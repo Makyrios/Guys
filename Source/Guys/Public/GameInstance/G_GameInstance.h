@@ -17,7 +17,10 @@ public:
 	virtual void Init() override;
 
 	UFUNCTION()
-	void BeginLoadingScreen(const FString& InMapName);
+	virtual void BeginLoadingScreen(const FString& MapName);
+
+	UFUNCTION()
+	virtual void EndLoadingScreen(UWorld* InLoadedWorld);
 
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "AS|LoadingScreen")

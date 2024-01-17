@@ -11,16 +11,16 @@ void UG_GameInstance::Init()
 {
     Super::Init();
     FCoreUObjectDelegates::PreLoadMap.AddUObject(this, &UG_GameInstance::BeginLoadingScreen);
+    FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UG_GameInstance::EndLoadingScreen);
 }
 
-void UG_GameInstance::BeginLoadingScreen(const FString& InMapName)
+void UG_GameInstance::BeginLoadingScreen(const FString& MapName)
 {
     UE_LOG(LogTemp, Warning, TEXT("BeginLoadingScreen is launched"));
     if (IsRunningDedicatedServer()) return;
 
     FLoadingScreenAttributes Attributes;
     Attributes.bAutoCompleteWhenLoadingCompletes = false;
-    Attributes.bMoviesAreSkippable = true;
     Attributes.MinimumLoadingScreenDisplayTime = 2.f;
 
     UUserWidget* LoadingScreen = CreateWidget<UUserWidget>(GetWorld(), LoadingScreenClass);
@@ -28,9 +28,13 @@ void UG_GameInstance::BeginLoadingScreen(const FString& InMapName)
 
     Attributes.WidgetLoadingScreen = LoadingScreen->TakeWidget();
 
-    IGameMoviePlayer* MoviePlayer = GetMoviePlayer();
-    if (MoviePlayer)
+    if (GetMoviePlayer())
     {
-        MoviePlayer->SetupLoadingScreen(Attributes);
+        GetMoviePlayer()->SetupLoadingScreen(Attributes);
     }
+}
+
+void UG_GameInstance::EndLoadingScreen(UWorld* InLoadedWorld)
+{
+
 }
