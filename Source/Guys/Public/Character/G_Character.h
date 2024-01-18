@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
-#include "GuysCharacter.generated.h"
+#include "G_Character.generated.h"
 
 class UInputAction;
 class UInputMappingContext;
@@ -15,15 +15,14 @@ class UCameraComponent;
 struct FInputActionValue;
 
 UCLASS(config = Game)
-class AGuysCharacter : public ACharacter, public IAbilitySystemInterface
+class AG_Character : public ACharacter, public IAbilitySystemInterface
 {
     GENERATED_BODY()
-public:
-    AGuysCharacter();
 
-    /** Returns CameraBoom subobject **/
+public:
+    AG_Character();
+
     FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-    /** Returns FollowCamera subobject **/
     FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
     virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
@@ -33,15 +32,11 @@ public:
     virtual void OnRep_PlayerState() override;
 
 protected:
-    /** Called for movement input */
     void Move(const FInputActionValue& Value);
 
-    /** Called for looking input */
     void Look(const FInputActionValue& Value);
-    // APawn interface
     virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
-    // To add mapping context
     virtual void BeginPlay();
 
     virtual void InitAbilityActorInfo();
@@ -54,27 +49,21 @@ protected:
     TObjectPtr<UAttributeSet> AttributeSet;
 
 private:
-    /** Camera boom positioning the camera behind the character */
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
     USpringArmComponent* CameraBoom;
 
-    /** Follow camera */
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
     UCameraComponent* FollowCamera;
 
-    /** MappingContext */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputMappingContext* DefaultMappingContext;
 
-    /** Jump Input Action */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputAction* JumpAction;
 
-    /** Move Input Action */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputAction* MoveAction;
 
-    /** Look Input Action */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputAction* LookAction;
 };
