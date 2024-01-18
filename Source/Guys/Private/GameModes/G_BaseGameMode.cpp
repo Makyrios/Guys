@@ -5,6 +5,8 @@
 #include "UObject/ConstructorHelpers.h"
 #include <Kismet/GameplayStatics.h>
 #include <Misc/G_PlayerStart.h>
+#include <Player/G_PlayerState.h>
+#include "Actors/G_Checkpoint.h"
 
 void AG_BaseGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
@@ -116,12 +118,20 @@ void AG_BaseGameMode::RespawnPawn(AController* Controller)
 {
     UWorld* World = GetWorld();
     APawn* OldPawn = Controller->GetPawn();
+    AG_PlayerState* PlayerState = OldPawn->GetPlayerState<AG_PlayerState>();
+    /*
     const AActor* PlayerStart = ChoosePlayerStart_Implementation(Controller);
+    */
 
-    if (!World || !Controller || !OldPawn || !PlayerStart) return;
+    if (!World || !Controller || !OldPawn || !PlayerState) return;
+
+    AG_Checkpoint* LastCheckpoint = PlayerState->GetLastCheckpoint().Get();
+    if (!LastCheckpoint) return;
+
+    FVector RespawnLocation = LastCheckpoint->GetRandomSpawnPoint();
 
     AG_Character* NewPawn =
-        World->SpawnActor<AG_Character>(OldPawn->GetClass(), PlayerStart->GetActorLocation(), PlayerStart->GetActorRotation());
+        World->SpawnActor<AG_Character>(OldPawn->GetClass(), RespawnLocation, LastCheckpoint->GetActorRotation());
 
     OldPawn->Destroy();
 

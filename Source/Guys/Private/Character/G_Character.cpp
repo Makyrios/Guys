@@ -45,6 +45,10 @@ void AG_Character::BeginPlay()
 {
     Super::BeginPlay();
 
+}
+
+void AG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+{
     if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
     {
         if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
@@ -53,10 +57,7 @@ void AG_Character::BeginPlay()
             Subsystem->AddMappingContext(DefaultMappingContext, 0);
         }
     }
-}
 
-void AG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
-{
     if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
     {
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);

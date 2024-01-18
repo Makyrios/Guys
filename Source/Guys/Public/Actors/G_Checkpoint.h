@@ -17,6 +17,8 @@ class GUYS_API AG_Checkpoint : public AActor
 public:	
 	AG_Checkpoint();
 
+    FVector GetRandomSpawnPoint() const;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -25,6 +27,8 @@ protected:
         int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 public:
+    UPROPERTY(VisibleAnywhere, Category = "G|Components")
+    TObjectPtr<USceneComponent> SceneComponent;
     UPROPERTY(VisibleAnywhere, Category = "G|Components")
     TObjectPtr<UStaticMeshComponent> CheckpointMesh;
     UPROPERTY(VisibleAnywhere, Category = "G|Components")
