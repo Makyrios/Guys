@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "AbilitySystem/G_AbilitySystemComponent.h"
 #include "Player/G_PlayerState.h"
+#include <GameModes/G_BaseGameMode.h>
 
 
 AG_Character::AG_Character()
@@ -120,6 +121,18 @@ void AG_Character::OnRep_PlayerState()
     Super::OnRep_PlayerState();
 
     InitAbilityActorInfo();
+}
+
+void AG_Character::OnCharacterDie() {
+
+    if (UWorld* World = GetWorld())
+    {
+        if (AG_BaseGameMode* GameMode = Cast<AG_BaseGameMode>(World->GetAuthGameMode()))
+        {
+            AController* RefController = GetController();
+            GameMode->RespawnPawn(Controller);
+        }
+    }
 }
 
 void AG_Character::InitAbilityActorInfo()

@@ -18,14 +18,15 @@ public:
     FORCEINLINE float GetDelayBeforeStart() const { return DelayBeforeStart; }
     virtual bool IsGameStarted();
 
+    UFUNCTION()
+    virtual void RespawnPawn(AController* Controller);
+
 protected:
     virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
     virtual void PostLogin(APlayerController* NewPlayer) override;
     virtual void HandleMatchHasStarted() override;
     AActor* ChoosePlayerStart_Implementation(AController* Player) override;
     virtual bool ReadyToStartMatch_Implementation() override;
-    UFUNCTION()
-    virtual void RespawnPawn(AController* Controller);
     virtual bool ReadyToEndMatch_Implementation() override;
     virtual void HandleMatchHasEnded() override;
 

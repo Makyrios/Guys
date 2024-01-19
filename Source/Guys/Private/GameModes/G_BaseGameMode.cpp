@@ -118,20 +118,13 @@ void AG_BaseGameMode::RespawnPawn(AController* Controller)
 {
     UWorld* World = GetWorld();
     APawn* OldPawn = Controller->GetPawn();
-    AG_PlayerState* PlayerState = OldPawn->GetPlayerState<AG_PlayerState>();
-    /*
-    const AActor* PlayerStart = ChoosePlayerStart_Implementation(Controller);
-    */
-
-    if (!World || !Controller || !OldPawn || !PlayerState) return;
-
-    AG_Checkpoint* LastCheckpoint = PlayerState->GetLastCheckpoint().Get();
-    if (!LastCheckpoint) return;
-
-    FVector RespawnLocation = LastCheckpoint->GetRandomSpawnPoint();
+    
+    AActor* PlayerStart = ChoosePlayerStart_Implementation(Controller);
+    
+    if (!World || !Controller || !OldPawn || !PlayerStart) return;
 
     AG_Character* NewPawn =
-        World->SpawnActor<AG_Character>(OldPawn->GetClass(), RespawnLocation, LastCheckpoint->GetActorRotation());
+        World->SpawnActor<AG_Character>(OldPawn->GetClass(), PlayerStart->GetActorLocation(), PlayerStart->GetActorRotation());
 
     OldPawn->Destroy();
 

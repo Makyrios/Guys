@@ -17,4 +17,8 @@ class GUYS_API AG_RaceGameMode : public AG_BaseGameMode
 protected:
     virtual bool ReadyToEndMatch_Implementation() override;
     virtual void HandleMatchHasEnded() override;
+    virtual void RespawnPawn(AController* Controller) override;
+
+private:
+    APawn* GetSpawnedPawn(APawn* OldPawn) const;
 };
