@@ -22,7 +22,12 @@ public:
 	UFUNCTION()
 	virtual void EndLoadingScreen(UWorld* InLoadedWorld);
 
+	FORCEINLINE void SetPlayerName(FText NewName) { PlayerName = NewName; }
+	FORCEINLINE FText GetPlayerName() const { return PlayerName; }
+
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "AS|LoadingScreen")
 	TSubclassOf<UUserWidget> LoadingScreenClass;
+
+	FText PlayerName = FText::FromString(TEXT("Player"));
 };
