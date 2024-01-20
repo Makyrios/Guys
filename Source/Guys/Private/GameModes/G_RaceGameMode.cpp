@@ -63,13 +63,13 @@ APawn* AG_RaceGameMode::GetSpawnedPawn(APawn* OldPawn) const
     if (!World || !OldPawn || !PlayerState || !LastCheckpoint) return nullptr;
 
     FVector RespawnLocation = LastCheckpoint->GetRandomSpawnPoint();
-    APawn* NewPawn = World->SpawnActor<APawn>(OldPawn->GetClass(), RespawnLocation, LastCheckpoint->GetActorRightVector().Rotation());
+    APawn* NewPawn = World->SpawnActor<APawn>(OldPawn->GetClass(), RespawnLocation, LastCheckpoint->GetActorRotation());
 
     /*Find new spawn location if previous is occupied*/
     while (NewPawn == nullptr)
     {
         RespawnLocation = LastCheckpoint->GetRandomSpawnPoint();
-        NewPawn = World->SpawnActor<APawn>(OldPawn->GetClass(), RespawnLocation, LastCheckpoint->GetActorRightVector().Rotation());
+        NewPawn = World->SpawnActor<APawn>(OldPawn->GetClass(), RespawnLocation, LastCheckpoint->GetActorRotation());
     }
 
     return NewPawn;

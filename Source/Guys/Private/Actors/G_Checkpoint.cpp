@@ -25,8 +25,7 @@ FVector AG_Checkpoint::GetRandomSpawnPoint() const
 {
     //return CheckpointMesh->GetComponentLocation();
     check(BoxCollider);
-    return UKismetMathLibrary::RandomPointInBoundingBox(CheckpointMesh->GetComponentLocation(), 
-        FVector(0, BoxCollider->GetScaledBoxExtent().X, BoxCollider->GetScaledBoxExtent().Z));
+    return UKismetMathLibrary::RandomPointInBoundingBox(GetActorLocation(), FVector(0, BoxCollider->GetScaledBoxExtent().X, 0));
 }
 
 void AG_Checkpoint::BeginPlay()
