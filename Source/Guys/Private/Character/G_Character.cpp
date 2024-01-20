@@ -11,7 +11,8 @@
 #include "EnhancedInputSubsystems.h"
 #include "AbilitySystem/G_AbilitySystemComponent.h"
 #include "Player/G_PlayerState.h"
-
+#include "Interfaces/G_IInteractable.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 AG_Character::AG_Character()
 {
@@ -60,11 +61,14 @@ void AG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputC
     if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
     {
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
+
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
         EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AG_Character::Move);
 
         EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AG_Character::Look);
+        
+        EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &AG_Character::Interact);
     }
 }
 
@@ -97,6 +101,30 @@ void AG_Character::Look(const FInputActionValue& Value)
     }
 }
 
+void AG_Character::Interact(const FInputActionValue& Value)
+{
+    UKismetSystemLibrary::PrintString(this, "I've pushed someone!");
+    Server_Interact();
+}
+
+void AG_Character::Server_Interact_Implementation()
+{
+    Multicast_Interact();
+}
+
+void AG_Character::Multicast_Interact_Implementation()
+{
+    TArray<AActor*> OverlappingActors;
+    this->GetOverlappingActors(OverlappingActors);
+    if (!OverlappingActors.IsEmpty())
+    {
+        if (IG_IInteractable* Actor = Cast<IG_IInteractable>(OverlappingActors[0]))
+        {
+            Actor->ReactOnPush();
+        }
+    }
+}
+
 UAbilitySystemComponent* AG_Character::GetAbilitySystemComponent() const
 {
     return AbilitySystemComponent;
@@ -119,6 +147,12 @@ void AG_Character::OnRep_PlayerState()
     Super::OnRep_PlayerState();
 
     InitAbilityActorInfo();
+}
+
+void AG_Character::ReactOnPush()
+{
+    Jump();
+    UKismetSystemLibrary::PrintString(this, "Somebody has pushed me!");
 }
 
 void AG_Character::InitAbilityActorInfo()

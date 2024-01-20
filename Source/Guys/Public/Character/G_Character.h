@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
+#include "Interfaces/G_IInteractable.h"
 #include "G_Character.generated.h"
 
 class UInputAction;
@@ -15,7 +16,7 @@ class UCameraComponent;
 struct FInputActionValue;
 
 UCLASS(config = Game)
-class AG_Character : public ACharacter, public IAbilitySystemInterface
+class AG_Character : public ACharacter, public IAbilitySystemInterface, public IG_IInteractable
 {
     GENERATED_BODY()
 
@@ -29,12 +30,24 @@ public:
     UAttributeSet* GetAttributeSet() const;
 
     virtual void PossessedBy(AController* NewController) override;
+
     virtual void OnRep_PlayerState() override;
+
+    virtual void ReactOnPush() override;
+
+    UFUNCTION(Server, Reliable)
+    void Server_Interact();
+
+    UFUNCTION(NetMulticast, Reliable)
+    void Multicast_Interact();
 
 protected:
     void Move(const FInputActionValue& Value);
 
     void Look(const FInputActionValue& Value);
+
+    void Interact(const FInputActionValue& Value);
+
     virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
     virtual void BeginPlay();
@@ -66,4 +79,7 @@ private:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Input", meta = (AllowPrivateAccess = "true"))
     TObjectPtr<UInputAction> LookAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Input", meta = (AllowPrivateAccess = "true"))
+    TObjectPtr<UInputAction> InteractAction;
 };
