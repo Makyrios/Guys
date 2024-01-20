@@ -5,6 +5,8 @@
 #include "UObject/ConstructorHelpers.h"
 #include <Kismet/GameplayStatics.h>
 #include <Misc/G_PlayerStart.h>
+#include <Player/G_PlayerState.h>
+#include "Actors/G_Checkpoint.h"
 
 void AG_BaseGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
@@ -116,8 +118,9 @@ void AG_BaseGameMode::RespawnPawn(AController* Controller)
 {
     UWorld* World = GetWorld();
     APawn* OldPawn = Controller->GetPawn();
-    const AActor* PlayerStart = ChoosePlayerStart_Implementation(Controller);
-
+    
+    AActor* PlayerStart = ChoosePlayerStart_Implementation(Controller);
+    
     if (!World || !Controller || !OldPawn || !PlayerStart) return;
 
     AG_Character* NewPawn =

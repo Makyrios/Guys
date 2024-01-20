@@ -4,6 +4,7 @@
 
 #include "AbilitySystem/G_AbilitySystemComponent.h"
 #include "AbilitySystem/G_AttributeSet.h"
+#include "Net/UnrealNetwork.h"
 
 AG_PlayerState::AG_PlayerState()
 {
@@ -14,6 +15,13 @@ AG_PlayerState::AG_PlayerState()
     AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
     AttributeSet = CreateDefaultSubobject<UG_AttributeSet>("AttributeSet");
+}
+
+void AG_PlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+    DOREPLIFETIME(AG_PlayerState, PlayerScore);
 }
 
 UAbilitySystemComponent* AG_PlayerState::GetAbilitySystemComponent() const
