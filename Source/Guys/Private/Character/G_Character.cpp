@@ -13,6 +13,7 @@
 #include "Player/G_PlayerState.h"
 #include "Interfaces/G_IInteractable.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include <GameModes/G_BaseGameMode.h>
 
 AG_Character::AG_Character()
 {
@@ -46,6 +47,10 @@ void AG_Character::BeginPlay()
 {
     Super::BeginPlay();
 
+}
+
+void AG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+{
     if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
     {
         if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
@@ -54,10 +59,7 @@ void AG_Character::BeginPlay()
             Subsystem->AddMappingContext(DefaultMappingContext, 0);
         }
     }
-}
 
-void AG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
-{
     if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
     {
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
@@ -67,7 +69,7 @@ void AG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputC
         EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AG_Character::Move);
 
         EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AG_Character::Look);
-        
+
         EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &AG_Character::Interact);
     }
 }
@@ -147,6 +149,18 @@ void AG_Character::OnRep_PlayerState()
     Super::OnRep_PlayerState();
 
     InitAbilityActorInfo();
+}
+
+void AG_Character::OnCharacterDie()
+{
+    if (UWorld* World = GetWorld())
+    {
+        if (AG_BaseGameMode* GameMode = Cast<AG_BaseGameMode>(World->GetAuthGameMode()))
+        {
+            AController* RefController = GetController();
+            GameMode->RespawnPawn(Controller);
+        }
+    }
 }
 
 void AG_Character::ReactOnPush()

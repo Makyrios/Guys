@@ -33,6 +33,8 @@ public:
 
     virtual void OnRep_PlayerState() override;
 
+    void OnCharacterDie();
+
     virtual void ReactOnPush() override;
 
     UFUNCTION(Server, Reliable)
