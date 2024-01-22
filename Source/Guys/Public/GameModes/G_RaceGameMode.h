@@ -6,13 +6,15 @@
 #include "GameModes/G_BaseGameMode.h"
 #include "G_RaceGameMode.generated.h"
 
-/**
- *
- */
 UCLASS()
 class GUYS_API AG_RaceGameMode : public AG_BaseGameMode
 {
     GENERATED_BODY()
+
+public:
+    APawn* GetSpawnedPawn(APawn* OldPawn) const;
+
+    FORCEINLINE float GetTimeLimit() const { return TimeLimit; }
 
 protected:
     virtual bool ReadyToEndMatch_Implementation() override;
@@ -20,5 +22,6 @@ protected:
     virtual void RespawnPawn(AController* Controller) override;
 
 private:
-    APawn* GetSpawnedPawn(APawn* OldPawn) const;
+    UPROPERTY(EditDefaultsOnly, Category = "G|Gameplay")
+    float TimeLimit = 180;
 };
