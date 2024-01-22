@@ -2,6 +2,8 @@
 
 #include "AbilitySystem/G_AttributeSet.h"
 
+#include "Character/G_Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Net/UnrealNetwork.h"
 
 UG_AttributeSet::UG_AttributeSet()
