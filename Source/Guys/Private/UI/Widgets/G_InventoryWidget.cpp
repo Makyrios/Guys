@@ -2,6 +2,4 @@
 
 
 #include "UI/Widgets/G_InventoryWidget.h"
-#include <Components/Border.h>
-
 

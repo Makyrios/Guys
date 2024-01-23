@@ -4,15 +4,15 @@
 #include <Player/G_PlayerState.h>
 #include "Actors/G_Checkpoint.h"
 #include <Character/G_Character.h>
+#include <GameStates/G_RaceGameState.h>
+#include "Player/G_RacePlayerController.h"
 
 bool AG_RaceGameMode::ReadyToEndMatch_Implementation()
 {
-
-    /* TODO
     if (const AG_RaceGameState* CurrentGameState = Cast<AG_RaceGameState>(GameState))
     {
-        return CurrentGameState->GetWinner() != nullptr || Super::ReadyToEndMatch_Implementation();
-    }*/
+        return CurrentGameState->GetTimer() >= TimeLimit || Super::ReadyToEndMatch_Implementation();
+    }
     return false;
 }
 
@@ -20,25 +20,14 @@ void AG_RaceGameMode::HandleMatchHasEnded()
 {
     Super::HandleMatchHasEnded();
 
-    /* TODO
-    const AAS_DeathmatchGameState* CustomGameState = GetGameState<AAS_DeathmatchGameState>();
-    if (!CustomGameState) return;
-
-    const AController* WonController = CustomGameState->GetWinningPlayer();
-    if (!WonController) return;
-
     for (FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; ++Iterator)
     {
-        AAS_PlayerController* CustomController = Cast<AAS_PlayerController>(*Iterator);
-        if (CustomController && (*Iterator).Get() == WonController)
+        AG_RacePlayerController* RaceController = Cast<AG_RacePlayerController>(*Iterator);
+        if (RaceController)
         {
-            CustomController->HandleWin();
+            RaceController->HandleFinishRace();
         }
-        else
-        {
-            CustomController->HandleLose();
-        }
-    }*/
+    }
 }
 
 void AG_RaceGameMode::RespawnPawn(AController* Controller)
