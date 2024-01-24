@@ -23,6 +23,9 @@ public:
     void SetFirstAbilityImage(FGameplayTag AbilityTag);
     void SetSecondAbilityImage(FGameplayTag AbilityTag);
 
+protected:
+    void NativePreConstruct() override;
+
 private:
     UImage* GetAbilityImage(FGameplayTag AbilityTag);
 

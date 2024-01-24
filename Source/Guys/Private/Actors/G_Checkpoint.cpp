@@ -19,6 +19,7 @@ AG_Checkpoint::AG_Checkpoint()
 	BoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Collider"));
     BoxCollider->SetupAttachment(CheckpointMesh);
     BoxCollider->SetCollisionProfileName(FName("OverlapOnlyPawn"));
+    BoxCollider->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 }
 
 FVector AG_Checkpoint::GetRandomSpawnPoint() const
@@ -33,6 +34,7 @@ void AG_Checkpoint::BeginPlay()
 	Super::BeginPlay();
 	
 	BoxCollider->OnComponentBeginOverlap.AddDynamic(this, &AG_Checkpoint::HandleCheckpointOverlap);
+    BoxCollider->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 }
 
 void AG_Checkpoint::HandleCheckpointOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,

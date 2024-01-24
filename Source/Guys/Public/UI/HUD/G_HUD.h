@@ -17,6 +17,7 @@ class GUYS_API AG_HUD : public AHUD
 
 public:
     void SetHUDWidgetVisibility(ESlateVisibility InVisibility);
+    void SetSpectatorHUDWidgetVisibility(ESlateVisibility InVisibility);
 
     void ShowStatsTable();
     void HideStatsTable();
@@ -39,6 +40,9 @@ protected:
 protected:
     UPROPERTY()
     TObjectPtr<UUserWidget> HUDWidget;
+
+    UPROPERTY()
+    TObjectPtr<UUserWidget> SpectatorHUDWidget;
 
     UPROPERTY(EditDefaultsOnly, Category = "AS|Widgets")
     TSubclassOf<UUserWidget> StartGameWidgetClass;

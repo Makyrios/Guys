@@ -37,6 +37,9 @@ public:
 
     virtual void ReactOnPush() override;
 
+    // RENAME
+    void SetKeyboardInput(bool bEnable);
+
     UFUNCTION(Server, Reliable)
     void Server_Interact();
 
@@ -51,8 +54,6 @@ protected:
     void Interact(const FInputActionValue& Value);
 
     virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-
-    virtual void BeginPlay();
 
     virtual void InitAbilityActorInfo();
 
@@ -72,6 +73,9 @@ private:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Input", meta = (AllowPrivateAccess = "true"))
     TObjectPtr<UInputMappingContext> DefaultMappingContext;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Input", meta = (AllowPrivateAccess = "true"))
+    TObjectPtr<UInputMappingContext> WaitingForGameMappingContext;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Input", meta = (AllowPrivateAccess = "true"))
     TObjectPtr<UInputAction> JumpAction;

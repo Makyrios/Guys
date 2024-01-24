@@ -6,6 +6,8 @@
 #include "GameModes/G_BaseGameMode.h"
 #include "G_RaceGameMode.generated.h"
 
+class AG_RacePlayerController;
+
 UCLASS()
 class GUYS_API AG_RaceGameMode : public AG_BaseGameMode
 {
@@ -17,9 +19,14 @@ public:
     FORCEINLINE float GetTimeLimit() const { return TimeLimit; }
 
 protected:
+    virtual void BeginPlay() override;
     virtual bool ReadyToEndMatch_Implementation() override;
     virtual void HandleMatchHasEnded() override;
     virtual void RespawnPawn(AController* Controller) override;
+
+private:
+    UFUNCTION()
+    void OnPlayerFinishRace(AG_RacePlayerController* RaceController);
 
 private:
     UPROPERTY(EditDefaultsOnly, Category = "G|Gameplay")

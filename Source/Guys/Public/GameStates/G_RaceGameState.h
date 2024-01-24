@@ -9,6 +9,7 @@
 class AG_RacePlayerController;
 class AG_RaceGameMode;
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerFinishRace, AG_RacePlayerController*);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnTimerUpdate, float);
 
 UCLASS()
@@ -20,14 +21,12 @@ public:
     AG_RaceGameState();
     virtual void Tick(float DeltaTime) override;
 
-    /*
-    void AddFinishedPlayerController(TWeakPtr<AG_RacePlayerController> PlayerController);
-    */
-    void AddFinishedPlayer();
+    void AddFinishedPlayer(AG_RacePlayerController* PlayerController);
 
     FORCEINLINE float GetTimer() const { return Timer; }
 
 public:
+    FOnPlayerFinishRace OnPlayerFinishRace;
     FOnTimerUpdate OnTimerUpdate;
 
 private:

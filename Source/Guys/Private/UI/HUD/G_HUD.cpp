@@ -38,6 +38,14 @@ void AG_HUD::SetHUDWidgetVisibility(ESlateVisibility InVisibility)
     }
 }
 
+void AG_HUD::SetSpectatorHUDWidgetVisibility(ESlateVisibility InVisibility)
+{
+    if (SpectatorHUDWidget)
+    {
+		SpectatorHUDWidget->SetVisibility(InVisibility);
+	}
+}
+
 
 void AG_HUD::ShowStatsTable()
 {

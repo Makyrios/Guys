@@ -12,15 +12,12 @@ void AG_Checkpoint_FinishLine::HandleCheckpointOverlap(UPrimitiveComponent* Over
 {
     Super::HandleCheckpointOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 
-    if (AG_RaceGameState* GameState = Cast<AG_RaceGameState>(UGameplayStatics::GetGameState(this))) 
-    {
-        GameState->AddFinishedPlayer();
-    }
-
     if (AG_RacePlayerController* RaceController = OtherActor->GetInstigatorController<AG_RacePlayerController>())
     {
+        if (AG_RaceGameState* GameState = Cast<AG_RaceGameState>(UGameplayStatics::GetGameState(this))) 
+        {
+            GameState->AddFinishedPlayer(RaceController);
+        }
         OtherActor->Destroy();
-		RaceController->HandleWinRace();
 	}
-    
 }

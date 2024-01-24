@@ -6,6 +6,18 @@
 #include <Character/G_Character.h>
 #include <GameStates/G_RaceGameState.h>
 #include "Player/G_RacePlayerController.h"
+#include "GameFramework/SpectatorPawn.h"
+
+
+void AG_RaceGameMode::BeginPlay()
+{
+    Super::BeginPlay();
+
+    if (AG_RaceGameState* RaceGameState = GetGameState<AG_RaceGameState>())
+    {
+		RaceGameState->OnPlayerFinishRace.AddUObject(this, &AG_RaceGameMode::OnPlayerFinishRace);
+	}
+}
 
 bool AG_RaceGameMode::ReadyToEndMatch_Implementation()
 {
@@ -42,6 +54,18 @@ void AG_RaceGameMode::RespawnPawn(AController* Controller)
         Controller->UnPossess();
         Controller->Possess(NewPawn);
     }
+}
+
+void AG_RaceGameMode::OnPlayerFinishRace(AG_RacePlayerController* RaceController)
+{
+    if (!RaceController) return;
+
+	RaceController->HandleWinRace();
+    
+    if (ASpectatorPawn* NewSpectatorPawn = RaceController->SpawnSpectatorPawn())
+    {
+        RaceController->Possess(NewSpectatorPawn);
+    }   
 }
 
 APawn* AG_RaceGameMode::GetSpawnedPawn(APawn* OldPawn) const

@@ -5,6 +5,7 @@
 #include <GameStates/G_RaceGameState.h>
 #include <GameModes/G_RaceGameMode.h>
 #include <Kismet/GameplayStatics.h>
+#include <Components/SlateWrapperTypes.h>
 
 void AG_RacePlayerController::HandleFinishRace()
 {
@@ -44,10 +45,10 @@ void AG_RacePlayerController::HandleWinRace()
 
 void AG_RacePlayerController::Client_HandleWinRace_Implementation()
 {
-	RaceHUD = (!RaceHUD) ? GetHUD<AG_RaceHUD>() : RaceHUD;
-	if (!RaceHUD) return;
+    RaceHUD = (!RaceHUD) ? GetHUD<AG_RaceHUD>() : RaceHUD;
+    if (!RaceHUD) return;
 
-	RaceHUD->ShowWinRaceWidget();
+    RaceHUD->ShowWinRaceWidget();
 }
 
 void AG_RacePlayerController::BeginPlay()
@@ -83,4 +84,3 @@ void AG_RacePlayerController::Client_SetTimeRemaining_Implementation(float Remai
 
     RaceHUD->SetTimeRemaining(RemainingSeconds);
 }
-

@@ -43,23 +43,8 @@ AG_Character::AG_Character()
     FollowCamera->bUsePawnControlRotation = false;
 }
 
-void AG_Character::BeginPlay()
-{
-    Super::BeginPlay();
-
-}
-
 void AG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
-    if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
-    {
-        if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
-                ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-        {
-            Subsystem->AddMappingContext(DefaultMappingContext, 0);
-        }
-    }
-
     if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
     {
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
@@ -169,10 +154,31 @@ void AG_Character::ReactOnPush()
     UKismetSystemLibrary::PrintString(this, "Somebody has pushed me!");
 }
 
+void AG_Character::SetKeyboardInput(bool bEnable)
+{
+    if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+    {
+        if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
+                ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+        {
+            if (bEnable)
+            {
+                Subsystem->RemoveMappingContext(WaitingForGameMappingContext);
+                Subsystem->AddMappingContext(DefaultMappingContext, 0);
+            }
+            else
+            {
+                Subsystem->RemoveMappingContext(DefaultMappingContext);
+                Subsystem->AddMappingContext(WaitingForGameMappingContext, 0);
+            }
+        }
+    }
+}
+
 void AG_Character::InitAbilityActorInfo()
 {
     AG_PlayerState* G_PlayerState = GetPlayerState<AG_PlayerState>();
-    check(G_PlayerState);
+    if (!G_PlayerState) return;
 
     AbilitySystemComponent = G_PlayerState->GetAbilitySystemComponent();
     AttributeSet = G_PlayerState->GetAttributeSet();
