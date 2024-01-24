@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "AbilitySystem/G_AbilitySystemComponent.h"
+#include "AbilitySystem/G_AttributeSet.h"
 #include "Player/G_PlayerState.h"
 #include "Interfaces/G_IInteractable.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -46,7 +47,14 @@ AG_Character::AG_Character()
 void AG_Character::BeginPlay()
 {
     Super::BeginPlay();
+}
 
+void AG_Character::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+
+    ApplyAttributes();
+    ApplyGameplayTags();
 }
 
 void AG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -179,4 +187,29 @@ void AG_Character::InitAbilityActorInfo()
 
     AbilitySystemComponent->InitAbilityActorInfo(G_PlayerState, this);
     Cast<UG_AbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+}
+
+void AG_Character::ApplyGameplayTags()
+{
+    FGameplayTagContainer AssetTags;
+    AbilitySystemComponent->GetOwnedGameplayTags(AssetTags);
+
+    for (const FGameplayTag& Tag : AssetTags)
+    {
+        FGameplayTag StateTag = FGameplayTag::RequestGameplayTag(FName("State"));
+        if (Tag.MatchesTag(StateTag))
+        {
+            // Confirm States
+            if (Tag.GetTagName() == "State.Debuff.Stunned")
+            {
+            }
+        }
+    }
+}
+
+void AG_Character::ApplyAttributes()
+{
+    UG_AttributeSet* G_AttributeSet = Cast<UG_AttributeSet>(AttributeSet);
+
+    GetCharacterMovement()->MaxWalkSpeed = G_AttributeSet->GetMaxMovementSpeed();
 }

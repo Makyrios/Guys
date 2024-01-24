@@ -54,7 +54,14 @@ protected:
 
     virtual void BeginPlay();
 
+    virtual void Tick(float DeltaTime);
+
     virtual void InitAbilityActorInfo();
+
+private:
+    void ApplyGameplayTags();
+
+    void ApplyAttributes();
 
 protected:
     UPROPERTY()
