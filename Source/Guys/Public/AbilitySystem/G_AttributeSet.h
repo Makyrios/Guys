@@ -30,13 +30,10 @@ public:
 
     // OnRep functions to variables
     UFUNCTION()
-    void OnRep_Score(const FGameplayAttributeData& OldScore) const;
+    void OnRep_MaxMovementSpeed(const FGameplayAttributeData& OldMaxMovementSpeed) const;
 
 public:
-    UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Score, Category = "Multiplayer Attributes")
-    FGameplayAttributeData Score;
-    ATTRIBUTE_ACCESSORS(UG_AttributeSet, Score);
-
-    UPROPERTY(BlueprintReadWrite, Replicated, Category = "Multiplayer Attributes")
-    FString Name;
+    UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxMovementSpeed, Category = "G|Attributes")
+    FGameplayAttributeData MaxMovementSpeed;
+    ATTRIBUTE_ACCESSORS(UG_AttributeSet, MaxMovementSpeed);
 };
