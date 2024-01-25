@@ -3,6 +3,7 @@
 #include "UI/HUD/G_RaceHUD.h"
 #include "UI/Widgets/G_RaceHUDWidget.h"
 #include "Components/TextBlock.h"
+#include "UI/Widgets/G_RaceSpectatorHUDWidget.h"
 
 void AG_RaceHUD::PostInitializeComponents()
 {
@@ -15,18 +16,30 @@ void AG_RaceHUD::PostInitializeComponents()
         HUDWidget = RaceHUDWidget;
     }
 
+    RaceSpectatorHUDWidget = CreateWidget<UG_RaceSpectatorHUDWidget>(GetOwningPlayerController(), RaceSpectatorHUDWidgetClass);
+    if (RaceSpectatorHUDWidget)
+    {
+        RaceSpectatorHUDWidget->AddToViewport();
+        SpectatorHUDWidget = RaceSpectatorHUDWidget;
+    }
 }
 
 void AG_RaceHUD::SetTimeRemaining(float RemainingSeconds)
 {
-    check(RaceHUDWidget);
-    RaceHUDWidget->SetTimeText(RemainingSeconds);
-}
-
-void AG_RaceHUD::ShowTimer()
-{
-    check(RaceHUDWidget);
-    RaceHUDWidget->ShowTimer();
+    if (bIsSpectator)
+    {
+        if (RaceSpectatorHUDWidget)
+        {
+            RaceSpectatorHUDWidget->SetTimeText(RemainingSeconds);
+        }
+    }
+    else
+    {
+        if (RaceHUDWidget)
+        {
+            RaceHUDWidget->SetTimeText(RemainingSeconds);
+        }
+    }
 }
 
 void AG_RaceHUD::ShowFinishRaceWidget()
@@ -35,6 +48,8 @@ void AG_RaceHUD::ShowFinishRaceWidget()
     if (FinishRaceWidget)
     {
         FinishRaceWidget->AddToViewport();
+        SetHUDWidgetVisibility(ESlateVisibility::Collapsed);
+        SetSpectatorHUDWidgetVisibility(ESlateVisibility::Collapsed);
     }
 }
 
@@ -44,5 +59,8 @@ void AG_RaceHUD::ShowWinRaceWidget()
     if (WinRaceWidget)
     {
         WinRaceWidget->AddToViewport();
+        SetHUDWidgetVisibility(ESlateVisibility::Collapsed);
+        SetSpectatorHUDWidgetVisibility(ESlateVisibility::Visible);
+        bIsSpectator = true;
     }
 }

@@ -18,6 +18,7 @@ void UG_TableStatsWidget::NativeOnInitialized()
 void UG_TableStatsWidget::UpdatePlayers()
 {
     const AGameStateBase* GameState = UGameplayStatics::GetGameState(this);
+    if (!GameState) return;
     const TArray<APlayerState*> PlayerStates = GameState->PlayerArray;
 
     for (int i = 0; i < PlayerStates.Num(); ++i)
@@ -34,7 +35,7 @@ void UG_TableStatsWidget::UpdatePlayers()
 
 void UG_TableStatsWidget::AddPlayerStatsToTable(AG_PlayerState* PlayerToAdd)
 {
-    if (!PlayerToAdd) return;
+    if (!PlayerToAdd || !PlayerStatsClass) return;
 
     UG_PlayerStatsWidget* NewPlayerStats = CreateWidget<UG_PlayerStatsWidget>(this, PlayerStatsClass);
     if (!NewPlayerStats || !Players) return;
@@ -44,12 +45,12 @@ void UG_TableStatsWidget::AddPlayerStatsToTable(AG_PlayerState* PlayerToAdd)
     Players->AddChild(NewPlayerStats);
 }
 
-void UG_TableStatsWidget::SetPlayerNumber(int32 PlayerNumber)
-{
-    if (PlayersNumberBox)
-    {
-        const FString PlayerNumberString = FString::FromInt(PlayerNumber);
-        PlayersNumberBox->SetText(FText::FromString(PlayerNumberString));
-    }
-}
+//void UG_TableStatsWidget::SetPlayerNumber(int32 PlayerNumber)
+//{
+//    if (PlayersNumberBox)
+//    {
+//        const FString PlayerNumberString = FString::FromInt(PlayerNumber);
+//        PlayersNumberBox->SetText(FText::FromString(PlayerNumberString));
+//    }
+//}
 

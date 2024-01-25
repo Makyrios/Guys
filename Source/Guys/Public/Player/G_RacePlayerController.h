@@ -7,6 +7,7 @@
 #include "G_RacePlayerController.generated.h"
 
 class AG_RaceHUD;
+class ASpectatorPawn;
 
 UCLASS()
 class GUYS_API AG_RacePlayerController : public AG_PlayerController
@@ -19,7 +20,7 @@ public:
     void HandleWinRace();
 
 protected:
-    void BeginPlay() override;
+    virtual void BeginPlay() override;
 
 private:
     void OnTimerUpdate(float RemainingSeconds);

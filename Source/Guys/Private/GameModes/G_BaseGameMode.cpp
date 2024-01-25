@@ -11,6 +11,9 @@
 #include <Player/G_PlayerController.h>
 #include "GameFramework/GameStateBase.h"
 #include "Components/SlateWrapperTypes.h"
+#include "GameFramework/SpectatorPawn.h"
+#include <Actors/G_SpectatorPawn.h>
+
 
 void AG_BaseGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
@@ -20,6 +23,11 @@ void AG_BaseGameMode::InitGame(const FString& MapName, const FString& Options, F
     {
         GetWorldTimerManager().SetTimer(DelayStartTimer, this, &AG_BaseGameMode::StartMatch, DelayBeforeStart);
     }
+}
+
+APawn* AG_BaseGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot)
+{
+    return nullptr;
 }
 
 bool AG_BaseGameMode::ReadyToStartMatch_Implementation()
@@ -45,7 +53,63 @@ void AG_BaseGameMode::PostLogin(APlayerController* NewPlayer)
         const FString PlayerName = GameInstance->GetPlayerName().ToString();
         PlayerState->SetPlayerName(PlayerName);
     }
+
+    if (IsMatchPreparing())
+    {
+        HandleLoginBeforeGameStart(NewPlayer);
+    }
+    else if (IsMatchStarted())
+    {
+		HandleLoginAfterGameStart(NewPlayer);
+    }
+}
+
+bool AG_BaseGameMode::IsMatchPreparing()
+{
+    return GetMatchState() == MatchState::WaitingToStart || GetMatchState() == MatchState::EnteringMap;
+}
+
+bool AG_BaseGameMode::IsMatchStarted()
+{
+    return GetMatchState() == MatchState::InProgress;
+}
+
+void AG_BaseGameMode::HandleLoginBeforeGameStart(APlayerController* NewPlayer)
+{
+    SpawnNewPawn(NewPlayer);
+    SetControllerMatchState(NewPlayer, MatchState::WaitingToStart);
     CreateStartGameWidget(NewPlayer);
+}
+
+void AG_BaseGameMode::HandleLoginAfterGameStart(APlayerController* NewPlayer)
+{
+    SpawnSpectatorPawn(NewPlayer);
+    SetControllerMatchState(NewPlayer, MatchState::InProgress);
+    EnableSpectatorHUD(NewPlayer);
+}
+
+void AG_BaseGameMode::SpawnNewPawn(APlayerController* NewPlayer)
+{
+    if (!NewPlayer) return;
+    APawn* NewPawn = GetWorld()->SpawnActor<APawn>(DefaultPawnClass);
+    NewPlayer->Possess(NewPawn);
+    MovePawnToRandomPlayerStart(NewPawn);
+}
+
+void AG_BaseGameMode::SetControllerMatchState(APlayerController* PlayerController, FName NewMatchState)
+{
+    if (AG_PlayerController* CustomPlayerController = Cast<AG_PlayerController>(PlayerController))
+    {
+        CustomPlayerController->SetCurrentMatchState(NewMatchState);
+    }
+}
+
+void AG_BaseGameMode::EnableSpectatorHUD(APlayerController* NewPlayer)
+{
+    if (AG_PlayerController* CustomPlayerController = Cast<AG_PlayerController>(NewPlayer))
+    {
+        CustomPlayerController->SetSpectatorHUD(true);
+    }
 }
 
 void AG_BaseGameMode::CreateStartGameWidget(APlayerController* NewPlayer)
@@ -60,40 +124,61 @@ void AG_BaseGameMode::CreateStartGameWidget(APlayerController* NewPlayer)
     }
 }
 
+void AG_BaseGameMode::SpawnSpectatorPawn(APlayerController* NewPlayer)
+{
+    if (!NewPlayer) return;
+
+    APawn* SpectatorPawn = GetWorld()->SpawnActor<APawn>(SpectatorClass, NewPlayer->GetSpawnLocation(), NewPlayer->GetControlRotation());
+    NewPlayer->Possess(SpectatorPawn);
+}
+
+void AG_BaseGameMode::HandleMatchIsWaitingToStart()
+{
+    Super::HandleMatchIsWaitingToStart();
+
+    for (FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; ++Iterator)
+    {
+        if (Iterator)
+        {
+            SetControllerMatchState(Iterator->Get(), MatchState::WaitingToStart);
+        }
+    }
+}
+
 void AG_BaseGameMode::HandleMatchHasStarted()
 {
     Super::HandleMatchHasStarted();
 
     for (FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; ++Iterator)
     {
-        MovePawnToRandomPlayerStart(Iterator);
-        ShowHUDWidget(Iterator);
+        if (Iterator)
+        {
+            SetControllerMatchState(Iterator->Get(), MatchState::InProgress);
+            ShowHUDWidget(Iterator->Get());
+        }
     }
 }
 
-void AG_BaseGameMode::MovePawnToRandomPlayerStart(FConstPlayerControllerIterator& Iterator)
+void AG_BaseGameMode::MovePawnToRandomPlayerStart(APawn* PawnToMove)
 {
-    const AActor* PlayerStart = ChoosePlayerStart_Implementation(Iterator->Get());
-    APawn* PlayerPawn = (*Iterator)->GetPawn();
-    if (PlayerStart && PlayerPawn)
+    const AActor* PlayerStart = ChoosePlayerStart();
+    if (PlayerStart && PawnToMove)
     {
-        PlayerPawn->SetActorLocation(PlayerStart->GetActorLocation());
-        PlayerPawn->SetActorRotation(PlayerStart->GetActorRotation());
+        PawnToMove->SetActorLocation(PlayerStart->GetActorLocation());
+        PawnToMove->SetActorRotation(PlayerStart->GetActorRotation());
     }
 }
 
-void AG_BaseGameMode::ShowHUDWidget(FConstPlayerControllerIterator& Iterator)
+void AG_BaseGameMode::ShowHUDWidget(APlayerController* PlayerController)
 {
-    if (AG_PlayerController* CustomPlayerController = Cast<AG_PlayerController>(*Iterator))
+    if (AG_PlayerController* CustomPlayerController = Cast<AG_PlayerController>(PlayerController))
     {
         CustomPlayerController->SetHUDWidgetVisibility(ESlateVisibility::Visible);
     }
 }
 
-AActor* AG_BaseGameMode::ChoosePlayerStart_Implementation(AController* Player)
+AActor* AG_BaseGameMode::ChoosePlayerStart()
 {
-    if (!Player) return nullptr;
-
     TArray<AActor*> PlayerStarts;
     UGameplayStatics::GetAllActorsOfClass(this, AG_PlayerStart::StaticClass(), PlayerStarts);
 
@@ -129,7 +214,7 @@ void AG_BaseGameMode::RespawnPawn(AController* Controller)
     UWorld* World = GetWorld();
     APawn* OldPawn = Controller->GetPawn();
 
-    AActor* PlayerStart = ChoosePlayerStart_Implementation(Controller);
+    AActor* PlayerStart = ChoosePlayerStart();
 
     if (!World || !Controller || !OldPawn || !PlayerStart) return;
 
@@ -157,14 +242,10 @@ void AG_BaseGameMode::HandleMatchHasEnded()
     UWorld* World = GetWorld();
     if (!World) return;
 
-    /*
-    UGameplayStatics::SetGlobalTimeDilation(this, 0.3);
-    */
-    UGameplayStatics::SetGamePaused(this, true);
-
     FTimerHandle OpenLevelTimer;
 
-    World->GetTimerManager().SetTimer(OpenLevelTimer, [this]() {RestartGame(); }, DelayBeforeRestart, false);
+    World->GetTimerManager().SetTimer(
+        OpenLevelTimer, [this]() { RestartGame(); }, DelayBeforeRestart, false);
 }
 
 void AG_BaseGameMode::RestartGame()

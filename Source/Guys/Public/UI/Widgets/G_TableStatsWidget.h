@@ -16,7 +16,7 @@ class GUYS_API UG_TableStatsWidget : public UUserWidget
     GENERATED_BODY()
 
 public:
-    void SetPlayerNumber(int32 PlayerNumber);
+    //void SetPlayerNumber(int32 PlayerNumber);
 
 protected:
     void NativeOnInitialized() override;
@@ -30,8 +30,8 @@ protected:
     UPROPERTY(EditAnywhere)
     TSubclassOf<UUserWidget> PlayerStatsClass;
 
-    UPROPERTY(EditAnywhere, meta = (BindWidget))
-    UTextBlock* PlayersNumberBox;
+    /*UPROPERTY(EditAnywhere, meta = (BindWidget))
+    UTextBlock* PlayersNumberBox;*/
 
     UPROPERTY(EditAnywhere, meta = (BindWidget))
     UVerticalBox* Players;

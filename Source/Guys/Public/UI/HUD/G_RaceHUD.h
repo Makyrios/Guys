@@ -6,6 +6,9 @@
 #include "UI/HUD/G_HUD.h"
 #include "G_RaceHUD.generated.h"
 
+class UG_RaceHUDWidget;
+class UG_RaceSpectatorHUDWidget;
+
 UCLASS()
 class GUYS_API AG_RaceHUD : public AG_HUD
 {
@@ -13,8 +16,6 @@ class GUYS_API AG_RaceHUD : public AG_HUD
 
 public:
     void SetTimeRemaining(float RemainingSeconds);
-
-    void ShowTimer();
 
     void ShowFinishRaceWidget();
 
@@ -28,6 +29,9 @@ private:
     TSubclassOf<UUserWidget> RaceHUDWidgetClass;
 
     UPROPERTY(EditDefaultsOnly, Category = "AS|Widgets")
+    TSubclassOf<UUserWidget> RaceSpectatorHUDWidgetClass;
+
+    UPROPERTY(EditDefaultsOnly, Category = "AS|Widgets")
     TSubclassOf<UUserWidget> FinishRaceWidgetClass;
 
     UPROPERTY(EditDefaultsOnly, Category = "AS|Widgets")
@@ -36,4 +40,8 @@ private:
     UPROPERTY()
     TObjectPtr<UG_RaceHUDWidget> RaceHUDWidget;
 
+    UPROPERTY()
+    TObjectPtr<UG_RaceSpectatorHUDWidget> RaceSpectatorHUDWidget;
+
+    bool bIsSpectator = false;
 };

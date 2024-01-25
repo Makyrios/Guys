@@ -8,6 +8,7 @@
 #include <GameModes/G_RaceGameMode.h>
 #include <Kismet/GameplayStatics.h>
 
+
 void UG_RaceHUDWidget::SetTimeText(float RemainingSeconds)
 {
     if (!TimeText) return;
@@ -49,6 +50,13 @@ void UG_RaceHUDWidget::SetSecondAbilityImage(FGameplayTag AbilityTag)
     {
         InventoryWidget->SecondAbilityImage->SetBrushFromTexture(AbilityImage->Brush.GetResourceObject());
     }*/
+}
+
+void UG_RaceHUDWidget::NativePreConstruct()
+{
+    Super::NativePreConstruct();
+
+    SetVisibility(ESlateVisibility::Collapsed);
 }
 
 UImage* UG_RaceHUDWidget::GetAbilityImage(FGameplayTag AbilityTag)

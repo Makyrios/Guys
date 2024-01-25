@@ -9,6 +9,7 @@
 class UButton;
 class AG_HUD;
 class USlider;
+class AG_PlayerController;
 class UG_GameInstance;
 
 UCLASS()
@@ -18,6 +19,8 @@ class GUYS_API UG_PauseWidget : public UUserWidget
 
 protected:
     virtual void NativeConstruct() override;
+
+    virtual FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent);
 
 private:
     UFUNCTION()
@@ -40,9 +43,9 @@ public:
     TObjectPtr<USlider> VolumeSlider;
 
 private:
-    /*UPROPERTY()
-    UG_GameInstance* G_GameInstance;*/
+    UPROPERTY()
+    TWeakObjectPtr<UG_GameInstance> G_GameInstance;
 
     UPROPERTY()
-    AG_HUD* G_HUD;
+    TWeakObjectPtr<AG_PlayerController> PlayerController;
 };

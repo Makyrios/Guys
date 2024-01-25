@@ -20,6 +20,17 @@ void AG_RaceGameState::Tick(float DeltaTime)
     }
 }
 
+void AG_RaceGameState::AddFinishedPlayer(AG_RacePlayerController* PlayerController)
+{
+    OnPlayerFinishRace.Broadcast(PlayerController);
+
+    FinishedPlayersCount++;
+    if (!bAnyPlayerFinished)
+    {
+        bAnyPlayerFinished = true;
+    }
+}
+
 void AG_RaceGameState::UpdateTimer(float DeltaTime)
 {
     Timer += DeltaTime;
@@ -28,13 +39,4 @@ void AG_RaceGameState::UpdateTimer(float DeltaTime)
 
     float TimeLimit = RaceGameMode->GetTimeLimit();
     OnTimerUpdate.Broadcast(TimeLimit - Timer);
-}
-
-void AG_RaceGameState::AddFinishedPlayer()
-{
-    FinishedPlayersCount++;
-    if (!bAnyPlayerFinished)
-    {
-        bAnyPlayerFinished = true;
-    }
 }

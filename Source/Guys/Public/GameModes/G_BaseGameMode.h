@@ -12,28 +12,38 @@ class AG_BaseGameMode : public AGameMode
     GENERATED_BODY()
 
 public:
-    virtual void HandleActorDeath(AController* DeadActor);
-
     FORCEINLINE float GetDelayBeforeStart() const { return DelayBeforeStart; }
-    virtual bool IsGameStarted();
 
     UFUNCTION()
     virtual void RespawnPawn(AController* Controller);
 
 protected:
     virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
+    virtual bool IsGameStarted();
     virtual void PostLogin(APlayerController* NewPlayer) override;
+    virtual void HandleMatchIsWaitingToStart() override;
     virtual void HandleMatchHasStarted() override;
-    void ShowHUDWidget(FConstPlayerControllerIterator& Iterator);
-    void MovePawnToRandomPlayerStart(FConstPlayerControllerIterator& Iterator);
-    AActor* ChoosePlayerStart_Implementation(AController* Player) override;
+    virtual void HandleMatchHasEnded() override;
+    virtual void HandleActorDeath(AController* DeadActor);
     virtual bool ReadyToStartMatch_Implementation() override;
     virtual bool ReadyToEndMatch_Implementation() override;
-    virtual void HandleMatchHasEnded() override;
+    virtual APawn* SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot) override;
+
+    void SpawnNewPawn(APlayerController* NewPlayer);
+    void SpawnSpectatorPawn(APlayerController* NewPlayer);
 
 private:
+    AActor* ChoosePlayerStart();
+    void ShowHUDWidget(APlayerController* PlayerController);
+    void SetControllerMatchState(APlayerController* PlayerController, FName NewMatchState);
+    void MovePawnToRandomPlayerStart(APawn* PawnToMove);
     void CreateStartGameWidget(APlayerController* NewPlayer);
     void RestartGame();
+    bool IsMatchStarted();
+    bool IsMatchPreparing();
+    void HandleLoginBeforeGameStart(APlayerController* NewPlayer);
+    void HandleLoginAfterGameStart(APlayerController* NewPlayer);
+    void EnableSpectatorHUD(APlayerController* NewPlayer);
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "G|GameStart", meta = (EditCondition = "bDelayedStart"))

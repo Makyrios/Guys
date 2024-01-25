@@ -4,12 +4,14 @@
 #include "UI/Widgets/G_TableStatsWidget.h"
 #include "UI/Widgets/G_PauseWidget.h"
 #include <UI/Widgets/G_StartGameWidget.h>
+#include <Player/G_PlayerController.h>
+#include <Kismet/GameplayStatics.h>
 
 void AG_HUD::PostInitializeComponents()
 {
     Super::PostInitializeComponents();
 
-    if (TableStatsWidget)
+    if (TableStatsClass)
     {
         TableStatsWidget = CreateWidget<UG_TableStatsWidget>(GetOwningPlayerController(), TableStatsClass);
         if (TableStatsWidget)
@@ -18,8 +20,8 @@ void AG_HUD::PostInitializeComponents()
             TableStatsWidget->AddToViewport();
         }
     }
-    
-    if (PauseWidget)
+
+    if (PauseWidgetClass)
     {
         PauseWidget = CreateWidget<UG_PauseWidget>(GetOwningPlayerController(), PauseWidgetClass);
         if (PauseWidget)
@@ -38,40 +40,41 @@ void AG_HUD::SetHUDWidgetVisibility(ESlateVisibility InVisibility)
     }
 }
 
-
-void AG_HUD::ShowStatsTable()
+void AG_HUD::SetSpectatorHUDWidgetVisibility(ESlateVisibility InVisibility)
 {
-    /*
-    if (!TableStatsWidget) return;
-    TableStatsWidget->SetVisibility(ESlateVisibility::Visible);
-    */
+    if (SpectatorHUDWidget)
+    {
+        SpectatorHUDWidget->SetVisibility(InVisibility);
+    }
 }
 
-void AG_HUD::HideStatsTable()
+void AG_HUD::ToggleStatsTable(bool bEnable)
 {
-    /*
     if (!TableStatsWidget) return;
-    TableStatsWidget->SetVisibility(ESlateVisibility::Collapsed);
-    */
+
+    if (bEnable)
+    {
+        TableStatsWidget->SetVisibility(ESlateVisibility::Visible);
+    }
+    else
+    {
+        TableStatsWidget->SetVisibility(ESlateVisibility::Collapsed);
+    }
 }
 
 void AG_HUD::Pause(bool bPause)
 {
-    /*if (!PauseWidget) return;
+    if (!PauseWidget) return;
 
     if (bPause)
     {
+        PauseWidget->SetKeyboardFocus();
         PauseWidget->SetVisibility(ESlateVisibility::Visible);
     }
     else
     {
         PauseWidget->SetVisibility(ESlateVisibility::Collapsed);
-
-        AAS_PlayerController* OwnerController = Cast<AAS_PlayerController>(GetOwningPlayerController());
-        if (!OwnerController) return;
-
-        OwnerController->UnPause();
-    }*/
+    }
 }
 
 void AG_HUD::ExitToMenu()
@@ -121,7 +124,7 @@ void AG_HUD::UpdateInventoryInfo()
     HUDWidget->UpdateInventoryInfo();*/
 }
 
-void AG_HUD::SetupTableWidget()
+void AG_HUD::UpdateTableWidget()
 {
     /*if (!TableStatsWidget) return;
 
