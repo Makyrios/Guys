@@ -21,7 +21,6 @@ public:
     void SetHUDWidgetVisibility(ESlateVisibility InVisibility);
     void SetSpectatorHUDWidgetVisibility(ESlateVisibility InVisibility);
     void SetKeyboardInput(bool bEnable);
-    ASpectatorPawn* SpawnSpectatorPawn() override;
     void SetSpectatorHUD(bool bEnableSpectator);
     void TogglePause();
     void ToggleStats();

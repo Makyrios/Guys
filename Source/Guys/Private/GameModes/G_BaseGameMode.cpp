@@ -12,6 +12,7 @@
 #include "GameFramework/GameStateBase.h"
 #include "Components/SlateWrapperTypes.h"
 #include "GameFramework/SpectatorPawn.h"
+#include <Actors/G_SpectatorPawn.h>
 
 
 void AG_BaseGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
@@ -126,7 +127,8 @@ void AG_BaseGameMode::CreateStartGameWidget(APlayerController* NewPlayer)
 void AG_BaseGameMode::SpawnSpectatorPawn(APlayerController* NewPlayer)
 {
     if (!NewPlayer) return;
-    APawn* SpectatorPawn = GetWorld()->SpawnActor<APawn>(SpectatorClass);
+
+    APawn* SpectatorPawn = GetWorld()->SpawnActor<APawn>(SpectatorClass, NewPlayer->GetSpawnLocation(), NewPlayer->GetControlRotation());
     NewPlayer->Possess(SpectatorPawn);
 }
 

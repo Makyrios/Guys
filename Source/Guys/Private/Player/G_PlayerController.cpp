@@ -74,11 +74,6 @@ void AG_PlayerController::ExitToMenu()
     UGameplayStatics::OpenLevel(this, GameInstance->GetMenuMapName());
 }
 
-ASpectatorPawn* AG_PlayerController::SpawnSpectatorPawn()
-{
-    return GetWorld()->SpawnActor<ASpectatorPawn>(GetSpawnLocation(), GetControlRotation());
-}
-
 void AG_PlayerController::SetSpectatorHUD(bool bEnableSpectator)
 {
     if (bEnableSpectator)
@@ -187,6 +182,12 @@ void AG_PlayerController::SetHUDWidgetVisibility(ESlateVisibility InVisibility)
 {
     if (bIsPaused || CurrentMatchState != MatchState::InProgress)
     {
+        return;
+    }
+
+    if (GetPawn()->IsA<ASpectatorPawn>())
+    {
+        SetSpectatorHUDWidgetVisibility(InVisibility);
         return;
     }
 

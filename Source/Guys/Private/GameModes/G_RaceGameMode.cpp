@@ -62,10 +62,7 @@ void AG_RaceGameMode::OnPlayerFinishRace(AG_RacePlayerController* RaceController
 
 	RaceController->HandleWinRace();
     
-    if (ASpectatorPawn* NewSpectatorPawn = RaceController->SpawnSpectatorPawn())
-    {
-        RaceController->Possess(NewSpectatorPawn);
-    }   
+    SpawnSpectatorPawn(RaceController);
 }
 
 APawn* AG_RaceGameMode::GetSpawnedPawn(APawn* OldPawn) const

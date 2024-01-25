@@ -29,6 +29,9 @@ protected:
     virtual bool ReadyToEndMatch_Implementation() override;
     virtual APawn* SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot) override;
 
+    void SpawnNewPawn(APlayerController* NewPlayer);
+    void SpawnSpectatorPawn(APlayerController* NewPlayer);
+
 private:
     AActor* ChoosePlayerStart();
     void ShowHUDWidget(APlayerController* PlayerController);
@@ -41,8 +44,6 @@ private:
     void HandleLoginBeforeGameStart(APlayerController* NewPlayer);
     void HandleLoginAfterGameStart(APlayerController* NewPlayer);
     void EnableSpectatorHUD(APlayerController* NewPlayer);
-    void SpawnNewPawn(APlayerController* NewPlayer);
-    void SpawnSpectatorPawn(APlayerController* NewPlayer);
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "G|GameStart", meta = (EditCondition = "bDelayedStart"))
