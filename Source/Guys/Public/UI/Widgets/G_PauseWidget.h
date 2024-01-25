@@ -43,8 +43,8 @@ public:
     TObjectPtr<USlider> VolumeSlider;
 
 private:
-    /*UPROPERTY()
-    UG_GameInstance* G_GameInstance;*/
+    UPROPERTY()
+    TWeakObjectPtr<UG_GameInstance> G_GameInstance;
 
     UPROPERTY()
     TWeakObjectPtr<AG_PlayerController> PlayerController;

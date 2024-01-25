@@ -5,6 +5,7 @@
 #include "Components/Button.h"
 #include "Components/Slider.h"
 #include <Player/G_PlayerController.h>
+#include "GameInstance/G_GameInstance.h"
 
 void UG_PauseWidget::NativeConstruct()
 {
@@ -17,22 +18,19 @@ void UG_PauseWidget::NativeConstruct()
 
     VolumeSlider->OnValueChanged.AddDynamic(this, &UG_PauseWidget::OnVolumeSliderValueChanged);
 
-    /*
-    AG_GameInstance = (!AG_GameInstance) ? GetGameInstance<UG_GameInstance>() : AG_GameInstance;
-    if (!AG_GameInstance) return;
+    G_GameInstance = G_GameInstance.IsValid() ? G_GameInstance : GetGameInstance<UG_GameInstance>();
+    if (!G_GameInstance.IsValid()) return;
 
-    VolumeSlider->SetValue(AG_GameInstance->GetMasterSoundVolume());
-    */
-
+    VolumeSlider->SetValue(G_GameInstance->GetMasterSoundVolume());
 }
 
 FReply UG_PauseWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
 {
     if (InKeyEvent.GetKey() == EKeys::Escape || InKeyEvent.GetKey() == EKeys::P)
     {
-		OnPlayButtonClicked();
+        OnPlayButtonClicked();
         return FReply::Handled();
-	}
+    }
     return FReply::Unhandled();
 }
 
@@ -56,12 +54,10 @@ void UG_PauseWidget::OnExitButtonClicked()
     PlayerController->ExitToMenu();
 }
 
-void UG_PauseWidget::OnVolumeSliderValueChanged(float Value) 
+void UG_PauseWidget::OnVolumeSliderValueChanged(float Value)
 {
-    /*
-    AG_GameInstance = (!AG_GameInstance) ? GetGameInstance<UAG_GameInstance>() : AG_GameInstance;
-    if (!AG_GameInstance) return;
+    G_GameInstance = G_GameInstance.IsValid() ? G_GameInstance : GetGameInstance<UG_GameInstance>();
+    if (!G_GameInstance.IsValid()) return;
 
-    AG_GameInstance->SetMasterSoundVolume(Value);
-    */
+    G_GameInstance->SetMasterSoundVolume(Value);
 }

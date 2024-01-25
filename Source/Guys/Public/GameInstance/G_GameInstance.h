@@ -6,9 +6,8 @@
 #include "Engine/GameInstance.h"
 #include "G_GameInstance.generated.h"
 
-/**
- *
- */
+class USoundClass;
+
 UCLASS()
 class GUYS_API UG_GameInstance : public UGameInstance
 {
@@ -26,6 +25,9 @@ public:
     FORCEINLINE void SetPlayerName(FText NewName) { PlayerName = NewName; }
     FORCEINLINE FText GetPlayerName() const { return PlayerName; }
 
+    void SetMasterSoundVolume(float Volume);
+    float GetMasterSoundVolume() const;
+
     FORCEINLINE FName GetMenuMapName() const { return MenuMapName; }
 
 private:
@@ -34,6 +36,9 @@ private:
 
     UPROPERTY(EditDefaultsOnly, Category = "G|Maps")
     FName MenuMapName;
+
+    UPROPERTY(EditDefaultsOnly, Category = "G|Sound")
+    TObjectPtr<USoundClass> MasterSoundClass;
 
     FText PlayerName = FText::FromString(TEXT("Player"));
 };
