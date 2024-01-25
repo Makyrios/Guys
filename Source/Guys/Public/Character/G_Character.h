@@ -13,6 +13,7 @@ class UInputMappingContext;
 class UAttributeSet;
 class USpringArmComponent;
 class UCameraComponent;
+class AG_PlayerController;
 struct FInputActionValue;
 
 UCLASS(config = Game)
@@ -47,15 +48,17 @@ public:
     void Multicast_Interact();
 
 protected:
+    virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+
+    virtual void InitAbilityActorInfo();
+
     void Move(const FInputActionValue& Value);
 
     void Look(const FInputActionValue& Value);
 
     void Interact(const FInputActionValue& Value);
 
-    virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-
-    virtual void InitAbilityActorInfo();
+    void TogglePause();
 
 protected:
     UPROPERTY()
@@ -64,7 +67,11 @@ protected:
     UPROPERTY()
     TObjectPtr<UAttributeSet> AttributeSet;
 
+
 private:
+    UPROPERTY()
+    TWeakObjectPtr<AG_PlayerController> G_PlayerController;
+
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
     TObjectPtr<USpringArmComponent> CameraBoom;
 
@@ -88,4 +95,7 @@ private:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Input", meta = (AllowPrivateAccess = "true"))
     TObjectPtr<UInputAction> InteractAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Input", meta = (AllowPrivateAccess = "true"))
+    TObjectPtr<UInputAction> PauseAction;
 };

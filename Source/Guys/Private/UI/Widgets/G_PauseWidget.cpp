@@ -4,6 +4,7 @@
 #include "UI/HUD/G_HUD.h"
 #include "Components/Button.h"
 #include "Components/Slider.h"
+#include <Player/G_PlayerController.h>
 
 void UG_PauseWidget::NativeConstruct()
 {
@@ -25,24 +26,34 @@ void UG_PauseWidget::NativeConstruct()
 
 }
 
+FReply UG_PauseWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
+{
+    if (InKeyEvent.GetKey() == EKeys::Escape || InKeyEvent.GetKey() == EKeys::P)
+    {
+		OnPlayButtonClicked();
+        return FReply::Handled();
+	}
+    return FReply::Unhandled();
+}
+
 void UG_PauseWidget::OnPlayButtonClicked()
 {
-    if (!GetOwningPlayer() || !GetOwningPlayer()->GetHUD()) return;
+    if (!GetOwningPlayer()) return;
 
-    G_HUD = (!G_HUD) ? Cast<AG_HUD>(GetOwningPlayer()->GetHUD()) : G_HUD;
-    if (!G_HUD) return;
+    PlayerController = PlayerController.IsValid() ? PlayerController : GetOwningPlayer<AG_PlayerController>();
+    if (!PlayerController.IsValid()) return;
 
-    G_HUD->Pause(false);
+    PlayerController->TogglePause();
 }
 
 void UG_PauseWidget::OnExitButtonClicked()
 {
-    if (!GetOwningPlayer() || !GetOwningPlayer()->GetHUD()) return;
+    if (!GetOwningPlayer()) return;
 
-    G_HUD = (!G_HUD) ? Cast<AG_HUD>(GetOwningPlayer()->GetHUD()) : G_HUD;
-    if (!G_HUD) return;
+    PlayerController = PlayerController.IsValid() ? PlayerController : GetOwningPlayer<AG_PlayerController>();
+    if (!PlayerController.IsValid()) return;
 
-    G_HUD->ExitToMenu();
+    PlayerController->ExitToMenu();
 }
 
 void UG_PauseWidget::OnVolumeSliderValueChanged(float Value) 

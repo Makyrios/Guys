@@ -18,18 +18,16 @@ public:
     AG_PlayerController();
 
     void CreateStartGameWidget(float DelayBeforeStart);
-
     void SetHUDWidgetVisibility(ESlateVisibility InVisibility);
     void SetSpectatorHUDWidgetVisibility(ESlateVisibility InVisibility);
-
     void SetKeyboardInput(bool bEnable);
+    ASpectatorPawn* SpawnSpectatorPawn() override;
+    void SetSpectatorHUD(bool bEnableSpectator);
+    void TogglePause();
+    void ExitToMenu();
 
     FORCEINLINE FName GetCurrentMatchState() const { return CurrentMatchState; }
     void SetCurrentMatchState(FName InMatchState);
-
-    ASpectatorPawn* SpawnSpectatorPawn() override;
-
-    void SetSpectatorHUD(bool bEnableSpectator);
 
 protected:
     virtual void OnPossess(APawn* InPawn) override;
@@ -65,4 +63,6 @@ private:
 
     UPROPERTY(ReplicatedUsing = OnRep_CurrentMatchState)
     FName CurrentMatchState;
+
+    bool bIsPaused = false;
 };

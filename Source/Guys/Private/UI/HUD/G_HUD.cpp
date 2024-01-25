@@ -4,12 +4,13 @@
 #include "UI/Widgets/G_TableStatsWidget.h"
 #include "UI/Widgets/G_PauseWidget.h"
 #include <UI/Widgets/G_StartGameWidget.h>
+#include <Player/G_PlayerController.h>
 
 void AG_HUD::PostInitializeComponents()
 {
     Super::PostInitializeComponents();
 
-    if (TableStatsWidget)
+    if (TableStatsClass)
     {
         TableStatsWidget = CreateWidget<UG_TableStatsWidget>(GetOwningPlayerController(), TableStatsClass);
         if (TableStatsWidget)
@@ -19,7 +20,7 @@ void AG_HUD::PostInitializeComponents()
         }
     }
     
-    if (PauseWidget)
+    if (PauseWidgetClass)
     {
         PauseWidget = CreateWidget<UG_PauseWidget>(GetOwningPlayerController(), PauseWidgetClass);
         if (PauseWidget)
@@ -65,21 +66,17 @@ void AG_HUD::HideStatsTable()
 
 void AG_HUD::Pause(bool bPause)
 {
-    /*if (!PauseWidget) return;
+    if (!PauseWidget) return;
 
     if (bPause)
     {
+        PauseWidget->SetKeyboardFocus();
         PauseWidget->SetVisibility(ESlateVisibility::Visible);
     }
     else
     {
         PauseWidget->SetVisibility(ESlateVisibility::Collapsed);
-
-        AAS_PlayerController* OwnerController = Cast<AAS_PlayerController>(GetOwningPlayerController());
-        if (!OwnerController) return;
-
-        OwnerController->UnPause();
-    }*/
+    }
 }
 
 void AG_HUD::ExitToMenu()

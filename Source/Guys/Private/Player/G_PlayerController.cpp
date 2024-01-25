@@ -7,7 +7,9 @@
 #include "Net/UnrealNetwork.h"
 #include <Components/SlateWrapperTypes.h>
 #include "GameFramework/SpectatorPawn.h"
-
+#include <GameInstance/G_GameInstance.h>
+#include <Kismet/GameplayStatics.h>
+#include "UI/Widgets/G_PauseWidget.h"
 
 AG_PlayerController::AG_PlayerController()
 {
@@ -19,6 +21,38 @@ void AG_PlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
     DOREPLIFETIME(AG_PlayerController, CurrentMatchState);
+}
+
+void AG_PlayerController::TogglePause()
+{
+    G_HUD = (!G_HUD) ? GetHUD<AG_HUD>() : G_HUD;
+    if (!G_HUD) return;
+
+    if (bIsPaused)
+    {
+        bIsPaused = false;
+        G_HUD->Pause(false);
+        SetInputMode(FInputModeGameOnly());
+        bShowMouseCursor = false;
+        SetHUDWidgetVisibility(ESlateVisibility::Visible);
+    }
+    else
+    {
+        SetHUDWidgetVisibility(ESlateVisibility::Collapsed);
+        bIsPaused = true;
+        G_HUD->Pause(true);
+        FInputModeUIOnly InputMode;
+        SetInputMode(InputMode);
+        bShowMouseCursor = true;
+    }
+}
+
+void AG_PlayerController::ExitToMenu()
+{
+    UG_GameInstance* GameInstance = GetGameInstance<UG_GameInstance>();
+    if (!GameInstance) return;
+
+    UGameplayStatics::OpenLevel(this, GameInstance->GetMenuMapName());
 }
 
 ASpectatorPawn* AG_PlayerController::SpawnSpectatorPawn()
@@ -80,6 +114,17 @@ void AG_PlayerController::SetKeyboardInput(bool bEnable)
     }
 }
 
+void AG_PlayerController::Client_SetKeyboardInput_Implementation(bool bEnable)
+{
+    if (GetPawn())
+    {
+        G_Character = G_Character.IsValid() ? G_Character : Cast<AG_Character>(GetPawn());
+        if (!G_Character.IsValid()) return;
+
+        G_Character->SetKeyboardInput(bEnable);
+    }
+}
+
 void AG_PlayerController::SetCurrentMatchState(FName InMatchState)
 {
     CurrentMatchState = InMatchState;
@@ -91,17 +136,6 @@ void AG_PlayerController::SetCurrentMatchState(FName InMatchState)
     else
     {
         SetKeyboardInput(false);
-    }
-}
-
-void AG_PlayerController::Client_SetKeyboardInput_Implementation(bool bEnable)
-{
-    if (GetPawn())
-    {
-        G_Character = G_Character.IsValid() ? G_Character : Cast<AG_Character>(GetPawn());
-        if (!G_Character.IsValid()) return;
-
-        G_Character->SetKeyboardInput(bEnable);
     }
 }
 
@@ -132,6 +166,11 @@ void AG_PlayerController::ShowStartGameWidget(float DelayBeforeStart)
 
 void AG_PlayerController::SetHUDWidgetVisibility(ESlateVisibility InVisibility)
 {
+    if (bIsPaused || CurrentMatchState != MatchState::InProgress)
+    {
+    	return;
+    }
+
     if (!IsLocalController())
     {
         Client_SetHUDWidgetVisibility(InVisibility);

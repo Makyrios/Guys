@@ -37,12 +37,19 @@ protected:
 
     void SetupTableWidget();
 
-protected:
+public:
     UPROPERTY()
     TObjectPtr<UUserWidget> HUDWidget;
 
     UPROPERTY()
     TObjectPtr<UUserWidget> SpectatorHUDWidget;
+
+    UPROPERTY()
+    TObjectPtr<UG_PauseWidget> PauseWidget;
+
+protected:
+    UPROPERTY()
+    TObjectPtr<UG_TableStatsWidget> TableStatsWidget;
 
     UPROPERTY(EditDefaultsOnly, Category = "AS|Widgets")
     TSubclassOf<UUserWidget> StartGameWidgetClass;
@@ -50,19 +57,12 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category = "AS|Widgets")
     TSubclassOf<UUserWidget> TableStatsClass;
 
-    UPROPERTY()
-    TObjectPtr<UG_TableStatsWidget> TableStatsWidget;
-
     UPROPERTY(EditDefaultsOnly, Category = "AS|Widgets")
     TSubclassOf<UUserWidget> PauseWidgetClass;
-
-    UPROPERTY()
-    TObjectPtr<UG_PauseWidget> PauseWidget;
 
     UPROPERTY(EditDefaultsOnly, Category = "AS|Widgets")
     TSubclassOf<UUserWidget> WonWidgetClass;
 
     UPROPERTY(EditDefaultsOnly, Category = "AS|Widgets")
     TSubclassOf<UUserWidget> LoseWidgetClass;
-
 };

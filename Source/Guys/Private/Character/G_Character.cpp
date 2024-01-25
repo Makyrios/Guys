@@ -14,6 +14,7 @@
 #include "Interfaces/G_IInteractable.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include <GameModes/G_BaseGameMode.h>
+#include "Player/G_PlayerController.h"
 
 AG_Character::AG_Character()
 {
@@ -48,14 +49,11 @@ void AG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputC
     if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
     {
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
-
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
-
         EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AG_Character::Move);
-
         EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AG_Character::Look);
-
         EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &AG_Character::Interact);
+        EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Started, this, &AG_Character::TogglePause);
     }
 }
 
@@ -92,6 +90,14 @@ void AG_Character::Interact(const FInputActionValue& Value)
 {
     UKismetSystemLibrary::PrintString(this, "I've pushed someone!");
     Server_Interact();
+}
+
+void AG_Character::TogglePause()
+{
+    G_PlayerController = G_PlayerController.IsValid() ? G_PlayerController : Cast<AG_PlayerController>(Controller);
+    if (!G_PlayerController.IsValid()) return;
+
+    G_PlayerController->TogglePause();
 }
 
 void AG_Character::Server_Interact_Implementation()
