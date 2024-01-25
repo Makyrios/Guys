@@ -62,6 +62,15 @@ protected:
 
     void ToggleStats();
 
+    virtual void Tick(float DeltaTime);
+
+    virtual void InitAbilityActorInfo();
+
+private:
+    void ApplyGameplayTags();
+
+    void ApplyAttributes();
+
 protected:
     UPROPERTY()
     TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;

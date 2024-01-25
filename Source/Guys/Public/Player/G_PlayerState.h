@@ -42,6 +42,9 @@ protected:
     UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "G|Stats")
     int32 PlayerScore = 0;
 
+    UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "G|Stats")
+    FString PlayerName = "";
+
     UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "G|Spawn")
     TWeakObjectPtr<AG_Checkpoint> LastCheckpoint;
 };
