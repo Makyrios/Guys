@@ -54,6 +54,8 @@ void AG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputC
         EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AG_Character::Look);
         EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &AG_Character::Interact);
         EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Started, this, &AG_Character::TogglePause);
+        EnhancedInputComponent->BindAction(StatsAction, ETriggerEvent::Started, this, &AG_Character::ToggleStats);
+        EnhancedInputComponent->BindAction(StatsAction, ETriggerEvent::Completed, this, &AG_Character::ToggleStats);
     }
 }
 
@@ -98,6 +100,14 @@ void AG_Character::TogglePause()
     if (!G_PlayerController.IsValid()) return;
 
     G_PlayerController->TogglePause();
+}
+
+void AG_Character::ToggleStats()
+{
+    G_PlayerController = G_PlayerController.IsValid() ? G_PlayerController : Cast<AG_PlayerController>(Controller);
+    if (!G_PlayerController.IsValid()) return;
+
+    G_PlayerController->ToggleStats();
 }
 
 void AG_Character::Server_Interact_Implementation()

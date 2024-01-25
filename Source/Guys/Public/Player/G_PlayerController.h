@@ -24,6 +24,7 @@ public:
     ASpectatorPawn* SpawnSpectatorPawn() override;
     void SetSpectatorHUD(bool bEnableSpectator);
     void TogglePause();
+    void ToggleStats();
     void ExitToMenu();
 
     FORCEINLINE FName GetCurrentMatchState() const { return CurrentMatchState; }
@@ -65,4 +66,5 @@ private:
     FName CurrentMatchState;
 
     bool bIsPaused = false;
+    bool bIsStats = false;
 };

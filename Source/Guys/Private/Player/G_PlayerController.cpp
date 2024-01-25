@@ -47,6 +47,25 @@ void AG_PlayerController::TogglePause()
     }
 }
 
+void AG_PlayerController::ToggleStats()
+{
+    G_HUD = (!G_HUD) ? GetHUD<AG_HUD>() : G_HUD;
+    if (!G_HUD) return;
+
+    if (bIsStats)
+    {
+        bIsStats = false;
+        G_HUD->ToggleStatsTable(false);
+        SetHUDWidgetVisibility(ESlateVisibility::Visible);
+    }
+    else
+    {
+        SetHUDWidgetVisibility(ESlateVisibility::Collapsed);
+        bIsStats = true;
+        G_HUD->ToggleStatsTable(true);
+    }
+}
+
 void AG_PlayerController::ExitToMenu()
 {
     UG_GameInstance* GameInstance = GetGameInstance<UG_GameInstance>();
@@ -168,7 +187,7 @@ void AG_PlayerController::SetHUDWidgetVisibility(ESlateVisibility InVisibility)
 {
     if (bIsPaused || CurrentMatchState != MatchState::InProgress)
     {
-    	return;
+        return;
     }
 
     if (!IsLocalController())

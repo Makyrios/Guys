@@ -19,9 +19,7 @@ public:
     void SetHUDWidgetVisibility(ESlateVisibility InVisibility);
     void SetSpectatorHUDWidgetVisibility(ESlateVisibility InVisibility);
 
-    void ShowStatsTable();
-    void HideStatsTable();
-
+    void ToggleStatsTable(bool bEnable);
     void Pause(bool bPause);
     void ExitToMenu();
 
@@ -35,7 +33,7 @@ public:
 protected:
     virtual void PostInitializeComponents() override;
 
-    void SetupTableWidget();
+    void UpdateTableWidget();
 
 public:
     UPROPERTY()

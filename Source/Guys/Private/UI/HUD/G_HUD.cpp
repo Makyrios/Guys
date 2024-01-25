@@ -5,6 +5,7 @@
 #include "UI/Widgets/G_PauseWidget.h"
 #include <UI/Widgets/G_StartGameWidget.h>
 #include <Player/G_PlayerController.h>
+#include <Kismet/GameplayStatics.h>
 
 void AG_HUD::PostInitializeComponents()
 {
@@ -19,7 +20,7 @@ void AG_HUD::PostInitializeComponents()
             TableStatsWidget->AddToViewport();
         }
     }
-    
+
     if (PauseWidgetClass)
     {
         PauseWidget = CreateWidget<UG_PauseWidget>(GetOwningPlayerController(), PauseWidgetClass);
@@ -43,25 +44,22 @@ void AG_HUD::SetSpectatorHUDWidgetVisibility(ESlateVisibility InVisibility)
 {
     if (SpectatorHUDWidget)
     {
-		SpectatorHUDWidget->SetVisibility(InVisibility);
-	}
+        SpectatorHUDWidget->SetVisibility(InVisibility);
+    }
 }
 
-
-void AG_HUD::ShowStatsTable()
+void AG_HUD::ToggleStatsTable(bool bEnable)
 {
-    /*
     if (!TableStatsWidget) return;
-    TableStatsWidget->SetVisibility(ESlateVisibility::Visible);
-    */
-}
 
-void AG_HUD::HideStatsTable()
-{
-    /*
-    if (!TableStatsWidget) return;
-    TableStatsWidget->SetVisibility(ESlateVisibility::Collapsed);
-    */
+    if (bEnable)
+    {
+        TableStatsWidget->SetVisibility(ESlateVisibility::Visible);
+    }
+    else
+    {
+        TableStatsWidget->SetVisibility(ESlateVisibility::Collapsed);
+    }
 }
 
 void AG_HUD::Pause(bool bPause)
@@ -126,7 +124,7 @@ void AG_HUD::UpdateInventoryInfo()
     HUDWidget->UpdateInventoryInfo();*/
 }
 
-void AG_HUD::SetupTableWidget()
+void AG_HUD::UpdateTableWidget()
 {
     /*if (!TableStatsWidget) return;
 

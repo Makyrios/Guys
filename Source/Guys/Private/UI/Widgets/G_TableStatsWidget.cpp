@@ -45,12 +45,12 @@ void UG_TableStatsWidget::AddPlayerStatsToTable(AG_PlayerState* PlayerToAdd)
     Players->AddChild(NewPlayerStats);
 }
 
-void UG_TableStatsWidget::SetPlayerNumber(int32 PlayerNumber)
-{
-    if (PlayersNumberBox)
-    {
-        const FString PlayerNumberString = FString::FromInt(PlayerNumber);
-        PlayersNumberBox->SetText(FText::FromString(PlayerNumberString));
-    }
-}
+//void UG_TableStatsWidget::SetPlayerNumber(int32 PlayerNumber)
+//{
+//    if (PlayersNumberBox)
+//    {
+//        const FString PlayerNumberString = FString::FromInt(PlayerNumber);
+//        PlayersNumberBox->SetText(FText::FromString(PlayerNumberString));
+//    }
+//}
 
