@@ -48,9 +48,9 @@ public:
     void Multicast_Interact();
 
 protected:
-    virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+    virtual void BeginPlay() override;
 
-    virtual void InitAbilityActorInfo();
+    virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
     void Move(const FInputActionValue& Value);
 

@@ -214,11 +214,17 @@ void AG_Character::InitAbilityActorInfo()
     AttributeSet = G_PlayerState->GetAttributeSet();
 
     AbilitySystemComponent->InitAbilityActorInfo(G_PlayerState, this);
-    Cast<UG_AbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+
+    if (UG_AbilitySystemComponent* CustomAbilitySystemComponent = Cast<UG_AbilitySystemComponent>(AbilitySystemComponent))
+    {
+        CustomAbilitySystemComponent->AbilityActorInfoSet();
+    }
 }
 
 void AG_Character::ApplyGameplayTags()
 {
+    if (!AbilitySystemComponent) return;
+
     FGameplayTagContainer AssetTags;
     AbilitySystemComponent->GetOwnedGameplayTags(AssetTags);
 
@@ -238,6 +244,6 @@ void AG_Character::ApplyGameplayTags()
 void AG_Character::ApplyAttributes()
 {
     UG_AttributeSet* G_AttributeSet = Cast<UG_AttributeSet>(AttributeSet);
-
+    if (!G_AttributeSet) return;
     GetCharacterMovement()->MaxWalkSpeed = G_AttributeSet->GetMaxMovementSpeed();
 }
