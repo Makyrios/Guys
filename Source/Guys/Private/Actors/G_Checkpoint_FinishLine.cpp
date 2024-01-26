@@ -5,19 +5,37 @@
 #include <Kismet/GameplayStatics.h>
 #include <GameStates/G_RaceGameState.h>
 #include "Player/G_RacePlayerController.h"
+#include <Player/G_PlayerState.h>
 
 
 void AG_Checkpoint_FinishLine::HandleCheckpointOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
     UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-    Super::HandleCheckpointOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+    AddPointsToPlayer(OtherActor);
 
+    HandleFinishingRace(OtherActor);
+}
+
+void AG_Checkpoint_FinishLine::AddPointsToPlayer(AActor* OtherActor)
+{
+    if (APawn* Pawn = Cast<APawn>(OtherActor))
+    {
+        if (AG_PlayerState* PlayerState = Pawn->GetPlayerState<AG_PlayerState>())
+        {
+            PlayerState->AddPlayerScore(Points);
+            Points -= RemovePointsPerPlayer;
+        }
+    }
+}
+
+void AG_Checkpoint_FinishLine::HandleFinishingRace(AActor* OtherActor)
+{
     if (AG_RacePlayerController* RaceController = OtherActor->GetInstigatorController<AG_RacePlayerController>())
     {
-        if (AG_RaceGameState* GameState = Cast<AG_RaceGameState>(UGameplayStatics::GetGameState(this))) 
+        if (AG_RaceGameState* GameState = Cast<AG_RaceGameState>(UGameplayStatics::GetGameState(this)))
         {
             GameState->AddFinishedPlayer(RaceController);
         }
         OtherActor->Destroy();
-	}
+    }
 }
