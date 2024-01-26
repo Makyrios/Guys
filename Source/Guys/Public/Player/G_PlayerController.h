@@ -19,7 +19,7 @@ public:
 
     void CreateStartGameWidget(float DelayBeforeStart);
     void SetHUDWidgetVisibility(ESlateVisibility InVisibility);
-    void SetSpectatorHUDWidgetVisibility(ESlateVisibility InVisibility);
+    bool ShouldChangeHUDVisibility();
     void SetKeyboardInput(bool bEnable);
     void SetSpectatorHUD(bool bEnableSpectator);
     void TogglePause();
@@ -38,12 +38,15 @@ protected:
 
 private:
     void ShowStartGameWidget(float DelayBeforeStart);
+    void SetSpectatorHUDWidgetVisibility(ESlateVisibility InVisibility);
+    void SetPlayerHUDWidgetVisibility(ESlateVisibility InVisibility);
+
 
     UFUNCTION(Client, Reliable)
     void Client_ShowStartGameWidget(float DelayBeforeStart);
 
     UFUNCTION(Client, Reliable)
-    void Client_SetHUDWidgetVisibility(ESlateVisibility InVisibility);
+    void Client_SetPlayerHUDWidgetVisibility(ESlateVisibility InVisibility);
 
     UFUNCTION(Client, Reliable)
     void Client_SetSpectatorHUDWidgetVisibility(ESlateVisibility InVisibility);

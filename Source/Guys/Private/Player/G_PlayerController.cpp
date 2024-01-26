@@ -180,7 +180,7 @@ void AG_PlayerController::ShowStartGameWidget(float DelayBeforeStart)
 
 void AG_PlayerController::SetHUDWidgetVisibility(ESlateVisibility InVisibility)
 {
-    if (bIsPaused || CurrentMatchState != MatchState::InProgress)
+    if (!ShouldChangeHUDVisibility())
     {
         return;
     }
@@ -188,23 +188,17 @@ void AG_PlayerController::SetHUDWidgetVisibility(ESlateVisibility InVisibility)
     if (GetPawn()->IsA<ASpectatorPawn>())
     {
         SetSpectatorHUDWidgetVisibility(InVisibility);
-        return;
     }
-
-    if (!IsLocalController())
+    else
     {
-        Client_SetHUDWidgetVisibility(InVisibility);
+        SetPlayerHUDWidgetVisibility(InVisibility);
     }
 
-    G_HUD = (!G_HUD) ? GetHUD<AG_HUD>() : G_HUD;
-    if (!G_HUD) return;
-
-    G_HUD->SetHUDWidgetVisibility(InVisibility);
 }
 
-void AG_PlayerController::Client_SetHUDWidgetVisibility_Implementation(ESlateVisibility InVisibility)
+bool AG_PlayerController::ShouldChangeHUDVisibility()
 {
-    SetHUDWidgetVisibility(InVisibility);
+    return !bIsPaused && CurrentMatchState == MatchState::InProgress;
 }
 
 void AG_PlayerController::SetSpectatorHUDWidgetVisibility(ESlateVisibility InVisibility)
@@ -218,6 +212,24 @@ void AG_PlayerController::SetSpectatorHUDWidgetVisibility(ESlateVisibility InVis
     if (!G_HUD) return;
 
     G_HUD->SetSpectatorHUDWidgetVisibility(InVisibility);
+}
+
+void AG_PlayerController::SetPlayerHUDWidgetVisibility(ESlateVisibility InVisibility)
+{
+    if (!IsLocalController())
+    {
+        Client_SetPlayerHUDWidgetVisibility(InVisibility);
+    }
+
+    G_HUD = (!G_HUD) ? GetHUD<AG_HUD>() : G_HUD;
+    if (!G_HUD) return;
+
+    G_HUD->SetHUDWidgetVisibility(InVisibility);
+}
+
+void AG_PlayerController::Client_SetPlayerHUDWidgetVisibility_Implementation(ESlateVisibility InVisibility)
+{
+    SetPlayerHUDWidgetVisibility(InVisibility);
 }
 
 void AG_PlayerController::Client_SetSpectatorHUDWidgetVisibility_Implementation(ESlateVisibility InVisibility)
