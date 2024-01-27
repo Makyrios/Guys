@@ -4,6 +4,11 @@
 #include "UI/Widgets/G_RaceHUDWidget.h"
 #include "Components/TextBlock.h"
 #include "UI/Widgets/G_RaceSpectatorHUDWidget.h"
+#include <UI/Widgets/G_RaceWinWidget.h>
+#include <UI/Widgets/G_RaceFinishWidget.h>
+#include "Animation/WidgetAnimation.h"
+
+
 
 void AG_RaceHUD::PostInitializeComponents()
 {
@@ -42,23 +47,40 @@ void AG_RaceHUD::SetTimeRemaining(float RemainingSeconds)
     }
 }
 
+void AG_RaceHUD::SetPlayerPosition(int32 Position)
+{
+    if (RaceHUDWidget)
+    {
+        RaceHUDWidget->SetPlayerPosition(Position);
+    }
+}
+
 void AG_RaceHUD::ShowFinishRaceWidget()
 {
-    UUserWidget* FinishRaceWidget = CreateWidget<UUserWidget>(GetOwningPlayerController(), FinishRaceWidgetClass);
-    if (FinishRaceWidget)
+    if (RaceWinWidget && RaceWinWidget->IsInViewport() && RaceWinWidget->RaceWinAnimation)
     {
-        FinishRaceWidget->AddToViewport();
+        FTimerHandle AnimationFinishedTimer;
+        GetWorld()->GetTimerManager().SetTimer(
+            AnimationFinishedTimer, [this]() { ShowFinishRaceWidget(); }, RaceWinWidget->RaceWinAnimation->GetEndTime(), false);
+        return;
+    }
+
+    RaceFinishWidget = CreateWidget<UG_RaceFinishWidget>(GetOwningPlayerController(), FinishRaceWidgetClass);
+    if (RaceFinishWidget)
+    {
+        RaceFinishWidget->AddToViewport();
         SetHUDWidgetVisibility(ESlateVisibility::Collapsed);
         SetSpectatorHUDWidgetVisibility(ESlateVisibility::Collapsed);
     }
 }
 
-void AG_RaceHUD::ShowWinRaceWidget()
+void AG_RaceHUD::ShowWinRaceWidget(int32 Place)
 {
-    UUserWidget* WinRaceWidget = CreateWidget<UUserWidget>(GetOwningPlayerController(), WinRaceWidgetClass);
-    if (WinRaceWidget)
+    RaceWinWidget = CreateWidget<UG_RaceWinWidget>(GetOwningPlayerController(), WinRaceWidgetClass);
+    if (RaceWinWidget)
     {
-        WinRaceWidget->AddToViewport();
+        RaceWinWidget->SetPlace(Place);
+        RaceWinWidget->AddToViewport();
         SetHUDWidgetVisibility(ESlateVisibility::Collapsed);
         SetSpectatorHUDWidgetVisibility(ESlateVisibility::Visible);
         bIsSpectator = true;

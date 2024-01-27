@@ -3,7 +3,7 @@
 
 #include "Actors/G_Checkpoint.h"
 #include "Components/BoxComponent.h"
-#include <Player/G_PlayerState.h>
+#include <Player/G_RacePlayerState.h>
 #include <Kismet/KismetMathLibrary.h>
 
 AG_Checkpoint::AG_Checkpoint()
@@ -41,7 +41,7 @@ void AG_Checkpoint::HandleCheckpointOverlap(UPrimitiveComponent* OverlappedCompo
 {
     if (APawn* Pawn = Cast<APawn>(OtherActor))
     {
-        if (AG_PlayerState* PlayerState = Pawn->GetPlayerState<AG_PlayerState>())
+        if (AG_RacePlayerState* PlayerState = Pawn->GetPlayerState<AG_RacePlayerState>())
         {
             if (!bTriggeredBefore)
             {

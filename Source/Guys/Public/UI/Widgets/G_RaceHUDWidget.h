@@ -10,6 +10,7 @@
 class UG_InventoryWidget;
 class UTextBlock;
 class UImage;
+class AG_RaceTrajectorySpline;
 
 UCLASS()
 class GUYS_API UG_RaceHUDWidget : public UUserWidget
@@ -23,8 +24,12 @@ public:
     void SetFirstAbilityImage(FGameplayTag AbilityTag);
     void SetSecondAbilityImage(FGameplayTag AbilityTag);
 
+    FORCEINLINE int32 GetPlayerPosition() const { return PlayerPosition; }
+    void SetPlayerPosition(int32 Position);
+
 protected:
-    void NativePreConstruct() override;
+    virtual void NativePreConstruct() override;
+    virtual void NativeConstruct() override;
 
 private:
     UImage* GetAbilityImage(FGameplayTag AbilityTag);
@@ -38,4 +43,10 @@ public:
 
     UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
     TObjectPtr<UTextBlock> TimeText;
+
+private:
+    UPROPERTY()
+    TWeakObjectPtr<AG_RaceTrajectorySpline> TrajectorySpline;
+
+    int32 PlayerPosition = 0;
 };

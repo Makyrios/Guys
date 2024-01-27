@@ -8,30 +8,24 @@
 
 class UTextBlock;
 class UVerticalBox;
-class AG_PlayerState;
+class AG_RacePlayerState;
 
 UCLASS()
 class GUYS_API UG_TableStatsWidget : public UUserWidget
 {
     GENERATED_BODY()
 
-public:
-    //void SetPlayerNumber(int32 PlayerNumber);
-
 protected:
     void NativeOnInitialized() override;
     void UpdatePlayers();
-    virtual void AddPlayerStatsToTable(AG_PlayerState* PlayerToAdd);
+    virtual void AddPlayerStatsToTable(AG_RacePlayerState* PlayerToAdd);
 
 protected:
     UPROPERTY()
-    TArray<AG_PlayerState*> PlayerStatesInTable;
+    TArray<AG_RacePlayerState*> PlayerStatesInTable;
 
     UPROPERTY(EditAnywhere)
     TSubclassOf<UUserWidget> PlayerStatsClass;
-
-    /*UPROPERTY(EditAnywhere, meta = (BindWidget))
-    UTextBlock* PlayersNumberBox;*/
 
     UPROPERTY(EditAnywhere, meta = (BindWidget))
     UVerticalBox* Players;

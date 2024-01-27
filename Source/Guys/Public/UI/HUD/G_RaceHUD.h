@@ -8,6 +8,8 @@
 
 class UG_RaceHUDWidget;
 class UG_RaceSpectatorHUDWidget;
+class UG_RaceWinWidget;
+class UG_RaceFinishWidget;
 
 UCLASS()
 class GUYS_API AG_RaceHUD : public AG_HUD
@@ -17,9 +19,11 @@ class GUYS_API AG_RaceHUD : public AG_HUD
 public:
     void SetTimeRemaining(float RemainingSeconds);
 
+    void SetPlayerPosition(int32 Position);
+
     void ShowFinishRaceWidget();
 
-    void ShowWinRaceWidget();
+    void ShowWinRaceWidget(int32 Place);
 
 protected:
     virtual void PostInitializeComponents() override;
@@ -42,6 +46,9 @@ private:
 
     UPROPERTY()
     TObjectPtr<UG_RaceSpectatorHUDWidget> RaceSpectatorHUDWidget;
+
+    TObjectPtr<UG_RaceWinWidget> RaceWinWidget;
+    TObjectPtr<UG_RaceFinishWidget> RaceFinishWidget;
 
     bool bIsSpectator = false;
 };

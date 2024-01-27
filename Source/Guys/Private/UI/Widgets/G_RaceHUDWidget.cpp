@@ -7,7 +7,7 @@
 #include "Components/Image.h"
 #include <GameModes/G_RaceGameMode.h>
 #include <Kismet/GameplayStatics.h>
-
+#include <Actors/G_RaceTrajectorySpline.h>
 
 void UG_RaceHUDWidget::SetTimeText(float RemainingSeconds)
 {
@@ -59,6 +59,13 @@ void UG_RaceHUDWidget::NativePreConstruct()
     SetVisibility(ESlateVisibility::Collapsed);
 }
 
+void UG_RaceHUDWidget::NativeConstruct()
+{
+    Super::NativeConstruct();
+
+    TrajectorySpline = Cast<AG_RaceTrajectorySpline>(UGameplayStatics::GetActorOfClass(GetWorld(), AG_RaceTrajectorySpline::StaticClass()));
+}
+
 UImage* UG_RaceHUDWidget::GetAbilityImage(FGameplayTag AbilityTag)
 {
     /* TODO - Get ability image from ability tag
@@ -66,4 +73,15 @@ UImage* UG_RaceHUDWidget::GetAbilityImage(FGameplayTag AbilityTag)
     {
     */
     return nullptr;
+}
+
+void UG_RaceHUDWidget::SetPlayerPosition(int32 Position)
+{
+    check(PlaceText);
+
+    if (PlayerPosition == Position) return;
+
+    PlayerPosition = Position;
+    FText PosText = FText::AsNumber(Position);
+    PlaceText->SetText(PosText);
 }

@@ -2,7 +2,7 @@
 
 #include "UI/Widgets/G_PlayerStatsWidget.h"
 #include "Components/TextBlock.h"
-#include "Player/G_PlayerState.h"
+#include "Player/G_RacePlayerState.h"
 
 void UG_PlayerStatsWidget::NativeOnInitialized()
 {
@@ -13,7 +13,7 @@ void UG_PlayerStatsWidget::NativeOnInitialized()
 
 void UG_PlayerStatsWidget::UpdatePlayerStats()
 {
-    if (!PlayerState) return;
+    if (!PlayerState.IsValid()) return;
 
     FString PlayerName = PlayerState->GetPlayerName();
     int32 PlayerScore = PlayerState->GetPlayerScore();
@@ -24,7 +24,7 @@ void UG_PlayerStatsWidget::UpdatePlayerStats()
     SetPing(PlayerPing);
 }
 
-void UG_PlayerStatsWidget::SetPlayerState(AG_PlayerState* NewPlayerState)
+void UG_PlayerStatsWidget::SetPlayerState(AG_RacePlayerState* NewPlayerState)
 {
     if (!NewPlayerState) return;
     PlayerState = NewPlayerState;

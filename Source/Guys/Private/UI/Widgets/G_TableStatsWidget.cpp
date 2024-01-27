@@ -4,7 +4,7 @@
 #include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/VerticalBox.h"
-#include "Player/G_PlayerState.h"
+#include "Player/G_RacePlayerState.h"
 #include "GameFramework/GameState.h"
 #include "UI/Widgets/G_PlayerStatsWidget.h"
 
@@ -23,7 +23,7 @@ void UG_TableStatsWidget::UpdatePlayers()
 
     for (int i = 0; i < PlayerStates.Num(); ++i)
     {
-        if (AG_PlayerState* PlayerState = Cast<AG_PlayerState>(PlayerStates[i]))
+        if (AG_RacePlayerState* PlayerState = Cast<AG_RacePlayerState>(PlayerStates[i]))
         {
             if (PlayerStatesInTable.Find(PlayerState) == INDEX_NONE)
             {
@@ -33,7 +33,7 @@ void UG_TableStatsWidget::UpdatePlayers()
     }
 }
 
-void UG_TableStatsWidget::AddPlayerStatsToTable(AG_PlayerState* PlayerToAdd)
+void UG_TableStatsWidget::AddPlayerStatsToTable(AG_RacePlayerState* PlayerToAdd)
 {
     if (!PlayerToAdd || !PlayerStatsClass) return;
 
@@ -44,13 +44,3 @@ void UG_TableStatsWidget::AddPlayerStatsToTable(AG_PlayerState* PlayerToAdd)
     NewPlayerStats->SetPlayerState(PlayerToAdd);
     Players->AddChild(NewPlayerStats);
 }
-
-//void UG_TableStatsWidget::SetPlayerNumber(int32 PlayerNumber)
-//{
-//    if (PlayersNumberBox)
-//    {
-//        const FString PlayerNumberString = FString::FromInt(PlayerNumber);
-//        PlayersNumberBox->SetText(FText::FromString(PlayerNumberString));
-//    }
-//}
-

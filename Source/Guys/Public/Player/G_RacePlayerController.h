@@ -17,7 +17,9 @@ class GUYS_API AG_RacePlayerController : public AG_PlayerController
 public:
     void HandleFinishRace();
 
-    void HandleWinRace();
+    void HandleWinRace(int32 Place);
+
+    void SetPlayerPosition(int32 Position);
 
 protected:
     virtual void BeginPlay() override;
@@ -32,7 +34,10 @@ private:
     void Client_HandleFinishRace();
 
     UFUNCTION(Client, Reliable)
-    void Client_HandleWinRace();
+    void Client_HandleWinRace(int32 Place);
+
+    UFUNCTION(Client, Unreliable)
+    void Client_SetPlayerPosition(int32 Position);
 
 private:
     UPROPERTY()

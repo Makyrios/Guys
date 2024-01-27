@@ -5,7 +5,7 @@
 #include <Kismet/GameplayStatics.h>
 #include <GameStates/G_RaceGameState.h>
 #include "Player/G_RacePlayerController.h"
-#include <Player/G_PlayerState.h>
+#include <Player/G_RacePlayerState.h>
 
 
 void AG_Checkpoint_FinishLine::HandleCheckpointOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -20,7 +20,7 @@ void AG_Checkpoint_FinishLine::AddPointsToPlayer(AActor* OtherActor)
 {
     if (APawn* Pawn = Cast<APawn>(OtherActor))
     {
-        if (AG_PlayerState* PlayerState = Pawn->GetPlayerState<AG_PlayerState>())
+        if (AG_RacePlayerState* PlayerState = Pawn->GetPlayerState<AG_RacePlayerState>())
         {
             PlayerState->AddPlayerScore(Points);
             Points -= RemovePointsPerPlayer;
