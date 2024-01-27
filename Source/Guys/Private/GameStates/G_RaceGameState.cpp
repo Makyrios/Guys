@@ -4,10 +4,20 @@
 #include <GameModes/G_RaceGameMode.h>
 #include <Kismet/GameplayStatics.h>
 #include <Player/G_RacePlayerController.h>
+#include "Net/UnrealNetwork.h"
+
 
 AG_RaceGameState::AG_RaceGameState()
 {
     PrimaryActorTick.bCanEverTick = true;
+}
+
+void AG_RaceGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+    DOREPLIFETIME(AG_RaceGameState, bAnyPlayerFinished);
+    DOREPLIFETIME(AG_RaceGameState, Timer);
 }
 
 void AG_RaceGameState::Tick(float DeltaTime)
@@ -22,9 +32,9 @@ void AG_RaceGameState::Tick(float DeltaTime)
 
 void AG_RaceGameState::AddFinishedPlayer(AG_RacePlayerController* PlayerController)
 {
-    OnPlayerFinishRace.Broadcast(PlayerController);
-
     FinishedPlayersCount++;
+    OnPlayerFinishRace.Broadcast(PlayerController, FinishedPlayersCount);
+
     if (!bAnyPlayerFinished)
     {
         bAnyPlayerFinished = true;

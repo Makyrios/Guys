@@ -26,7 +26,7 @@ protected:
 
 private:
     UFUNCTION()
-    void OnPlayerFinishRace(AG_RacePlayerController* RaceController);
+    void OnPlayerFinishRace(AG_RacePlayerController* RaceController, int32 Place);
 
 private:
     UPROPERTY(EditDefaultsOnly, Category = "G|Gameplay")

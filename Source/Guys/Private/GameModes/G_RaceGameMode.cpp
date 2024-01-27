@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GameModes/G_RaceGameMode.h"
-#include <Player/G_PlayerState.h>
+#include <Player/G_RacePlayerState.h>
 #include "Actors/G_Checkpoint.h"
 #include <Character/G_Character.h>
 #include <GameStates/G_RaceGameState.h>
@@ -23,7 +23,9 @@ bool AG_RaceGameMode::ReadyToEndMatch_Implementation()
 {
     if (const AG_RaceGameState* CurrentGameState = Cast<AG_RaceGameState>(GameState))
     {
-        return CurrentGameState->GetTimer() >= TimeLimit || Super::ReadyToEndMatch_Implementation();
+        return CurrentGameState->GetTimer() >= TimeLimit 
+            || CurrentGameState->GetFinishedPlayersCount() == CurrentGameState->PlayerArray.Num() 
+            || Super::ReadyToEndMatch_Implementation();
     }
     return false;
 }
@@ -56,11 +58,17 @@ void AG_RaceGameMode::RespawnPawn(AController* Controller)
     }
 }
 
-void AG_RaceGameMode::OnPlayerFinishRace(AG_RacePlayerController* RaceController)
+void AG_RaceGameMode::OnPlayerFinishRace(AG_RacePlayerController* RaceController, int32 Place)
 {
     if (!RaceController) return;
 
-	RaceController->HandleWinRace();
+    AG_RacePlayerState* PlayerState = RaceController->GetPlayerState<AG_RacePlayerState>();
+    if (PlayerState)
+    {
+        PlayerState->SetFinishedRace(true);
+    }
+
+	RaceController->HandleWinRace(Place);
     
     SpawnSpectatorPawn(RaceController);
 }
@@ -68,7 +76,7 @@ void AG_RaceGameMode::OnPlayerFinishRace(AG_RacePlayerController* RaceController
 APawn* AG_RaceGameMode::GetSpawnedPawn(APawn* OldPawn) const
 {
     UWorld* World = GetWorld();
-    AG_PlayerState* PlayerState = OldPawn->GetPlayerState<AG_PlayerState>();
+    AG_RacePlayerState* PlayerState = OldPawn->GetPlayerState<AG_RacePlayerState>();
     AG_Checkpoint* LastCheckpoint = PlayerState->GetLastCheckpoint().Get();
     if (!World || !OldPawn || !PlayerState || !LastCheckpoint) return nullptr;
 
