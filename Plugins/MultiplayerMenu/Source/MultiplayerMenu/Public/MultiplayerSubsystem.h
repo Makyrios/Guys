@@ -32,14 +32,14 @@ public:
 
 	bool IsValidSessionInterface();
 	
-	//
-	// Our own custom delegates for the Menu class to bind callbacks to
-	//
 	FMultiplayerOnCreateSessionComplete MultiplayerOnCreateSessionComplete;
 	FMultiplayerOnFindSessionsComplete MultiplayerOnFindSessionsComplete;
 	FMultiplayerOnJoinSessionComplete MultiplayerOnJoinSessionComplete;
 	FMultiplayerOnDestroySessionComplete MultiplayerOnDestroySessionComplete;
 	FMultiplayerOnStartSessionComplete MultiplayerOnStartSessionComplete;
+
+	int32 DesiredNumPublicConnections{};
+	FString DesiredMatchType{};
 
 protected:
 	void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
