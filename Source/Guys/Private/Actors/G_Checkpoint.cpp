@@ -3,7 +3,7 @@
 
 #include "Actors/G_Checkpoint.h"
 #include "Components/BoxComponent.h"
-#include <Player/G_PlayerState.h>
+#include <Player/G_RacePlayerState.h>
 #include <Kismet/KismetMathLibrary.h>
 
 AG_Checkpoint::AG_Checkpoint()
@@ -19,11 +19,11 @@ AG_Checkpoint::AG_Checkpoint()
 	BoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Collider"));
     BoxCollider->SetupAttachment(CheckpointMesh);
     BoxCollider->SetCollisionProfileName(FName("OverlapOnlyPawn"));
+    BoxCollider->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 }
 
 FVector AG_Checkpoint::GetRandomSpawnPoint() const
 {
-    //return CheckpointMesh->GetComponentLocation();
     check(BoxCollider);
     return UKismetMathLibrary::RandomPointInBoundingBox(GetActorLocation(), FVector(0, BoxCollider->GetScaledBoxExtent().X, 0));
 }
@@ -33,6 +33,7 @@ void AG_Checkpoint::BeginPlay()
 	Super::BeginPlay();
 	
 	BoxCollider->OnComponentBeginOverlap.AddDynamic(this, &AG_Checkpoint::HandleCheckpointOverlap);
+    BoxCollider->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 }
 
 void AG_Checkpoint::HandleCheckpointOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
@@ -40,7 +41,7 @@ void AG_Checkpoint::HandleCheckpointOverlap(UPrimitiveComponent* OverlappedCompo
 {
     if (APawn* Pawn = Cast<APawn>(OtherActor))
     {
-        if (AG_PlayerState* PlayerState = Pawn->GetPlayerState<AG_PlayerState>())
+        if (AG_RacePlayerState* PlayerState = Pawn->GetPlayerState<AG_RacePlayerState>())
         {
             if (!bTriggeredBefore)
             {

@@ -1,82 +1,80 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "UI/HUD/G_HUD.h"
-#include "UI/Widgets/G_RaceHUDWidget.h"
+#include "UI/Widgets/G_TableStatsWidget.h"
+#include "UI/Widgets/G_PauseWidget.h"
+#include <UI/Widgets/G_StartGameWidget.h>
+#include <Player/G_PlayerController.h>
+#include <Kismet/GameplayStatics.h>
 
 void AG_HUD::PostInitializeComponents()
 {
     Super::PostInitializeComponents();
 
-    RaceHUDWidget = CreateWidget<UG_RaceHUDWidget>(GetOwningPlayerController(), RaceHUDWidgetClass);
-    RaceHUDWidget->AddToViewport();
-
-    /*
-
-    TableStatsWidget = AddWidget<UAS_TableStatsWidget>(StatsTableClass);
-    if (TableStatsWidget)
+    if (TableStatsClass)
     {
-        TableStatsWidget->SetVisibility(ESlateVisibility::Collapsed);
-
-        const FString MapName = UGameplayStatics::GetCurrentLevelName(this);
-        TableStatsWidget->SetMapName(FText::FromString(MapName));
+        TableStatsWidget = CreateWidget<UG_TableStatsWidget>(GetOwningPlayerController(), TableStatsClass);
+        if (TableStatsWidget)
+        {
+            TableStatsWidget->SetVisibility(ESlateVisibility::Collapsed);
+            TableStatsWidget->AddToViewport();
+        }
     }
 
-    DamageWidget = AddWidget<UAS_DamageWidget>(DamageWidgetClass);
-
-    PauseWidget = AddWidget<UAS_PauseWidget>(PauseWidgetClass);
-    if (PauseWidget)
+    if (PauseWidgetClass)
     {
-        PauseWidget->SetVisibility(ESlateVisibility::Collapsed);
-    }*/
+        PauseWidget = CreateWidget<UG_PauseWidget>(GetOwningPlayerController(), PauseWidgetClass);
+        if (PauseWidget)
+        {
+            PauseWidget->SetVisibility(ESlateVisibility::Collapsed);
+            PauseWidget->AddToViewport();
+        }
+    }
 }
 
 void AG_HUD::SetHUDWidgetVisibility(ESlateVisibility InVisibility)
 {
-    /*
-    HUDWidget->SetVisibility
-    */
+    if (HUDWidget)
+    {
+        HUDWidget->SetVisibility(InVisibility);
+    }
 }
 
-void AG_HUD::SetTimeRemaining(float RemainingTimeInSeconds) {}
-
-void AG_HUD::Tick(float DeltaTime)
+void AG_HUD::SetSpectatorHUDWidgetVisibility(ESlateVisibility InVisibility)
 {
-    Super::Tick(DeltaTime);
+    if (SpectatorHUDWidget)
+    {
+        SpectatorHUDWidget->SetVisibility(InVisibility);
+    }
 }
 
-void AG_HUD::ShowStatsTable()
+void AG_HUD::ToggleStatsTable(bool bEnable)
 {
-    /*
     if (!TableStatsWidget) return;
-    TableStatsWidget->SetVisibility(ESlateVisibility::Visible);
-    */
-}
 
-void AG_HUD::HideStatsTable()
-{
-    /*
-    if (!TableStatsWidget) return;
-    TableStatsWidget->SetVisibility(ESlateVisibility::Collapsed);
-    */
+    if (bEnable)
+    {
+        TableStatsWidget->SetVisibility(ESlateVisibility::Visible);
+    }
+    else
+    {
+        TableStatsWidget->SetVisibility(ESlateVisibility::Collapsed);
+    }
 }
 
 void AG_HUD::Pause(bool bPause)
 {
-    /*if (!PauseWidget) return;
+    if (!PauseWidget) return;
 
     if (bPause)
     {
+        PauseWidget->SetKeyboardFocus();
         PauseWidget->SetVisibility(ESlateVisibility::Visible);
     }
     else
     {
         PauseWidget->SetVisibility(ESlateVisibility::Collapsed);
-
-        AAS_PlayerController* OwnerController = Cast<AAS_PlayerController>(GetOwningPlayerController());
-        if (!OwnerController) return;
-
-        OwnerController->UnPause();
-    }*/
+    }
 }
 
 void AG_HUD::ExitToMenu()
@@ -89,7 +87,9 @@ void AG_HUD::ExitToMenu()
 
 void AG_HUD::ShowStartGameWidget(float StartDelayTime)
 {
-    /*UAS_StartGameWidget* StartGameWidget = AddWidget<UAS_StartGameWidget>(StartGameWidgetClass);
+    if (!StartGameWidgetClass) return;
+
+    UG_StartGameWidget* StartGameWidget = CreateWidget<UG_StartGameWidget>(GetOwningPlayerController(), StartGameWidgetClass);
 
     if (HUDWidget)
     {
@@ -99,7 +99,8 @@ void AG_HUD::ShowStartGameWidget(float StartDelayTime)
     if (StartGameWidget)
     {
         StartGameWidget->InitializeWidget(StartDelayTime);
-    }*/
+        StartGameWidget->AddToViewport();
+    }
 }
 
 void AG_HUD::ShowWonWidget()
@@ -123,7 +124,7 @@ void AG_HUD::UpdateInventoryInfo()
     HUDWidget->UpdateInventoryInfo();*/
 }
 
-void AG_HUD::SetupTableWidget()
+void AG_HUD::UpdateTableWidget()
 {
     /*if (!TableStatsWidget) return;
 

@@ -16,17 +16,10 @@ class GUYS_API AG_HUD : public AHUD
     GENERATED_BODY()
 
 public:
-    virtual void PostInitializeComponents() override;
-
     void SetHUDWidgetVisibility(ESlateVisibility InVisibility);
+    void SetSpectatorHUDWidgetVisibility(ESlateVisibility InVisibility);
 
-    void SetTimeRemaining(float RemainingTimeInSeconds);
-
-    void Tick(float DeltaTime) override;
-
-    void ShowStatsTable();
-    void HideStatsTable();
-
+    void ToggleStatsTable(bool bEnable);
     void Pause(bool bPause);
     void ExitToMenu();
 
@@ -38,34 +31,36 @@ public:
     void UpdateInventoryInfo();
 
 protected:
-    void SetupTableWidget();
+    virtual void PostInitializeComponents() override;
+
+    void UpdateTableWidget();
+
+public:
+    UPROPERTY()
+    TObjectPtr<UUserWidget> HUDWidget;
+
+    UPROPERTY()
+    TObjectPtr<UUserWidget> SpectatorHUDWidget;
+
+    UPROPERTY()
+    TObjectPtr<UG_PauseWidget> PauseWidget;
 
 protected:
-    UPROPERTY(EditDefaultsOnly, Category = "AS|Widgets")
-    TSubclassOf<UUserWidget> RaceHUDWidgetClass;
+    UPROPERTY()
+    TObjectPtr<UG_TableStatsWidget> TableStatsWidget;
 
     UPROPERTY(EditDefaultsOnly, Category = "AS|Widgets")
     TSubclassOf<UUserWidget> StartGameWidgetClass;
 
-    UPROPERTY()
-    TObjectPtr<UG_RaceHUDWidget> RaceHUDWidget;
-
     UPROPERTY(EditDefaultsOnly, Category = "AS|Widgets")
-    TSubclassOf<UUserWidget> StatsTableClass;
-
-    /*UPROPERTY()
-    TObjectPtr<UG_TableStatsWidget> TableStatsWidget;*/
+    TSubclassOf<UUserWidget> TableStatsClass;
 
     UPROPERTY(EditDefaultsOnly, Category = "AS|Widgets")
     TSubclassOf<UUserWidget> PauseWidgetClass;
-
-    /*UPROPERTY()
-    TObjectPtr<UAS_PauseWidget> PauseWidget;*/
 
     UPROPERTY(EditDefaultsOnly, Category = "AS|Widgets")
     TSubclassOf<UUserWidget> WonWidgetClass;
 
     UPROPERTY(EditDefaultsOnly, Category = "AS|Widgets")
     TSubclassOf<UUserWidget> LoseWidgetClass;
-
 };

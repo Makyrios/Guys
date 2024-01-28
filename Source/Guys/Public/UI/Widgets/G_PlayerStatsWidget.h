@@ -6,7 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "G_PlayerStatsWidget.generated.h"
 
-class AG_PlayerState;
+class AG_RacePlayerState;
 class UTextBlock;
 class UImage;
 
@@ -16,7 +16,7 @@ class GUYS_API UG_PlayerStatsWidget : public UUserWidget
     GENERATED_BODY()
 
 public:
-    void SetPlayerState(AG_PlayerState* NewPlayerState);
+    void SetPlayerState(AG_RacePlayerState* NewPlayerState);
     void SetPlayerName(FText PlayerName);
     void SetScore(int32 Score);
     void SetPing(int32 Ping);
@@ -37,7 +37,7 @@ private:
     TObjectPtr<UTextBlock> PingText;
 
     UPROPERTY()
-    TObjectPtr<AG_PlayerState> PlayerState;
+    TWeakObjectPtr<AG_RacePlayerState> PlayerState;
 
     UPROPERTY()
     FTimerHandle UpdateTimer;

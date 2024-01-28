@@ -10,10 +10,12 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "AbilitySystem/G_AbilitySystemComponent.h"
+#include "AbilitySystem/G_AttributeSet.h"
 #include "Player/G_PlayerState.h"
 #include "Interfaces/G_IInteractable.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include <GameModes/G_BaseGameMode.h>
+#include "Player/G_PlayerController.h"
 
 AG_Character::AG_Character()
 {
@@ -46,31 +48,28 @@ AG_Character::AG_Character()
 void AG_Character::BeginPlay()
 {
     Super::BeginPlay();
+}
 
+void AG_Character::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+
+    ApplyAttributes();
+    ApplyGameplayTags();
 }
 
 void AG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
-    if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
-    {
-        if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
-                ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-        {
-            Subsystem->AddMappingContext(DefaultMappingContext, 0);
-        }
-    }
-
     if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
     {
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
-
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
-
         EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AG_Character::Move);
-
         EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AG_Character::Look);
-
         EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &AG_Character::Interact);
+        EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Started, this, &AG_Character::TogglePause);
+        EnhancedInputComponent->BindAction(StatsAction, ETriggerEvent::Started, this, &AG_Character::ToggleStats);
+        EnhancedInputComponent->BindAction(StatsAction, ETriggerEvent::Completed, this, &AG_Character::ToggleStats);
     }
 }
 
@@ -107,6 +106,22 @@ void AG_Character::Interact(const FInputActionValue& Value)
 {
     UKismetSystemLibrary::PrintString(this, "I've pushed someone!");
     Server_Interact();
+}
+
+void AG_Character::TogglePause()
+{
+    G_PlayerController = G_PlayerController.IsValid() ? G_PlayerController : Cast<AG_PlayerController>(Controller);
+    if (!G_PlayerController.IsValid()) return;
+
+    G_PlayerController->TogglePause();
+}
+
+void AG_Character::ToggleStats()
+{
+    G_PlayerController = G_PlayerController.IsValid() ? G_PlayerController : Cast<AG_PlayerController>(Controller);
+    if (!G_PlayerController.IsValid()) return;
+
+    G_PlayerController->ToggleStats();
 }
 
 void AG_Character::Server_Interact_Implementation()
@@ -169,14 +184,66 @@ void AG_Character::ReactOnPush()
     UKismetSystemLibrary::PrintString(this, "Somebody has pushed me!");
 }
 
+void AG_Character::SetKeyboardInput(bool bEnable)
+{
+    if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+    {
+        if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
+                ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+        {
+            if (bEnable)
+            {
+                Subsystem->RemoveMappingContext(WaitingForGameMappingContext);
+                Subsystem->AddMappingContext(DefaultMappingContext, 0);
+            }
+            else
+            {
+                Subsystem->RemoveMappingContext(DefaultMappingContext);
+                Subsystem->AddMappingContext(WaitingForGameMappingContext, 0);
+            }
+        }
+    }
+}
+
 void AG_Character::InitAbilityActorInfo()
 {
     AG_PlayerState* G_PlayerState = GetPlayerState<AG_PlayerState>();
-    check(G_PlayerState);
+    if (!G_PlayerState) return;
 
     AbilitySystemComponent = G_PlayerState->GetAbilitySystemComponent();
     AttributeSet = G_PlayerState->GetAttributeSet();
 
     AbilitySystemComponent->InitAbilityActorInfo(G_PlayerState, this);
-    Cast<UG_AbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+
+    if (UG_AbilitySystemComponent* CustomAbilitySystemComponent = Cast<UG_AbilitySystemComponent>(AbilitySystemComponent))
+    {
+        CustomAbilitySystemComponent->AbilityActorInfoSet();
+    }
+}
+
+void AG_Character::ApplyGameplayTags()
+{
+    if (!AbilitySystemComponent) return;
+
+    FGameplayTagContainer AssetTags;
+    AbilitySystemComponent->GetOwnedGameplayTags(AssetTags);
+
+    for (const FGameplayTag& Tag : AssetTags)
+    {
+        FGameplayTag StateTag = FGameplayTag::RequestGameplayTag(FName("State"));
+        if (Tag.MatchesTag(StateTag))
+        {
+            // Confirm States
+            if (Tag.GetTagName() == "State.Debuff.Stunned")
+            {
+            }
+        }
+    }
+}
+
+void AG_Character::ApplyAttributes()
+{
+    UG_AttributeSet* G_AttributeSet = Cast<UG_AttributeSet>(AttributeSet);
+    if (!G_AttributeSet) return;
+    GetCharacterMovement()->MaxWalkSpeed = G_AttributeSet->GetMaxMovementSpeed();
 }
