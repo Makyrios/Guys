@@ -44,17 +44,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "G|Inventory")
 	FORCEINLINE TSubclassOf<UGameplayAbility> GetCurrentAbility() const
 	{
-		return OwnedAbilities[CurrentAbilitySlot];
+		return OwnedAbilities.Num() > 0 ? OwnedAbilities[CurrentAbilitySlot] : nullptr;
 	}
 
 	TArray<TSubclassOf<UGameplayAbility>> GetOwnedAbilities() { return OwnedAbilities; }
 
 public:
-	UPROPERTY(EditAnywhere, Category = "G|Inventory")
+	UPROPERTY(EditAnywhere, Category = "G|Properties")
 	int32 MaxAbilities;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Inventory")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Properties")
 	int32 CurrentAbilitySlot;
-private:
-	TArray<TSubclassOf<UGameplayAbility>> OwnedAbilities;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Properties")
+	TArray<TSubclassOf<UGameplayAbility>> OwnedAbilities;	
 };

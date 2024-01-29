@@ -61,7 +61,7 @@ bool UG_InventoryComponent::CanCollectAbilities()
 
 bool UG_InventoryComponent::SelectAbility(const int32& CandidateAbilitySlot)
 {
-	if ((OwnedAbilities.Num() >= CandidateAbilitySlot) && CurrentAbilitySlot != CandidateAbilitySlot)
+	if ((OwnedAbilities.Num() > CandidateAbilitySlot) && CurrentAbilitySlot != CandidateAbilitySlot)
 	{
 		//if (UGameplayAbility* CurrentAbility = GetCurrentAbility())
 		//{
