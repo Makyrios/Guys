@@ -14,6 +14,7 @@ class UAttributeSet;
 class USpringArmComponent;
 class UCameraComponent;
 class AG_PlayerController;
+class UG_InventoryComponent;
 struct FInputActionValue;
 
 UCLASS(config = Game)
@@ -70,6 +71,10 @@ private:
     void ApplyGameplayTags();
 
     void ApplyAttributes();
+
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Components", meta = (AllowPrivateAccess = "true"))
+    TObjectPtr<UG_InventoryComponent> InventoryComponent;
 
 protected:
     UPROPERTY()
