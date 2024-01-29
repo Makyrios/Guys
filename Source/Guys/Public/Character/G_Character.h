@@ -36,7 +36,7 @@ public:
 
     void OnCharacterDie();
 
-    virtual void ReactOnPush() override;
+    virtual void ReactOnPush(FVector PushDirection) override;
 
     // RENAME
     void SetKeyboardInput(bool bEnable);

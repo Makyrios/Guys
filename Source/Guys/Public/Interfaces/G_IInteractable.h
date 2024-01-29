@@ -20,5 +20,5 @@ class GUYS_API IG_IInteractable
 	GENERATED_BODY()
 
 public:
-	virtual void ReactOnPush();
+	virtual void ReactOnPush(FVector PushDirection);
 };

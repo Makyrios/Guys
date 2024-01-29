@@ -137,7 +137,8 @@ void AG_Character::Multicast_Interact_Implementation()
     {
         if (IG_IInteractable* Actor = Cast<IG_IInteractable>(OverlappingActors[0]))
         {
-            Actor->ReactOnPush();
+            FVector PushDirection = (OverlappingActors[0]->GetActorLocation() - this->GetActorLocation()).GetSafeNormal();
+            Actor->ReactOnPush(PushDirection);
         }
     }
 }
@@ -178,9 +179,9 @@ void AG_Character::OnCharacterDie()
     }
 }
 
-void AG_Character::ReactOnPush()
+void AG_Character::ReactOnPush(FVector PushDirection)
 {
-    Jump();
+    this->LaunchCharacter(PushDirection * 1000, false, false);
     UKismetSystemLibrary::PrintString(this, "Somebody has pushed me!");
 }
 

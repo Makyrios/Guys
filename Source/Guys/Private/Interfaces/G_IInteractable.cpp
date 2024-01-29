@@ -3,6 +3,6 @@
 
 #include "Interfaces/G_IInteractable.h"
 
-void IG_IInteractable::ReactOnPush()
+void IG_IInteractable::ReactOnPush(FVector PushDirection)
 {
 }
