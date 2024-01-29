@@ -32,4 +32,7 @@ private:
 
 	UPROPERTY()
 	FName SimulationBone;
+
+	UPROPERTY()
+	FTimerHandle TogglePhysicsTimer;
 };

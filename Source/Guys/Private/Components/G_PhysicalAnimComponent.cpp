@@ -46,7 +46,13 @@ void UG_PhysicalAnimComponent::TogglePhysicalAnimation()
 
 		PhysicalAnimComponent->ApplyPhysicalAnimationSettingsBelow(SimulationBone, Data);
 		SkeletalMeshComponent->SetAllBodiesBelowSimulatePhysics(SimulationBone, true, false);
-		UKismetSystemLibrary::PrintString(this, "Physics simulated!");
+
+		/* Revert to normal condition after delay */
+		GetOwner()->GetWorldTimerManager().SetTimer(
+			TogglePhysicsTimer, 
+			[this]() { SkeletalMeshComponent->SetAllBodiesBelowSimulatePhysics(SimulationBone, false, false); },
+			2.0f, 
+			false);
 	}
 }
 
