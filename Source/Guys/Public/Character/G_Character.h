@@ -14,6 +14,7 @@ class UAttributeSet;
 class USpringArmComponent;
 class UCameraComponent;
 class AG_PlayerController;
+class UG_PhysicalAnimComponent;
 struct FInputActionValue;
 
 UCLASS(config = Game)
@@ -88,6 +89,9 @@ private:
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
     TObjectPtr<UCameraComponent> FollowCamera;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "G|Components", meta = (AllowPrivateAccess = "true"))
+    TObjectPtr<UG_PhysicalAnimComponent> PhysicalAnimComponent;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Input", meta = (AllowPrivateAccess = "true"))
     TObjectPtr<UInputMappingContext> DefaultMappingContext;

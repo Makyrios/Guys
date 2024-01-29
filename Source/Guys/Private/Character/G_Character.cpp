@@ -16,6 +16,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include <GameModes/G_BaseGameMode.h>
 #include "Player/G_PlayerController.h"
+#include "Components/G_PhysicalAnimComponent.h"
 
 AG_Character::AG_Character()
 {
@@ -41,6 +42,8 @@ AG_Character::AG_Character()
 
     FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
     FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+
+    PhysicalAnimComponent = CreateDefaultSubobject<UG_PhysicalAnimComponent>(TEXT("PhysicalAnimComponent"));
 
     FollowCamera->bUsePawnControlRotation = false;
 }
