@@ -29,4 +29,7 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<USkeletalMeshComponent> SkeletalMeshComponent;
+
+	UPROPERTY()
+	FName SimulationBone;
 };

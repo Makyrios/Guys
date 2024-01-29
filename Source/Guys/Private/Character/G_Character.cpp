@@ -107,7 +107,6 @@ void AG_Character::Look(const FInputActionValue& Value)
 
 void AG_Character::Interact(const FInputActionValue& Value)
 {
-    UKismetSystemLibrary::PrintString(this, "I've pushed someone!");
     Server_Interact();
 }
 
@@ -129,20 +128,23 @@ void AG_Character::ToggleStats()
 
 void AG_Character::Server_Interact_Implementation()
 {
-    Multicast_Interact();
-}
-
-void AG_Character::Multicast_Interact_Implementation()
-{
     TArray<AActor*> OverlappingActors;
     this->GetOverlappingActors(OverlappingActors);
     if (!OverlappingActors.IsEmpty())
     {
-        if (IG_IInteractable* Actor = Cast<IG_IInteractable>(OverlappingActors[0]))
+        if (Cast<IG_IInteractable>(OverlappingActors[0]))
         {
             FVector PushDirection = (OverlappingActors[0]->GetActorLocation() - this->GetActorLocation()).GetSafeNormal();
-            Actor->ReactOnPush(PushDirection);
+            Multicast_Interact(OverlappingActors[0], PushDirection);
         }
+    }
+}
+
+void AG_Character::Multicast_Interact_Implementation(AActor* Actor, FVector Direction)
+{
+    if (IG_IInteractable* OtherActor = Cast<IG_IInteractable>(Actor))
+    {
+        OtherActor->ReactOnPush(Direction);
     }
 }
 
@@ -184,8 +186,11 @@ void AG_Character::OnCharacterDie()
 
 void AG_Character::ReactOnPush(FVector PushDirection)
 {
-    this->LaunchCharacter(PushDirection * 1000, false, false);
-    UKismetSystemLibrary::PrintString(this, "Somebody has pushed me!");
+    if (PhysicalAnimComponent)
+    {
+        PhysicalAnimComponent->TogglePhysicalAnimation();
+        this->LaunchCharacter(PushDirection * 1000, false, false);
+    }
 }
 
 void AG_Character::SetKeyboardInput(bool bEnable)

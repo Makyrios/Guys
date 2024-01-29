@@ -46,7 +46,7 @@ public:
     void Server_Interact();
 
     UFUNCTION(NetMulticast, Reliable)
-    void Multicast_Interact();
+    void Multicast_Interact(AActor* Actor, FVector Direction);
 
 protected:
     virtual void BeginPlay() override;
