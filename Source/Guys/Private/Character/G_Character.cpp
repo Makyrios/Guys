@@ -16,6 +16,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include <GameModes/G_BaseGameMode.h>
 #include "Player/G_PlayerController.h"
+#include "Components/G_InventoryComponent.h"
 
 AG_Character::AG_Character()
 {
@@ -43,6 +44,8 @@ AG_Character::AG_Character()
     FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 
     FollowCamera->bUsePawnControlRotation = false;
+
+    InventoryComponent = CreateDefaultSubobject<UG_InventoryComponent>(TEXT("Inventory"));
 }
 
 void AG_Character::BeginPlay()
