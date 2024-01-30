@@ -8,24 +8,50 @@
 #include "Player/G_RacePlayerController.h"
 #include "GameFramework/SpectatorPawn.h"
 
-
 void AG_RaceGameMode::BeginPlay()
 {
     Super::BeginPlay();
 
     if (AG_RaceGameState* RaceGameState = GetGameState<AG_RaceGameState>())
     {
-		RaceGameState->OnPlayerFinishRace.AddUObject(this, &AG_RaceGameMode::OnPlayerFinishRace);
-	}
+        RaceGameState->OnPlayerFinishRace.AddUObject(this, &AG_RaceGameMode::OnPlayerFinishRace);
+    }
+}
+
+void AG_RaceGameMode::HandleSeamlessTravelPlayer(AController*& C)
+{
+    Super::HandleSeamlessTravelPlayer(C);
+
+    /*LoadedPlayers += 1;
+    if (LoadedPlayers == GetNumExpectedPlayers())
+    {
+        SetMatchState(MatchState::WaitingToStart);
+        for (FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; ++Iterator)
+        {
+            if (Iterator)
+            {
+                CreateStartGameWidget(Iterator->Get());
+            }
+        }
+        if (bDelayedStart)
+        {
+            GetWorldTimerManager().SetTimer(DelayStartTimer, this, &AG_BaseGameMode::StartMatch, DelayBeforeStart);
+        }
+    }*/
+
+    /*if (bDelayedStart)
+    {
+        GetWorldTimerManager().SetTimer(DelayStartTimer, this, &AG_BaseGameMode::StartMatch, DelayBeforeStart);
+    }*/
 }
 
 bool AG_RaceGameMode::ReadyToEndMatch_Implementation()
 {
     if (const AG_RaceGameState* CurrentGameState = Cast<AG_RaceGameState>(GameState))
     {
-        return CurrentGameState->GetTimer() >= TimeLimit 
-            || CurrentGameState->GetFinishedPlayersCount() == CurrentGameState->PlayerArray.Num() 
-            || Super::ReadyToEndMatch_Implementation();
+        return CurrentGameState->GetTimer() >= TimeLimit ||
+               CurrentGameState->GetFinishedPlayersCount() == CurrentGameState->PlayerArray.Num() ||
+               Super::ReadyToEndMatch_Implementation();
     }
     return false;
 }
@@ -58,6 +84,37 @@ void AG_RaceGameMode::RespawnPawn(AController* Controller)
     }
 }
 
+APawn* AG_RaceGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot)
+{
+    return nullptr;
+}
+
+void AG_RaceGameMode::HandleLoginBeforeGameStart(APlayerController* NewPlayer)
+{
+    SpawnNewPawn(NewPlayer);
+    //SetControllerMatchState(NewPlayer, MatchState::WaitingToStart);
+}
+
+void AG_RaceGameMode::HandleLoginAfterGameStart(APlayerController* NewPlayer)
+{
+    SpawnSpectatorPawn(NewPlayer);
+    //SetControllerMatchState(NewPlayer, MatchState::InProgress);
+    EnableSpectatorHUD(NewPlayer);
+}
+
+void AG_RaceGameMode::OnAllPlayersLoaded()
+{
+    Super::OnAllPlayersLoaded();
+
+    for (FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; ++Iterator)
+    {
+        if (Iterator)
+        {
+            CreateStartGameWidget(Iterator->Get());
+        }
+    }
+}
+
 void AG_RaceGameMode::OnPlayerFinishRace(AG_RacePlayerController* RaceController, int32 Place)
 {
     if (!RaceController) return;
@@ -68,8 +125,8 @@ void AG_RaceGameMode::OnPlayerFinishRace(AG_RacePlayerController* RaceController
         PlayerState->SetFinishedRace(true);
     }
 
-	RaceController->HandleWinRace(Place);
-    
+    RaceController->HandleWinRace(Place);
+
     SpawnSpectatorPawn(RaceController);
 }
 

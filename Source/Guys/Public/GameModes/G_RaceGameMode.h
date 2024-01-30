@@ -20,9 +20,15 @@ public:
 
 protected:
     virtual void BeginPlay() override;
+    virtual void HandleSeamlessTravelPlayer(AController*& C) override;
     virtual bool ReadyToEndMatch_Implementation() override;
     virtual void HandleMatchHasEnded() override;
     virtual void RespawnPawn(AController* Controller) override;
+    virtual APawn* SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot) override;
+
+    virtual void HandleLoginBeforeGameStart(APlayerController* NewPlayer) override;
+    virtual void HandleLoginAfterGameStart(APlayerController* NewPlayer) override;
+    virtual void OnAllPlayersLoaded() override;
 
 private:
     UFUNCTION()

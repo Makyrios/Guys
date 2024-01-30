@@ -48,6 +48,7 @@ AG_Character::AG_Character()
 void AG_Character::BeginPlay()
 {
     Super::BeginPlay();
+
 }
 
 void AG_Character::Tick(float DeltaTime)

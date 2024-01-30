@@ -13,21 +13,46 @@
 #include "Components/SlateWrapperTypes.h"
 #include "GameFramework/SpectatorPawn.h"
 #include <Actors/G_SpectatorPawn.h>
-
+#include <GameFramework/GameState.h>
 
 void AG_BaseGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
     Super::InitGame(MapName, Options, ErrorMessage);
-
-    if (bDelayedStart)
-    {
-        GetWorldTimerManager().SetTimer(DelayStartTimer, this, &AG_BaseGameMode::StartMatch, DelayBeforeStart);
-    }
 }
 
-APawn* AG_BaseGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot)
+void AG_BaseGameMode::HandleSeamlessTravelPlayer(AController*& C)
 {
-    return nullptr;
+    Super::HandleSeamlessTravelPlayer(C);
+
+    /*LoadedPlayers += 1;
+    if (LoadedPlayers == GetNumExpectedPlayers())
+    {
+        OnAllPlayersLoaded();
+    }*/
+
+    /*if (bDelayedStart)
+    {
+        GetWorldTimerManager().SetTimer(DelayStartTimer, this, &AG_BaseGameMode::StartMatch, DelayBeforeStart);
+    }*/
+}
+
+int32 AG_BaseGameMode::GetNumExpectedPlayers() const
+{
+    if (UG_GameInstance* GameInstance = GetGameInstance<UG_GameInstance>())
+    {
+        return GameInstance->GetNumExpectedPlayers();
+    }
+    return 0;
+}
+
+void AG_BaseGameMode::SetMatchState(FName NewMatchState)
+{
+    Super::SetMatchState(NewMatchState);
+
+    OnChangeMatchState.Broadcast(NewMatchState);
+    if (NewMatchState != GetMatchState())
+    {
+    }
 }
 
 bool AG_BaseGameMode::ReadyToStartMatch_Implementation()
@@ -54,13 +79,35 @@ void AG_BaseGameMode::PostLogin(APlayerController* NewPlayer)
         PlayerState->SetPlayerName(PlayerName);
     }
 
+    LoadedPlayers += 1;
+    if (LoadedPlayers >= GetNumExpectedPlayers())
+    {
+        OnAllPlayersLoaded();
+    }
+
     if (IsMatchPreparing())
     {
         HandleLoginBeforeGameStart(NewPlayer);
     }
     else if (IsMatchStarted())
     {
-		HandleLoginAfterGameStart(NewPlayer);
+        HandleLoginAfterGameStart(NewPlayer);
+    }
+}
+
+void AG_BaseGameMode::OnAllPlayersLoaded()
+{
+    if (bDelayedStart)
+    {
+        if (GetWorldTimerManager().IsTimerActive(DelayStartTimer)) return;
+
+        GetWorldTimerManager().SetTimer(
+            DelayStartTimer, this, &AG_BaseGameMode::StartMatch, DelayBeforeStart);
+        // GetWorldTimerManager().SetTimer(DelayStartTimer, this, &AG_BaseGameMode::StartMatch, DelayBeforeStart);
+    }
+    else
+    {
+        StartMatch();
     }
 }
 
@@ -74,19 +121,9 @@ bool AG_BaseGameMode::IsMatchStarted()
     return GetMatchState() == MatchState::InProgress;
 }
 
-void AG_BaseGameMode::HandleLoginBeforeGameStart(APlayerController* NewPlayer)
-{
-    SpawnNewPawn(NewPlayer);
-    SetControllerMatchState(NewPlayer, MatchState::WaitingToStart);
-    CreateStartGameWidget(NewPlayer);
-}
+void AG_BaseGameMode::HandleLoginBeforeGameStart(APlayerController* NewPlayer) {}
 
-void AG_BaseGameMode::HandleLoginAfterGameStart(APlayerController* NewPlayer)
-{
-    SpawnSpectatorPawn(NewPlayer);
-    SetControllerMatchState(NewPlayer, MatchState::InProgress);
-    EnableSpectatorHUD(NewPlayer);
-}
+void AG_BaseGameMode::HandleLoginAfterGameStart(APlayerController* NewPlayer) {}
 
 void AG_BaseGameMode::SpawnNewPawn(APlayerController* NewPlayer)
 {
@@ -136,13 +173,13 @@ void AG_BaseGameMode::HandleMatchIsWaitingToStart()
 {
     Super::HandleMatchIsWaitingToStart();
 
-    for (FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; ++Iterator)
+    /*for (FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; ++Iterator)
     {
         if (Iterator)
         {
-            SetControllerMatchState(Iterator->Get(), MatchState::WaitingToStart);
+            SetControllerMatchState(Iterator->Get(), GetMatchState());
         }
-    }
+    }*/
 }
 
 void AG_BaseGameMode::HandleMatchHasStarted()
@@ -153,8 +190,8 @@ void AG_BaseGameMode::HandleMatchHasStarted()
     {
         if (Iterator)
         {
-            SetControllerMatchState(Iterator->Get(), MatchState::InProgress);
-            ShowHUDWidget(Iterator->Get());
+            //SetControllerMatchState(Iterator->Get(), GetMatchState());
+            //ShowHUDWidget(Iterator->Get());
         }
     }
 }
