@@ -20,7 +20,7 @@ AG_PlayerState::AG_PlayerState()
     UG_AttributeSet* GAttributeSet = Cast<UG_AttributeSet>(AttributeSet);
 
     AbilitySystemComponent
-        ->RegisterGameplayTagEvent(FGameplayTag::RequestGameplayTag(FName("State.Debuff.Stun")), EGameplayTagEventType::AnyCountChange)
+        ->RegisterGameplayTagEvent(FGameplayTag::RequestGameplayTag(FName("State.Debuff.Stun")), EGameplayTagEventType::NewOrRemoved)
         .AddUObject(this, &AG_PlayerState::StunTagChanged);
 
     AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GAttributeSet->GetMaxMovementSpeedAttribute())
