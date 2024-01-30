@@ -42,6 +42,7 @@ private:
 	void MenuTearDown();
 
 public:
+	UPROPERTY(BlueprintReadWrite)
 	int32 PublicConnectionsNum;
 
 	UPROPERTY(BlueprintReadWrite)

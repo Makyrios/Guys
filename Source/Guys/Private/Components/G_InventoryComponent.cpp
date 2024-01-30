@@ -9,38 +9,19 @@ UG_InventoryComponent::UG_InventoryComponent()
 
 void UG_InventoryComponent::AddAbility(TSubclassOf<UGameplayAbility> NewAbility)
 {
-	OwnedAbilities.Add(NewAbility);
-
-	//TWeakObjectPtr<UGameplayAbility> Ability = OwnedAbilities[OwnedAbilities.Find(NewAbility)];
-
-	//if (Ability.IsValid())
-	//{
-	//	// Delegates subscribe here
-	//}
+	if (OwnedAbilities.Num() < MaxAbilities)
+	{
+		OwnedAbilities.Add(NewAbility);
+	}
 }
 
 void UG_InventoryComponent::RemoveAbility(const int32& AbilitySlot)
 {
-	TSubclassOf<UGameplayAbility> Ability = OwnedAbilities[AbilitySlot];
-
-	//if (Ability.IsValid())
-	//{
-	//	// Delegates unsubscribe
-	//}
-
-	OwnedAbilities.RemoveSingle(Ability);
+	OwnedAbilities.RemoveAt(AbilitySlot);
 }
 
 void UG_InventoryComponent::RemoveAllAbilities()
 {
-	//for (TWeakObjectPtr<UGameplayAbility>& Ability : OwnedAbilities)
-	//{
-	//	if (Ability.IsValid())
-	//	{
-	//		// Delegates unsubscribe
-	//	}
-	//}
-
 	OwnedAbilities.Empty();
 }
 
@@ -63,10 +44,6 @@ bool UG_InventoryComponent::SelectAbility(const int32& CandidateAbilitySlot)
 {
 	if ((OwnedAbilities.Num() > CandidateAbilitySlot) && CurrentAbilitySlot != CandidateAbilitySlot)
 	{
-		//if (UGameplayAbility* CurrentAbility = GetCurrentAbility())
-		//{
-		//	// Delegates unsubscribe
-		//}
 
 		CurrentAbilitySlot = CandidateAbilitySlot;
 
