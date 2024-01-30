@@ -4,6 +4,8 @@
 
 #include "AbilitySystem/G_AbilitySystemComponent.h"
 #include "AbilitySystem/G_AttributeSet.h"
+#include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 AG_PlayerState::AG_PlayerState()
 {
@@ -14,6 +16,11 @@ AG_PlayerState::AG_PlayerState()
     AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
     AttributeSet = CreateDefaultSubobject<UG_AttributeSet>("AttributeSet");
+
+    UG_AttributeSet* GAttributeSet = Cast<UG_AttributeSet>(AttributeSet);
+
+    AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GAttributeSet->GetMaxMovementSpeedAttribute())
+        .AddUObject(this, &AG_PlayerState::OnMaxMovementSpeedAttributeChanged);
 }
 
 void AG_PlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -29,4 +36,13 @@ UAbilitySystemComponent* AG_PlayerState::GetAbilitySystemComponent() const
 UAttributeSet* AG_PlayerState::GetAttributeSet() const
 {
     return AttributeSet;
+}
+
+void AG_PlayerState::OnMaxMovementSpeedAttributeChanged(const FOnAttributeChangeData& Data)
+{
+    ACharacter* Character = Cast<ACharacter>(GetPawn());
+
+    if (Character == nullptr) return;
+
+    Character->GetCharacterMovement()->MaxWalkSpeed = Data.NewValue;
 }
