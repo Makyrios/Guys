@@ -31,6 +31,8 @@ public:
 
 protected:
     virtual void BeginPlay() override;
+    void BindChangeMatchState();
+    void ClampCamera();
     virtual void OnPossess(APawn* InPawn) override;
     virtual void AcknowledgePossession(APawn* InPawn) override;
 
@@ -40,7 +42,6 @@ private:
     void ShowStartGameWidget(float DelayBeforeStart);
     void SetSpectatorHUDWidgetVisibility(ESlateVisibility InVisibility);
     void SetPlayerHUDWidgetVisibility(ESlateVisibility InVisibility);
-
 
     UFUNCTION(Client, Reliable)
     void Client_ShowStartGameWidget(float DelayBeforeStart);
@@ -56,6 +57,13 @@ private:
 
     UFUNCTION()
     void OnRep_CurrentMatchState();
+
+protected:
+    UPROPERTY(EditDefaultsOnly, Category = "G|Camera")
+    float MaxPitch = 30.f;
+
+    UPROPERTY(EditDefaultsOnly, Category = "G|Camera")
+    float MinPitch = -75.f;
 
 private:
     UPROPERTY()

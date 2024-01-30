@@ -40,7 +40,6 @@ public:
 
     virtual void ReactOnPush(FVector PushDirection) override;
 
-    // RENAME
     void SetKeyboardInput(bool bEnable);
 
     UFUNCTION(Server, Reliable)
@@ -57,6 +56,8 @@ protected:
     void Move(const FInputActionValue& Value);
 
     void Look(const FInputActionValue& Value);
+
+    void Jump() override;
 
     void Interact(const FInputActionValue& Value);
 
@@ -83,7 +84,6 @@ protected:
 
     UPROPERTY()
     TObjectPtr<UAttributeSet> AttributeSet;
-
 
 private:
     UPROPERTY()
@@ -121,4 +121,10 @@ private:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Input", meta = (AllowPrivateAccess = "true"))
     TObjectPtr<UInputAction> StatsAction;
+
+    UPROPERTY()
+    FTimerHandle JumpTimer;
+
+    UPROPERTY(EditDefaultsOnly, Category = "G|Settings")
+    float JumpCooldown = 0.5f;
 };

@@ -30,9 +30,10 @@ AG_Character::AG_Character()
     GetCharacterMovement()->bOrientRotationToMovement = true;
     GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
 
-    GetCharacterMovement()->JumpZVelocity = 700.f;
-    GetCharacterMovement()->AirControl = 0.35f;
-    GetCharacterMovement()->MaxWalkSpeed = 500.f;
+    GetCharacterMovement()->JumpZVelocity = 400.f;
+    GetCharacterMovement()->AirControl = 0.1f;
+    GetCharacterMovement()->MaxWalkSpeed = 100;
+    GetCharacterMovement()->MaxAcceleration = 1024.f;
     GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
     GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 
@@ -43,10 +44,9 @@ AG_Character::AG_Character()
 
     FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
     FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+    FollowCamera->bUsePawnControlRotation = false;
 
     PhysicalAnimComponent = CreateDefaultSubobject<UG_PhysicalAnimComponent>(TEXT("PhysicalAnimComponent"));
-
-    FollowCamera->bUsePawnControlRotation = false;
 
     InventoryComponent = CreateDefaultSubobject<UG_InventoryComponent>(TEXT("Inventory"));
 }
@@ -54,8 +54,6 @@ AG_Character::AG_Character()
 void AG_Character::BeginPlay()
 {
     Super::BeginPlay();
-
-    CameraBoom->SetWorldRotation(GetActorRotation());
 }
 
 void AG_Character::Tick(float DeltaTime)
@@ -70,7 +68,7 @@ void AG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputC
 {
     if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
     {
-        EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
+        EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
         EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AG_Character::Move);
         EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AG_Character::Look);
@@ -108,6 +106,15 @@ void AG_Character::Look(const FInputActionValue& Value)
         AddControllerYawInput(LookAxisVector.X);
         AddControllerPitchInput(LookAxisVector.Y);
     }
+}
+
+void AG_Character::Jump()
+{
+    if (GetWorldTimerManager().IsTimerActive(JumpTimer)) return;
+
+    GetWorld()->GetTimerManager().SetTimer(JumpTimer, JumpCooldown, false);
+
+    Super::Jump();
 }
 
 void AG_Character::Interact(const FInputActionValue& Value)

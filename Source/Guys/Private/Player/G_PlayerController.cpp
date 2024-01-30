@@ -28,6 +28,13 @@ void AG_PlayerController::BeginPlay()
 {
     Super::BeginPlay();
 
+    BindChangeMatchState();
+
+    ClampCamera();
+}
+
+void AG_PlayerController::BindChangeMatchState()
+{
     if (HasAuthority())
     {
         if (AG_BaseGameMode* GameMode = Cast<AG_BaseGameMode>(UGameplayStatics::GetGameMode(this)))
@@ -36,6 +43,12 @@ void AG_PlayerController::BeginPlay()
             SetCurrentMatchState(GameMode->GetMatchState());
         }
     }
+}
+
+void AG_PlayerController::ClampCamera()
+{
+    PlayerCameraManager->ViewPitchMax = MaxPitch;
+    PlayerCameraManager->ViewPitchMin = MinPitch;
 }
 
 void AG_PlayerController::OnPossess(APawn* InPawn)
