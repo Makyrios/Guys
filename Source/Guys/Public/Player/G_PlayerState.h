@@ -29,6 +29,8 @@ protected:
 private:
     void OnMaxMovementSpeedAttributeChanged(const FOnAttributeChangeData& Data);
 
+    void StunTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
+
 protected:
     UPROPERTY()
     TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
