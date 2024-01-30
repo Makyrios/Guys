@@ -16,6 +16,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include <GameModes/G_BaseGameMode.h>
 #include "Player/G_PlayerController.h"
+#include "Components/G_PhysicalAnimComponent.h"
 #include "Components/G_InventoryComponent.h"
 
 AG_Character::AG_Character()
@@ -42,6 +43,8 @@ AG_Character::AG_Character()
 
     FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
     FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+
+    PhysicalAnimComponent = CreateDefaultSubobject<UG_PhysicalAnimComponent>(TEXT("PhysicalAnimComponent"));
 
     FollowCamera->bUsePawnControlRotation = false;
 
@@ -108,7 +111,6 @@ void AG_Character::Look(const FInputActionValue& Value)
 
 void AG_Character::Interact(const FInputActionValue& Value)
 {
-    UKismetSystemLibrary::PrintString(this, "I've pushed someone!");
     Server_Interact();
 }
 
@@ -130,19 +132,23 @@ void AG_Character::ToggleStats()
 
 void AG_Character::Server_Interact_Implementation()
 {
-    Multicast_Interact();
-}
-
-void AG_Character::Multicast_Interact_Implementation()
-{
     TArray<AActor*> OverlappingActors;
     this->GetOverlappingActors(OverlappingActors);
     if (!OverlappingActors.IsEmpty())
     {
-        if (IG_IInteractable* Actor = Cast<IG_IInteractable>(OverlappingActors[0]))
+        if (Cast<IG_IInteractable>(OverlappingActors[0]))
         {
-            Actor->ReactOnPush();
+            FVector PushDirection = (OverlappingActors[0]->GetActorLocation() - this->GetActorLocation()).GetSafeNormal();
+            Multicast_Interact(OverlappingActors[0], PushDirection);
         }
+    }
+}
+
+void AG_Character::Multicast_Interact_Implementation(AActor* Actor, FVector Direction)
+{
+    if (IG_IInteractable* OtherActor = Cast<IG_IInteractable>(Actor))
+    {
+        OtherActor->ReactOnPush(Direction);
     }
 }
 
@@ -182,10 +188,13 @@ void AG_Character::OnCharacterDie()
     }
 }
 
-void AG_Character::ReactOnPush()
+void AG_Character::ReactOnPush(FVector PushDirection)
 {
-    Jump();
-    UKismetSystemLibrary::PrintString(this, "Somebody has pushed me!");
+    if (PhysicalAnimComponent)
+    {
+        PhysicalAnimComponent->TogglePhysicalAnimation();
+        this->LaunchCharacter(PushDirection * 1000, false, false);
+    }
 }
 
 void AG_Character::SetKeyboardInput(bool bEnable)
