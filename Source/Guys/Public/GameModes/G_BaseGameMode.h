@@ -43,9 +43,9 @@ protected:
     void SetControllerMatchState(APlayerController* PlayerController, FName NewMatchState);
     void EnableSpectatorHUD(APlayerController* NewPlayer);
     void CreateStartGameWidget(APlayerController* NewPlayer);
+    AActor* ChooseRandomPlayerStart() const;
 
 private:
-    AActor* ChoosePlayerStart();
     void ShowHUDWidget(APlayerController* PlayerController);
     void MovePawnToRandomPlayerStart(APawn* PawnToMove);
     void RestartGame();

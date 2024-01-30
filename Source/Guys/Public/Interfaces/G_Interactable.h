@@ -4,21 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "G_IInteractable.generated.h"
+#include "G_Interactable.generated.h"
 
 UINTERFACE(MinimalAPI)
-class UG_IInteractable : public UInterface
+class UG_Interactable : public UInterface
 {
 	GENERATED_BODY()
 };
 
-/**
- * 
- */
-class GUYS_API IG_IInteractable
+class GUYS_API IG_Interactable
 {
 	GENERATED_BODY()
 
 public:
-	virtual void ReactOnPush(FVector PushDirection);
+	virtual void ReactOnPush(FVector PushDirection) PURE_VIRTUAL(&IG_Interactable::ReactOnPush,);
 };

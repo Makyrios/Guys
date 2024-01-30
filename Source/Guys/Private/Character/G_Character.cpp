@@ -12,12 +12,12 @@
 #include "AbilitySystem/G_AbilitySystemComponent.h"
 #include "AbilitySystem/G_AttributeSet.h"
 #include "Player/G_PlayerState.h"
-#include "Interfaces/G_IInteractable.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include <GameModes/G_BaseGameMode.h>
 #include "Player/G_PlayerController.h"
 #include "Components/G_PhysicalAnimComponent.h"
 #include "Components/G_InventoryComponent.h"
+#include <Interfaces/G_Interactable.h>
 
 AG_Character::AG_Character()
 {
@@ -55,6 +55,7 @@ void AG_Character::BeginPlay()
 {
     Super::BeginPlay();
 
+    CameraBoom->SetWorldRotation(GetActorRotation());
 }
 
 void AG_Character::Tick(float DeltaTime)
@@ -114,6 +115,24 @@ void AG_Character::Interact(const FInputActionValue& Value)
     Server_Interact();
 }
 
+void AG_Character::Server_Interact_Implementation()
+{
+    TArray<AActor*> OverlappingActors;
+    this->GetOverlappingActors(OverlappingActors);
+    if (!OverlappingActors.IsEmpty())
+    {
+        for (auto& OverlappingActor : OverlappingActors)
+        {
+            if (OverlappingActor->Implements<UG_Interactable>())
+            {
+                FVector PushDirection = (OverlappingActor->GetActorLocation() - this->GetActorLocation()).GetSafeNormal();
+                Multicast_Interact(OverlappingActor, PushDirection);
+                break;
+            }
+        }
+    }
+}
+
 void AG_Character::TogglePause()
 {
     G_PlayerController = G_PlayerController.IsValid() ? G_PlayerController : Cast<AG_PlayerController>(Controller);
@@ -130,23 +149,9 @@ void AG_Character::ToggleStats()
     G_PlayerController->ToggleStats();
 }
 
-void AG_Character::Server_Interact_Implementation()
-{
-    TArray<AActor*> OverlappingActors;
-    this->GetOverlappingActors(OverlappingActors);
-    if (!OverlappingActors.IsEmpty())
-    {
-        if (Cast<IG_IInteractable>(OverlappingActors[0]))
-        {
-            FVector PushDirection = (OverlappingActors[0]->GetActorLocation() - this->GetActorLocation()).GetSafeNormal();
-            Multicast_Interact(OverlappingActors[0], PushDirection);
-        }
-    }
-}
-
 void AG_Character::Multicast_Interact_Implementation(AActor* Actor, FVector Direction)
 {
-    if (IG_IInteractable* OtherActor = Cast<IG_IInteractable>(Actor))
+    if (IG_Interactable* OtherActor = Cast<IG_Interactable>(Actor))
     {
         OtherActor->ReactOnPush(Direction);
     }

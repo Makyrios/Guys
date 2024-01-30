@@ -14,7 +14,7 @@ class GUYS_API AG_RaceGameMode : public AG_BaseGameMode
     GENERATED_BODY()
 
 public:
-    APawn* GetSpawnedPawn(APawn* OldPawn) const;
+    APawn* GetSpawnedPawn(APawn* OldPawn);
 
     FORCEINLINE float GetTimeLimit() const { return TimeLimit; }
 

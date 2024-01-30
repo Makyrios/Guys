@@ -21,28 +21,6 @@ void AG_RaceGameMode::BeginPlay()
 void AG_RaceGameMode::HandleSeamlessTravelPlayer(AController*& C)
 {
     Super::HandleSeamlessTravelPlayer(C);
-
-    /*LoadedPlayers += 1;
-    if (LoadedPlayers == GetNumExpectedPlayers())
-    {
-        SetMatchState(MatchState::WaitingToStart);
-        for (FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; ++Iterator)
-        {
-            if (Iterator)
-            {
-                CreateStartGameWidget(Iterator->Get());
-            }
-        }
-        if (bDelayedStart)
-        {
-            GetWorldTimerManager().SetTimer(DelayStartTimer, this, &AG_BaseGameMode::StartMatch, DelayBeforeStart);
-        }
-    }*/
-
-    /*if (bDelayedStart)
-    {
-        GetWorldTimerManager().SetTimer(DelayStartTimer, this, &AG_BaseGameMode::StartMatch, DelayBeforeStart);
-    }*/
 }
 
 bool AG_RaceGameMode::ReadyToEndMatch_Implementation()
@@ -92,13 +70,11 @@ APawn* AG_RaceGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPlaye
 void AG_RaceGameMode::HandleLoginBeforeGameStart(APlayerController* NewPlayer)
 {
     SpawnNewPawn(NewPlayer);
-    //SetControllerMatchState(NewPlayer, MatchState::WaitingToStart);
 }
 
 void AG_RaceGameMode::HandleLoginAfterGameStart(APlayerController* NewPlayer)
 {
     SpawnSpectatorPawn(NewPlayer);
-    //SetControllerMatchState(NewPlayer, MatchState::InProgress);
     EnableSpectatorHUD(NewPlayer);
 }
 
@@ -130,22 +106,45 @@ void AG_RaceGameMode::OnPlayerFinishRace(AG_RacePlayerController* RaceController
     SpawnSpectatorPawn(RaceController);
 }
 
-APawn* AG_RaceGameMode::GetSpawnedPawn(APawn* OldPawn) const
+APawn* AG_RaceGameMode::GetSpawnedPawn(APawn* OldPawn)
 {
     UWorld* World = GetWorld();
     AG_RacePlayerState* PlayerState = OldPawn->GetPlayerState<AG_RacePlayerState>();
     AG_Checkpoint* LastCheckpoint = PlayerState->GetLastCheckpoint().Get();
-    if (!World || !OldPawn || !PlayerState || !LastCheckpoint) return nullptr;
+    if (!World || !OldPawn || !PlayerState) return nullptr;
 
-    FVector RespawnLocation = LastCheckpoint->GetRandomSpawnPoint();
-    APawn* NewPawn = World->SpawnActor<APawn>(OldPawn->GetClass(), RespawnLocation, LastCheckpoint->GetActorRotation());
-
-    /*Find new spawn location if previous is occupied*/
-    while (NewPawn == nullptr)
+    if (LastCheckpoint)
     {
-        RespawnLocation = LastCheckpoint->GetRandomSpawnPoint();
-        NewPawn = World->SpawnActor<APawn>(OldPawn->GetClass(), RespawnLocation, LastCheckpoint->GetActorRotation());
+        FVector RespawnLocation = LastCheckpoint->GetRandomSpawnPoint();
+        APawn* NewPawn = World->SpawnActor<APawn>(OldPawn->GetClass(), RespawnLocation, LastCheckpoint->GetActorRotation());
+
+        /*Find new spawn location if previous is occupied*/
+        while (NewPawn == nullptr)
+        {
+            RespawnLocation = LastCheckpoint->GetRandomSpawnPoint();
+            NewPawn = World->SpawnActor<APawn>(OldPawn->GetClass(), RespawnLocation, LastCheckpoint->GetActorRotation());
+        }
+
+        return NewPawn;
+    }
+    else
+    {
+        AActor* PlayerStart = ChoosePlayerStart(OldPawn->GetController());
+        if (PlayerStart)
+        {
+            FVector RespawnLocation = PlayerStart->GetActorLocation();
+			APawn* NewPawn = World->SpawnActor<APawn>(OldPawn->GetClass(), RespawnLocation, PlayerStart->GetActorRotation());
+
+			/*Find new spawn location if previous is occupied*/
+            while (NewPawn == nullptr)
+            {
+				RespawnLocation = PlayerStart->GetActorLocation();
+				NewPawn = World->SpawnActor<APawn>(OldPawn->GetClass(), RespawnLocation, PlayerStart->GetActorRotation());
+			}
+
+			return NewPawn;
+        }
     }
 
-    return NewPawn;
+    return nullptr;
 }

@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
-#include "Interfaces/G_IInteractable.h"
+#include "Interfaces/G_Interactable.h"
 #include "G_Character.generated.h"
 
 class UInputAction;
@@ -19,7 +19,7 @@ class UG_PhysicalAnimComponent;
 struct FInputActionValue;
 
 UCLASS(config = Game)
-class AG_Character : public ACharacter, public IAbilitySystemInterface, public IG_IInteractable
+class AG_Character : public ACharacter, public IAbilitySystemInterface, public IG_Interactable
 {
     GENERATED_BODY()
 

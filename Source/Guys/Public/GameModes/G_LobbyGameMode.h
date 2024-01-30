@@ -6,9 +6,8 @@
 #include "GameModes/G_BaseGameMode.h"
 #include "G_LobbyGameMode.generated.h"
 
-/**
- * 
- */
+class APlayerController;
+
 UCLASS()
 class GUYS_API AG_LobbyGameMode : public AG_BaseGameMode
 {
@@ -19,8 +18,7 @@ protected:
 
     virtual void PostLogin(APlayerController* NewPlayer) override;
 
-    virtual void HandleLoginAfterGameStart(APlayerController* NewPlayer) override;
-
+    //virtual void HandleLoginAfterGameStart(APlayerController* NewPlayer) override;
 
 private:
     void MapChange(FName MapName);

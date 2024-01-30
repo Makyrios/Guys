@@ -8,50 +8,52 @@
 
 void AG_LobbyGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
-	Super::InitGame(MapName, Options, ErrorMessage);
+    Super::InitGame(MapName, Options, ErrorMessage);
 
-	FTimerHandle ChangeMapHandle;
+    /*FTimerHandle ChangeMapHandle;
 
-	GetWorld()->GetTimerManager().SetTimer(
-		ChangeMapHandle, [this]() { MapChange(FName("ThirdPersonMap")); }, 10, false);
+    GetWorld()->GetTimerManager().SetTimer(
+        ChangeMapHandle, [this]() { MapChange(FName("ThirdPersonMap")); }, 10, false);*/
 }
 
 void AG_LobbyGameMode::PostLogin(APlayerController* NewPlayer)
 {
-	Super::PostLogin(NewPlayer);
+    Super::PostLogin(NewPlayer);
 
-	FTimerHandle ChangeMapHandle;
-	int32 NumberOfPlayers = GameState.Get()->PlayerArray.Num();
+    int32 NumberOfPlayers = GameState.Get()->PlayerArray.Num();
 
-	GetWorld()->GetTimerManager().SetTimer(
-		ChangeMapHandle, [this]() { MapChange(FName("ThirdPersonMap")); }, 10, false);
+    UGameInstance* GameInstance = GetGameInstance();
+    if (GameInstance)
+    {
+        UMultiplayerSubsystem* Subsystem = GameInstance->GetSubsystem<UMultiplayerSubsystem>();
+        check(Subsystem);
 
-	UGameInstance* GameInstance = GetGameInstance();
-	if (GameInstance)
-	{
-		UMultiplayerSubsystem* Subsystem = GameInstance->GetSubsystem<UMultiplayerSubsystem>();
-		check(Subsystem);
+        if (NumberOfPlayers == Subsystem->DesiredNumPublicConnections)
+        {
+            UWorld* World = GetWorld();
+            if (World)
+            {
+                bUseSeamlessTravel = true;
 
-		if (NumberOfPlayers == Subsystem->DesiredNumPublicConnections)
-		{
-			UWorld* World = GetWorld();
-			if (World)
-			{
-				bUseSeamlessTravel = true;
+                FString MatchType = Subsystem->DesiredMatchType;
+                //FString PathToMap = FString::Printf(TEXT("%s?listen"), MapsForModes.Find(MatchType));
+                FString PathToMap = MapsForModes.Find(MatchType)->Append("?listen");
+                World->ServerTravel(PathToMap);
+            }
+        }
+    }
+}
 
-				FString MatchType = Subsystem->DesiredMatchType;
-				FString PathToMap = FString::Printf(TEXT("%s?listen"), MapsForModes.Find(MatchType));
-				World->ServerTravel(PathToMap);
-			}
-			GetWorld()->ServerTravel(MapName.ToString());
-		}
-	}
+//void AG_LobbyGameMode::HandleLoginAfterGameStart(APlayerController* NewPlayer)
+//{
+//    Super::HandleLoginAfterGameStart(NewPlayer);
+//}
 
-	int32 AG_LobbyGameMode::GetNumExpectedPlayers() const
-	{
-		if (GameState)
-		{
-			return GameState->PlayerArray.Num();
-		}
-		return 0;
-	}
+int32 AG_LobbyGameMode::GetNumExpectedPlayers() const
+{
+    if (GameState)
+    {
+        return GameState->PlayerArray.Num();
+    }
+    return 0;
+}

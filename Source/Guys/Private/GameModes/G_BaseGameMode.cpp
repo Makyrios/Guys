@@ -23,17 +23,6 @@ void AG_BaseGameMode::InitGame(const FString& MapName, const FString& Options, F
 void AG_BaseGameMode::HandleSeamlessTravelPlayer(AController*& C)
 {
     Super::HandleSeamlessTravelPlayer(C);
-
-    /*LoadedPlayers += 1;
-    if (LoadedPlayers == GetNumExpectedPlayers())
-    {
-        OnAllPlayersLoaded();
-    }*/
-
-    /*if (bDelayedStart)
-    {
-        GetWorldTimerManager().SetTimer(DelayStartTimer, this, &AG_BaseGameMode::StartMatch, DelayBeforeStart);
-    }*/
 }
 
 int32 AG_BaseGameMode::GetNumExpectedPlayers() const
@@ -103,7 +92,6 @@ void AG_BaseGameMode::OnAllPlayersLoaded()
 
         GetWorldTimerManager().SetTimer(
             DelayStartTimer, this, &AG_BaseGameMode::StartMatch, DelayBeforeStart);
-        // GetWorldTimerManager().SetTimer(DelayStartTimer, this, &AG_BaseGameMode::StartMatch, DelayBeforeStart);
     }
     else
     {
@@ -173,32 +161,16 @@ void AG_BaseGameMode::HandleMatchIsWaitingToStart()
 {
     Super::HandleMatchIsWaitingToStart();
 
-    /*for (FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; ++Iterator)
-    {
-        if (Iterator)
-        {
-            SetControllerMatchState(Iterator->Get(), GetMatchState());
-        }
-    }*/
 }
 
 void AG_BaseGameMode::HandleMatchHasStarted()
 {
     Super::HandleMatchHasStarted();
-
-    for (FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; ++Iterator)
-    {
-        if (Iterator)
-        {
-            //SetControllerMatchState(Iterator->Get(), GetMatchState());
-            //ShowHUDWidget(Iterator->Get());
-        }
-    }
 }
 
 void AG_BaseGameMode::MovePawnToRandomPlayerStart(APawn* PawnToMove)
 {
-    const AActor* PlayerStart = ChoosePlayerStart();
+    const AActor* PlayerStart = ChooseRandomPlayerStart();
     if (PlayerStart && PawnToMove)
     {
         PawnToMove->SetActorLocation(PlayerStart->GetActorLocation());
@@ -214,7 +186,7 @@ void AG_BaseGameMode::ShowHUDWidget(APlayerController* PlayerController)
     }
 }
 
-AActor* AG_BaseGameMode::ChoosePlayerStart()
+AActor* AG_BaseGameMode::ChooseRandomPlayerStart() const
 {
     TArray<AActor*> PlayerStarts;
     UGameplayStatics::GetAllActorsOfClass(this, AG_PlayerStart::StaticClass(), PlayerStarts);
@@ -251,7 +223,7 @@ void AG_BaseGameMode::RespawnPawn(AController* Controller)
     UWorld* World = GetWorld();
     APawn* OldPawn = Controller->GetPawn();
 
-    AActor* PlayerStart = ChoosePlayerStart();
+    AActor* PlayerStart = ChooseRandomPlayerStart();
 
     if (!World || !Controller || !OldPawn || !PlayerStart) return;
 
