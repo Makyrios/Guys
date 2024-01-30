@@ -8,6 +8,7 @@
 
 class UCanvasPanel;
 class UTextBlock;
+class UWidgetAnimation;
 
 UCLASS()
 class GUYS_API UG_StartGameWidget : public UUserWidget
@@ -26,6 +27,10 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
     TObjectPtr<UTextBlock> DisplayText;
+
+    UPROPERTY(Transient, BlueprintReadWrite, meta = (BindWidgetAnim))
+    TObjectPtr<UWidgetAnimation> TextShrinkAnimation;
+
 
 private:
     float StartGameDelay;
