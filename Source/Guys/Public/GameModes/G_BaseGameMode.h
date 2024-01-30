@@ -6,6 +6,8 @@
 #include "GameFramework/GameMode.h"
 #include "G_BaseGameMode.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnChangeMatchState, FName);
+
 UCLASS(minimalapi)
 class AG_BaseGameMode : public AGameMode
 {
@@ -24,26 +26,34 @@ protected:
     virtual void HandleMatchIsWaitingToStart() override;
     virtual void HandleMatchHasStarted() override;
     virtual void HandleMatchHasEnded() override;
+    virtual void HandleSeamlessTravelPlayer(AController*& C) override;
     virtual void HandleActorDeath(AController* DeadActor);
     virtual bool ReadyToStartMatch_Implementation() override;
     virtual bool ReadyToEndMatch_Implementation() override;
-    virtual APawn* SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot) override;
+
+    virtual void HandleLoginBeforeGameStart(APlayerController* NewPlayer);
+    virtual void HandleLoginAfterGameStart(APlayerController* NewPlayer);
+    virtual void OnAllPlayersLoaded();
+    virtual int32 GetNumExpectedPlayers() const;
+
+    virtual void SetMatchState(FName NewMatchState) override;
 
     void SpawnNewPawn(APlayerController* NewPlayer);
     void SpawnSpectatorPawn(APlayerController* NewPlayer);
+    void SetControllerMatchState(APlayerController* PlayerController, FName NewMatchState);
+    void EnableSpectatorHUD(APlayerController* NewPlayer);
+    void CreateStartGameWidget(APlayerController* NewPlayer);
 
 private:
     AActor* ChoosePlayerStart();
     void ShowHUDWidget(APlayerController* PlayerController);
-    void SetControllerMatchState(APlayerController* PlayerController, FName NewMatchState);
     void MovePawnToRandomPlayerStart(APawn* PawnToMove);
-    void CreateStartGameWidget(APlayerController* NewPlayer);
     void RestartGame();
     bool IsMatchStarted();
     bool IsMatchPreparing();
-    void HandleLoginBeforeGameStart(APlayerController* NewPlayer);
-    void HandleLoginAfterGameStart(APlayerController* NewPlayer);
-    void EnableSpectatorHUD(APlayerController* NewPlayer);
+
+public:
+    FOnChangeMatchState OnChangeMatchState;
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "G|GameStart", meta = (EditCondition = "bDelayedStart"))
@@ -55,4 +65,6 @@ protected:
     UPROPERTY()
     FTimerHandle DelayStartTimer;
     FTimerDelegate RespawnDelegate;
+
+    int32 LoadedPlayers = 0;
 };

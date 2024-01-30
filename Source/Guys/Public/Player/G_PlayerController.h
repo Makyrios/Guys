@@ -30,8 +30,8 @@ public:
     void SetCurrentMatchState(FName InMatchState);
 
 protected:
+    virtual void BeginPlay() override;
     virtual void OnPossess(APawn* InPawn) override;
-
     virtual void AcknowledgePossession(APawn* InPawn) override;
 
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;

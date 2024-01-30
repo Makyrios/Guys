@@ -10,6 +10,7 @@
 #include <GameInstance/G_GameInstance.h>
 #include <Kismet/GameplayStatics.h>
 #include "UI/Widgets/G_PauseWidget.h"
+#include <GameModes/G_BaseGameMode.h>
 
 AG_PlayerController::AG_PlayerController()
 {
@@ -21,6 +22,76 @@ void AG_PlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
     DOREPLIFETIME(AG_PlayerController, CurrentMatchState);
+}
+
+void AG_PlayerController::BeginPlay()
+{
+    Super::BeginPlay();
+
+    if (HasAuthority())
+    {
+        if (AG_BaseGameMode* GameMode = Cast<AG_BaseGameMode>(UGameplayStatics::GetGameMode(this)))
+        {
+            GameMode->OnChangeMatchState.AddUObject(this, &AG_PlayerController::SetCurrentMatchState);
+            SetCurrentMatchState(GameMode->GetMatchState());
+        }
+    }
+}
+
+void AG_PlayerController::OnPossess(APawn* InPawn)
+{
+    Super::OnPossess(InPawn);
+
+    if (!InPawn) return;
+
+    if (CurrentMatchState != MatchState::InProgress)
+    {
+        SetKeyboardInput(false);
+    }
+    else
+    {
+        SetKeyboardInput(true);
+    }
+}
+
+void AG_PlayerController::AcknowledgePossession(APawn* InPawn)
+{
+    Super::AcknowledgePossession(InPawn);
+
+    if (GetRemoteRole() == ROLE_Authority)
+    {
+        if (CurrentMatchState != MatchState::InProgress)
+        {
+            Client_SetKeyboardInput(false);
+        }
+        else
+        {
+            Client_SetKeyboardInput(true);
+        }
+    }
+}
+
+void AG_PlayerController::SetKeyboardInput(bool bEnable)
+{
+    if (HasAuthority() && IsLocalController())
+    {
+        G_Character = G_Character.IsValid() ? G_Character : Cast<AG_Character>(GetPawn());
+        if (!G_Character.IsValid()) return;
+
+        G_Character->SetKeyboardInput(bEnable);
+    }
+    else
+    {
+        Client_SetKeyboardInput(bEnable);
+    }
+}
+
+void AG_PlayerController::Client_SetKeyboardInput_Implementation(bool bEnable)
+{
+    G_Character = G_Character.IsValid() ? G_Character : Cast<AG_Character>(GetPawn());
+    if (!G_Character.IsValid()) return;
+
+    G_Character->SetKeyboardInput(bEnable);
 }
 
 void AG_PlayerController::TogglePause()
@@ -88,57 +159,6 @@ void AG_PlayerController::SetSpectatorHUD(bool bEnableSpectator)
     }
 }
 
-void AG_PlayerController::OnPossess(APawn* InPawn)
-{
-    Super::OnPossess(InPawn);
-
-    if (!InPawn) return;
-
-    if (CurrentMatchState != MatchState::InProgress)
-    {
-        SetKeyboardInput(false);
-    }
-}
-
-void AG_PlayerController::AcknowledgePossession(APawn* InPawn)
-{
-    Super::AcknowledgePossession(InPawn);
-
-    if (CurrentMatchState != MatchState::InProgress)
-    {
-        if (GetRemoteRole() == ROLE_Authority)
-        {
-            Client_SetKeyboardInput(false);
-        }
-    }
-}
-
-void AG_PlayerController::SetKeyboardInput(bool bEnable)
-{
-    if (HasAuthority() && IsLocalController())
-    {
-        G_Character = G_Character.IsValid() ? G_Character : Cast<AG_Character>(GetPawn());
-        if (!G_Character.IsValid()) return;
-
-        G_Character->SetKeyboardInput(bEnable);
-    }
-    else
-    {
-        Client_SetKeyboardInput(bEnable);
-    }
-}
-
-void AG_PlayerController::Client_SetKeyboardInput_Implementation(bool bEnable)
-{
-    if (GetPawn())
-    {
-        G_Character = G_Character.IsValid() ? G_Character : Cast<AG_Character>(GetPawn());
-        if (!G_Character.IsValid()) return;
-
-        G_Character->SetKeyboardInput(bEnable);
-    }
-}
-
 void AG_PlayerController::SetCurrentMatchState(FName InMatchState)
 {
     CurrentMatchState = InMatchState;
@@ -146,6 +166,7 @@ void AG_PlayerController::SetCurrentMatchState(FName InMatchState)
     if (CurrentMatchState == MatchState::InProgress)
     {
         SetKeyboardInput(true);
+        SetHUDWidgetVisibility(ESlateVisibility::Visible);
     }
     else
     {
@@ -185,6 +206,7 @@ void AG_PlayerController::SetHUDWidgetVisibility(ESlateVisibility InVisibility)
         return;
     }
 
+    if (!GetPawn()) return;
     if (GetPawn()->IsA<ASpectatorPawn>())
     {
         SetSpectatorHUDWidgetVisibility(InVisibility);
@@ -193,7 +215,6 @@ void AG_PlayerController::SetHUDWidgetVisibility(ESlateVisibility InVisibility)
     {
         SetPlayerHUDWidgetVisibility(InVisibility);
     }
-
 }
 
 bool AG_PlayerController::ShouldChangeHUDVisibility()
