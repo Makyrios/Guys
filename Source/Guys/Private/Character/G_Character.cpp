@@ -57,7 +57,7 @@ AG_Character::AG_Character()
     InventoryComponent->SetIsReplicated(true);
     
     Hat = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Hat"));
-    Hat->AttachToComponent(GetMesh(),FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("Hat_Socket_0"));
+    Hat->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("Hat_Socket_0"));
 }
 
 void AG_Character::BeginPlay()
@@ -133,7 +133,6 @@ void AG_Character::Use()
     {
         bool bSuccess = PState->GetAbilitySystemComponent()->TryActivateAbilityByClass(AbilityToUse, true);
         Inventory->RemoveAbility(0);
-        // Inventory->RemoveAbility(Inventory->CurrentAbilitySlot);
     }
 }
 
@@ -145,12 +144,16 @@ void AG_Character::Select()
     }
     InventoryComponent->SelectAbility();
 }
-    
+
 void AG_Character::Jump()
 {
     if (GetWorldTimerManager().IsTimerActive(JumpTimer)) return;
 
-    GetWorld()->GetTimerManager().SetTimer(JumpTimer, JumpCooldown, false);
+    if (AttributeSet == nullptr) return;
+
+    UG_AttributeSet* GAttributeSet = Cast<UG_AttributeSet>(AttributeSet);
+
+    GetWorld()->GetTimerManager().SetTimer(JumpTimer, GAttributeSet->GetJumpCooldown(), false);
 
     Super::Jump();
 }
@@ -175,17 +178,18 @@ void AG_Character::Server_Interact_Implementation()
                     FVector PushDirection = (OverlappingActor->GetActorLocation() - this->GetActorLocation()).GetSafeNormal();
                     Multicast_Interact(OverlappingActor, PushDirection);
                     bCanInteract = false;
+
+                    if (AttributeSet == nullptr) return;
+
+                    UG_AttributeSet* GAttributeSet = Cast<UG_AttributeSet>(AttributeSet);
+
                     GetWorldTimerManager().SetTimer(
-                        InteractTimer, 
-                        [this]() { bCanInteract = true; }, 
-                        InteractCooldown, 
-                        false);
+                        InteractTimer, [this]() { bCanInteract = true; }, GAttributeSet->GetInteractCooldown(), false);
                     break;
                 }
             }
         }
     }
-    
 }
 
 void AG_Character::TogglePause()
@@ -294,8 +298,6 @@ void AG_Character::InitAbilityActorInfo()
     }
 }
 
-
-
 void AG_Character::CreateSaveFile()
 {
     UG_SaveGame* dataToSave = Cast<UG_SaveGame>(UGameplayStatics::CreateSaveGameObject(UG_SaveGame::StaticClass()));
@@ -306,7 +308,7 @@ void AG_Character::CreateSaveFile()
 
 void AG_Character::SaveSkinsInfo()
 {
-    if (!UGameplayStatics::DoesSaveGameExist("Slot1",0))
+    if (!UGameplayStatics::DoesSaveGameExist("Slot1", 0))
     {
         CreateSaveFile();
     }
@@ -318,10 +320,9 @@ void AG_Character::SaveSkinsInfo()
 
 void AG_Character::LoadSkinsInfo()
 {
-    if (!UGameplayStatics::DoesSaveGameExist("Slot1",0))
+    if (!UGameplayStatics::DoesSaveGameExist("Slot1", 0))
     {
         CreateSaveFile();
-        
     }
     const UG_SaveGame* savedData = Cast<UG_SaveGame>(UGameplayStatics::LoadGameFromSlot("Slot1", 0));
     ChosenSkinIdx = savedData->ChosenSkins.SkinIdx;
@@ -352,8 +353,8 @@ void AG_Character::ChaneHatByIndex(const int32& Hat_Idx)
 
 void AG_Character::SetSkinByIndex_Implementation(const int32& Mat_Idx)
 {
-    this->GetMesh()->SetMaterial(0,Skins[Mat_Idx]);
-    ChosenSkinIdx = Mat_Idx;    
+    this->GetMesh()->SetMaterial(0, Skins[Mat_Idx]);
+    ChosenSkinIdx = Mat_Idx;
 }
 
 void AG_Character::SetHatByIndex_Implementation(const int32& Hat_Idx)
@@ -361,8 +362,6 @@ void AG_Character::SetHatByIndex_Implementation(const int32& Hat_Idx)
     FString SocketName = TEXT("Hat_Socket_");
     SocketName.Append(FString::FromInt(Hat_Idx));
     Hat->SetStaticMesh(Hats[Hat_Idx]);
-    Hat->AttachToComponent(GetMesh(),FAttachmentTransformRules::SnapToTargetIncludingScale, FName(SocketName));
-    ChosenHatIdx = Hat_Idx;    
+    Hat->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName(SocketName));
+    ChosenHatIdx = Hat_Idx;
 }
-
-

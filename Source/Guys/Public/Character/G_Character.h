@@ -50,7 +50,7 @@ public:
     void Multicast_Interact(AActor* Actor, FVector Direction);
 
     FG_ChosenSkinsIdx ChosenSkins;
-    
+
     UPROPERTY(BlueprintReadWrite, EditAnywhere)
     TArray<TObjectPtr<UMaterialInterface>> Skins;
 
@@ -62,7 +62,7 @@ public:
 
     UFUNCTION()
     void UpdateSkins();
-    
+
     UFUNCTION(BlueprintCallable)
     void ChaneSkinByIndex(const int32& Mat_Idx);
     UFUNCTION(NetMulticast, Reliable)
@@ -71,13 +71,13 @@ public:
     UFUNCTION(BlueprintCallable)
     void ChaneHatByIndex(const int32& Hat_Idx);
     UFUNCTION(NetMulticast, Reliable)
-    void SetHatByIndex(const int32& Hat_Idx);   
-   
+    void SetHatByIndex(const int32& Hat_Idx);
+
     UPROPERTY(BlueprintReadOnly)
-    int32 ChosenHatIdx {0};
+    int32 ChosenHatIdx{0};
     UPROPERTY(BlueprintReadOnly)
-    int32 ChosenSkinIdx {0};
-    
+    int32 ChosenSkinIdx{0};
+
     void CreateSaveFile();
     void SaveSkinsInfo();
     void LoadSkinsInfo();
@@ -168,13 +168,6 @@ private:
     UPROPERTY()
     FTimerHandle InteractTimer;
 
-    UPROPERTY(EditDefaultsOnly, Category = "G|Settings")
-    float JumpCooldown = 0.5f;
-
-    UPROPERTY(EditDefaultsOnly, Category = "G|Settings")
-    float InteractCooldown = 2.0f;
-
     UPROPERTY()
     bool bCanInteract = true;
-
 };

@@ -20,6 +20,10 @@ AG_PlayerState::AG_PlayerState()
 
     UG_AttributeSet* GAttributeSet = Cast<UG_AttributeSet>(AttributeSet);
 
+    AbilitySystemComponent
+        ->RegisterGameplayTagEvent(FGameplayTag::RequestGameplayTag(FName("State.Debuff.Stun")), EGameplayTagEventType::NewOrRemoved)
+        .AddUObject(this, &AG_PlayerState::StunTagChanged);
+
     AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GAttributeSet->GetMaxMovementSpeedAttribute())
         .AddUObject(this, &AG_PlayerState::OnMaxMovementSpeedAttributeChanged);
 }
@@ -48,4 +52,16 @@ void AG_PlayerState::OnMaxMovementSpeedAttributeChanged(const FOnAttributeChange
     if (Character == nullptr) return;
 
     Character->GetCharacterMovement()->MaxWalkSpeed = Data.NewValue;
+}
+
+void AG_PlayerState::StunTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
+{
+    if (NewCount == 0)
+    {
+        GetPlayerController()->SetIgnoreMoveInput(false);
+    }
+    else
+    {
+        GetPlayerController()->SetIgnoreMoveInput(true);
+    }
 }
