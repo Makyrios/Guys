@@ -6,7 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "G_RaceSpectatorHUDWidget.generated.h"
 
-class UTextBlock;
+class UG_TimerWidget;
 
 UCLASS()
 class GUYS_API UG_RaceSpectatorHUDWidget : public UUserWidget
@@ -16,13 +16,7 @@ class GUYS_API UG_RaceSpectatorHUDWidget : public UUserWidget
 public:
     void SetTimeText(float RemainingSeconds);
 
-protected:
-    void NativePreConstruct() override;
-
-private:
-    void ShowTimer();
-
 public:
     UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-    TObjectPtr<UTextBlock> TimeText;
+    TObjectPtr<UG_TimerWidget> Timer;
 };

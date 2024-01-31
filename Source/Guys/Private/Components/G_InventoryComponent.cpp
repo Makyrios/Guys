@@ -32,6 +32,20 @@ void UG_InventoryComponent::AddAbility(TSubclassOf<UGameplayAbility> NewAbility)
 			OwnedAbilities.Add(NewAbility);
 		}
 	}
+	OwnedAbilities.Add(NewAbility);
+
+	AG_PlayerController* PlayerController = GetOwner()->GetInstigatorController<AG_PlayerController>();
+    if (PlayerController)
+    {
+        PlayerController->UpdateAbilityUI(OwnedAbilities);
+	}
+
+	//TWeakObjectPtr<UGameplayAbility> Ability = OwnedAbilities[OwnedAbilities.Find(NewAbility)];
+
+	//if (Ability.IsValid())
+	//{
+	//	// Delegates subscribe here
+	//}
 }
 
 void UG_InventoryComponent::RemoveAbility(const int32& AbilitySlot)

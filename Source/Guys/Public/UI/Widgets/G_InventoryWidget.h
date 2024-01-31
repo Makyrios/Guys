@@ -16,6 +16,15 @@ class GUYS_API UG_InventoryWidget : public UUserWidget
     GENERATED_BODY()
 
 public:
+    void UpdateAbilityUI(FGameplayTagContainer AbilityTag);
+
+private:
+    void SetFirstAbilityImage(FGameplayTag AbilityTag);
+    void SetSecondAbilityImage(FGameplayTag AbilityTag);
+
+    UTexture2D* GetAbilityImage(FGameplayTag AbilityTag);
+
+public:
     UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
     TObjectPtr<UCanvasPanel> Canvas;
 
@@ -30,4 +39,8 @@ public:
 
     UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
     TObjectPtr<UImage> SecondAbilityImage;
+
+private:
+    UPROPERTY(EditDefaultsOnly)
+    TObjectPtr<UDataTable> AbilityImagesDataTable;
 };

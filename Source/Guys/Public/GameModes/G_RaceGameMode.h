@@ -34,6 +34,8 @@ private:
     UFUNCTION()
     void OnPlayerFinishRace(AG_RacePlayerController* RaceController, int32 Place);
 
+    APawn* SpawnPawnAtLocation(FVector SpawnLocation, FRotator SpawnRotation, APawn* OldPawn);
+
 private:
     UPROPERTY(EditDefaultsOnly, Category = "G|Gameplay")
     float TimeLimit = 180;

@@ -23,7 +23,6 @@ void AG_RaceGameMode::HandleSeamlessTravelPlayer(AController*& C)
     Super::HandleSeamlessTravelPlayer(C);
 }
 
-
 bool AG_RaceGameMode::ReadyToEndMatch_Implementation()
 {
     if (const AG_RaceGameState* CurrentGameState = Cast<AG_RaceGameState>(GameState))
@@ -109,43 +108,41 @@ void AG_RaceGameMode::OnPlayerFinishRace(AG_RacePlayerController* RaceController
 
 APawn* AG_RaceGameMode::GetSpawnedPawn(APawn* OldPawn)
 {
-    UWorld* World = GetWorld();
     AG_RacePlayerState* PlayerState = OldPawn->GetPlayerState<AG_RacePlayerState>();
     AG_Checkpoint* LastCheckpoint = PlayerState->GetLastCheckpoint().Get();
-    if (!World || !OldPawn || !PlayerState) return nullptr;
+    if (!OldPawn || !PlayerState) return nullptr;
 
     if (LastCheckpoint)
     {
-        FVector RespawnLocation = LastCheckpoint->GetRandomSpawnPoint();
-        APawn* NewPawn = World->SpawnActor<APawn>(OldPawn->GetClass(), RespawnLocation, LastCheckpoint->GetActorRotation());
-
-        /*Find new spawn location if previous is occupied*/
-        while (NewPawn == nullptr)
+        APawn* SpawnedPawn = SpawnPawnAtLocation(LastCheckpoint->GetRandomSpawnPoint(), LastCheckpoint->GetActorRotation(), OldPawn);
+        while (!SpawnedPawn)
         {
-            RespawnLocation = LastCheckpoint->GetRandomSpawnPoint();
-            NewPawn = World->SpawnActor<APawn>(OldPawn->GetClass(), RespawnLocation, LastCheckpoint->GetActorRotation());
+            SpawnedPawn = SpawnPawnAtLocation(LastCheckpoint->GetRandomSpawnPoint(), LastCheckpoint->GetActorRotation(), OldPawn);
         }
-
-        return NewPawn;
+        return SpawnedPawn;
     }
+    // If checkpoint is null spawn at player start
     else
     {
         AActor* PlayerStart = ChoosePlayerStart(OldPawn->GetController());
         if (PlayerStart)
         {
-            FVector RespawnLocation = PlayerStart->GetActorLocation();
-			APawn* NewPawn = World->SpawnActor<APawn>(OldPawn->GetClass(), RespawnLocation, PlayerStart->GetActorRotation());
-
-			/*Find new spawn location if previous is occupied*/
-            while (NewPawn == nullptr)
+            APawn* SpawnedPawn = SpawnPawnAtLocation(PlayerStart->GetActorLocation(), PlayerStart->GetActorRotation(), OldPawn);
+            while (SpawnedPawn)
             {
-				RespawnLocation = PlayerStart->GetActorLocation();
-				NewPawn = World->SpawnActor<APawn>(OldPawn->GetClass(), RespawnLocation, PlayerStart->GetActorRotation());
-			}
-
-			return NewPawn;
+                PlayerStart = ChoosePlayerStart(OldPawn->GetController());
+                if (!PlayerStart) continue;
+                SpawnedPawn = SpawnPawnAtLocation(PlayerStart->GetActorLocation(), PlayerStart->GetActorRotation(), OldPawn);
+            }
+            return SpawnedPawn;
         }
     }
 
     return nullptr;
+}
+
+APawn* AG_RaceGameMode::SpawnPawnAtLocation(FVector SpawnLocation, FRotator SpawnRotation, APawn* OldPawn)
+{
+    APawn* NewPawn = GetWorld()->SpawnActor<APawn>(OldPawn->GetClass(), SpawnLocation, SpawnRotation);
+    return NewPawn;
 }
