@@ -27,6 +27,7 @@ void AG_RacePlayerController::HandleFinishRace()
         return;
     }
 
+    SetKeyboardInput(false);
     RaceHUD = (!RaceHUD) ? GetHUD<AG_RaceHUD>() : RaceHUD;
     if (!RaceHUD) return;
 
@@ -35,10 +36,7 @@ void AG_RacePlayerController::HandleFinishRace()
 
 void AG_RacePlayerController::Client_HandleFinishRace_Implementation()
 {
-    RaceHUD = (!RaceHUD) ? GetHUD<AG_RaceHUD>() : RaceHUD;
-    if (!RaceHUD) return;
-
-    RaceHUD->ShowFinishRaceWidget();
+    HandleFinishRace();
 }
 
 void AG_RacePlayerController::HandleWinRace(int32 Place)
@@ -76,11 +74,11 @@ void AG_RacePlayerController::SetPlayerPosition(int32 Position)
 
 void AG_RacePlayerController::Client_SetPlayerPosition_Implementation(int32 Position)
 {
-    //SetPlayerPosition(Position);
-    RaceHUD = (!RaceHUD) ? GetHUD<AG_RaceHUD>() : RaceHUD;
+    SetPlayerPosition(Position);
+    /*RaceHUD = (!RaceHUD) ? GetHUD<AG_RaceHUD>() : RaceHUD;
     if (!RaceHUD) return;
 
-    RaceHUD->SetPlayerPosition(Position);
+    RaceHUD->SetPlayerPosition(Position);*/
 }
 
 void AG_RacePlayerController::OnTimerUpdate(float RemainingSeconds)

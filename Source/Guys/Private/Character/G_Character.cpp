@@ -12,11 +12,12 @@
 #include "AbilitySystem/G_AbilitySystemComponent.h"
 #include "AbilitySystem/G_AttributeSet.h"
 #include "Player/G_PlayerState.h"
-#include "Interfaces/G_IInteractable.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include <GameModes/G_BaseGameMode.h>
 #include "Player/G_PlayerController.h"
 #include "Components/G_PhysicalAnimComponent.h"
+#include "Components/G_InventoryComponent.h"
+#include <Interfaces/G_Interactable.h>
 
 AG_Character::AG_Character()
 {
@@ -29,9 +30,10 @@ AG_Character::AG_Character()
     GetCharacterMovement()->bOrientRotationToMovement = true;
     GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
 
-    GetCharacterMovement()->JumpZVelocity = 700.f;
-    GetCharacterMovement()->AirControl = 0.35f;
-    GetCharacterMovement()->MaxWalkSpeed = 500.f;
+    GetCharacterMovement()->JumpZVelocity = 400.f;
+    GetCharacterMovement()->AirControl = 0.1f;
+    GetCharacterMovement()->MaxWalkSpeed = 100;
+    GetCharacterMovement()->MaxAcceleration = 1024.f;
     GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
     GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 
@@ -42,10 +44,11 @@ AG_Character::AG_Character()
 
     FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
     FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+    FollowCamera->bUsePawnControlRotation = false;
 
     PhysicalAnimComponent = CreateDefaultSubobject<UG_PhysicalAnimComponent>(TEXT("PhysicalAnimComponent"));
 
-    FollowCamera->bUsePawnControlRotation = false;
+    InventoryComponent = CreateDefaultSubobject<UG_InventoryComponent>(TEXT("Inventory"));
 }
 
 void AG_Character::BeginPlay()
@@ -56,16 +59,13 @@ void AG_Character::BeginPlay()
 void AG_Character::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-
-    ApplyAttributes();
-    ApplyGameplayTags();
 }
 
 void AG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
     if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
     {
-        EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
+        EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
         EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AG_Character::Move);
         EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AG_Character::Look);
@@ -105,9 +105,36 @@ void AG_Character::Look(const FInputActionValue& Value)
     }
 }
 
+void AG_Character::Jump()
+{
+    if (GetWorldTimerManager().IsTimerActive(JumpTimer)) return;
+
+    GetWorld()->GetTimerManager().SetTimer(JumpTimer, JumpCooldown, false);
+
+    Super::Jump();
+}
+
 void AG_Character::Interact(const FInputActionValue& Value)
 {
     Server_Interact();
+}
+
+void AG_Character::Server_Interact_Implementation()
+{
+    TArray<AActor*> OverlappingActors;
+    this->GetOverlappingActors(OverlappingActors);
+    if (!OverlappingActors.IsEmpty())
+    {
+        for (auto& OverlappingActor : OverlappingActors)
+        {
+            if (OverlappingActor->Implements<UG_Interactable>())
+            {
+                FVector PushDirection = (OverlappingActor->GetActorLocation() - this->GetActorLocation()).GetSafeNormal();
+                Multicast_Interact(OverlappingActor, PushDirection);
+                break;
+            }
+        }
+    }
 }
 
 void AG_Character::TogglePause()
@@ -126,23 +153,9 @@ void AG_Character::ToggleStats()
     G_PlayerController->ToggleStats();
 }
 
-void AG_Character::Server_Interact_Implementation()
-{
-    TArray<AActor*> OverlappingActors;
-    this->GetOverlappingActors(OverlappingActors);
-    if (!OverlappingActors.IsEmpty())
-    {
-        if (Cast<IG_IInteractable>(OverlappingActors[0]))
-        {
-            FVector PushDirection = (OverlappingActors[0]->GetActorLocation() - this->GetActorLocation()).GetSafeNormal();
-            Multicast_Interact(OverlappingActors[0], PushDirection);
-        }
-    }
-}
-
 void AG_Character::Multicast_Interact_Implementation(AActor* Actor, FVector Direction)
 {
-    if (IG_IInteractable* OtherActor = Cast<IG_IInteractable>(Actor))
+    if (IG_Interactable* OtherActor = Cast<IG_Interactable>(Actor))
     {
         OtherActor->ReactOnPush(Direction);
     }
@@ -228,31 +241,4 @@ void AG_Character::InitAbilityActorInfo()
     {
         CustomAbilitySystemComponent->AbilityActorInfoSet();
     }
-}
-
-void AG_Character::ApplyGameplayTags()
-{
-    if (!AbilitySystemComponent) return;
-
-    FGameplayTagContainer AssetTags;
-    AbilitySystemComponent->GetOwnedGameplayTags(AssetTags);
-
-    for (const FGameplayTag& Tag : AssetTags)
-    {
-        FGameplayTag StateTag = FGameplayTag::RequestGameplayTag(FName("State"));
-        if (Tag.MatchesTag(StateTag))
-        {
-            // Confirm States
-            if (Tag.GetTagName() == "State.Debuff.Stunned")
-            {
-            }
-        }
-    }
-}
-
-void AG_Character::ApplyAttributes()
-{
-    UG_AttributeSet* G_AttributeSet = Cast<UG_AttributeSet>(AttributeSet);
-    if (!G_AttributeSet) return;
-    GetCharacterMovement()->MaxWalkSpeed = G_AttributeSet->GetMaxMovementSpeed();
 }

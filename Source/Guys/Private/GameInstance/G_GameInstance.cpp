@@ -49,3 +49,8 @@ float UG_GameInstance::GetMasterSoundVolume() const
 
     return MasterSoundClass->Properties.Volume;
 }
+
+int32 UG_GameInstance::GetNumExpectedPlayers() const
+{
+    return NumExpectedPlayers;
+}

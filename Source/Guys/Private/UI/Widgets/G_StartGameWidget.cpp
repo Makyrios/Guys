@@ -2,6 +2,8 @@
 
 #include "UI/Widgets/G_StartGameWidget.h"
 #include "Components/TextBlock.h"
+#include "Animation/WidgetAnimation.h"
+
 
 void UG_StartGameWidget::InitializeWidget(float DelayStartTimer)
 {
@@ -20,14 +22,22 @@ void UG_StartGameWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTi
         if (StartGameDelay - Timer < 1)
         {
             DisplayText->SetText(FText::FromString("Get Ready!"));
+            if (!IsAnimationPlaying(TextShrinkAnimation))
+            {
+                PlayAnimation(TextShrinkAnimation);
+            }
         }
-        else if (FMath::CeilToInt(Timer) == 0)
+        else if (FMath::FloorToInt(Timer) == 0)
         {
             DisplayText->SetText(FText::FromString("Go!"));
+            if (!IsAnimationPlaying(TextShrinkAnimation))
+            {
+                PlayAnimation(TextShrinkAnimation);
+            }
         }
         else if (Timer > 0)
         {
-            DisplayText->SetText(FText::AsNumber(FMath::CeilToInt(Timer)));
+            DisplayText->SetText(FText::AsNumber(FMath::FloorToInt(Timer)));
         }
         else
         {

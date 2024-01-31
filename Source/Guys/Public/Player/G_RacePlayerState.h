@@ -28,7 +28,7 @@ private:
     UPROPERTY(Replicated, VisibleAnywhere, Category = "G|Stats")
     int32 PlayerScore = 0;
 
-    UPROPERTY(Replicated, VisibleAnywhere, Category = "G|Spawn")
+    UPROPERTY(VisibleAnywhere, Category = "G|Spawn")
     TWeakObjectPtr<AG_Checkpoint> LastCheckpoint;
 
     bool bFinishedRace = false;

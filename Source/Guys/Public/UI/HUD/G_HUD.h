@@ -9,6 +9,7 @@
 class UG_RaceHUDWidget;
 class UG_TableStatsWidget;
 class UG_PauseWidget;
+class UG_StartGameWidget;
 
 UCLASS()
 class GUYS_API AG_HUD : public AHUD
@@ -45,10 +46,13 @@ public:
     UPROPERTY()
     TObjectPtr<UG_PauseWidget> PauseWidget;
 
-protected:
     UPROPERTY()
     TObjectPtr<UG_TableStatsWidget> TableStatsWidget;
 
+    UPROPERTY()
+    TObjectPtr<UG_StartGameWidget> StartGameWidget;
+
+protected:
     UPROPERTY(EditDefaultsOnly, Category = "AS|Widgets")
     TSubclassOf<UUserWidget> StartGameWidgetClass;
 

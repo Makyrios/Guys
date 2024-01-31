@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -18,7 +16,7 @@ public:
 	UG_InventoryComponent();
 
 	UFUNCTION(BlueprintCallable, Category = "G|Inventory")
-	void AddAbility(UGameplayAbility* NewAbility);
+	void AddAbility(TSubclassOf<UGameplayAbility> NewAbility);
 
 	UFUNCTION(BlueprintCallable, Category = "G|Inventory")
 	void RemoveAbility(const int32& AbilitySlot);
@@ -29,7 +27,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "G|Inventory")
 	bool HasAbility();
 
-	bool CanCollectAbilities(UGameplayAbility* Ability);
+	bool CanCollectAbilities();
 
 	UFUNCTION(BlueprintCallable, Category = "G|Inventory")
 	bool SelectAbility(const int32& CandidateAbilitySlot);
@@ -37,24 +35,27 @@ public:
 	/**
 	*  Getter section
 	*/
-	UFUNCTION(BlueprintCallable, Category = "G|Inventory")
-	FORCEINLINE UGameplayAbility* GetAbilityBySlot(const int32& AbilitySlot) const
-	{
-		return OwnedAbilities[AbilitySlot].IsValid() ? OwnedAbilities[AbilitySlot].Get() : nullptr;
-	}
+	//UFUNCTION(BlueprintCallable, Category = "G|Inventory")
+	//FORCEINLINE UGameplayAbility* GetAbilityBySlot(const int32& AbilitySlot) const
+	//{
+	//	return OwnedAbilities[AbilitySlot].IsValid() ? OwnedAbilities[AbilitySlot].Get() : nullptr;
+	//}
 
 	UFUNCTION(BlueprintCallable, Category = "G|Inventory")
-	FORCEINLINE UGameplayAbility* GetCurrentAbility() const
+	FORCEINLINE TSubclassOf<UGameplayAbility> GetCurrentAbility() const
 	{
-		return OwnedAbilities[CurrentAbilitySlot].IsValid() ? OwnedAbilities[CurrentAbilitySlot].Get() : nullptr;
+		return OwnedAbilities.Num() > 0 ? OwnedAbilities[CurrentAbilitySlot] : nullptr;
 	}
 
-	TArray<TWeakObjectPtr<UGameplayAbility>> GetOwnedAbilities() { return OwnedAbilities; }
+	TArray<TSubclassOf<UGameplayAbility>> GetOwnedAbilities() { return OwnedAbilities; }
 
-private:
-	TArray<TWeakObjectPtr<UGameplayAbility>> OwnedAbilities;
-
+public:
+	UPROPERTY(EditAnywhere, Category = "G|Properties")
 	int32 MaxAbilities;
-
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Properties")
 	int32 CurrentAbilitySlot;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Properties")
+	TArray<TSubclassOf<UGameplayAbility>> OwnedAbilities;	
 };
