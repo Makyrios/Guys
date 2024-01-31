@@ -6,6 +6,7 @@
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "Interfaces/G_IInteractable.h"
+#include "Structs/G_ChosenSkinsIdx.h"
 #include "G_Character.generated.h"
 
 class UInputAction;
@@ -46,6 +47,30 @@ public:
 
     UFUNCTION(NetMulticast, Reliable)
     void Multicast_Interact();
+
+    FG_ChosenSkinsIdx ChosenSkins;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere)
+    TArray<TObjectPtr<UMaterialInterface>> Skins;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere)
+    TArray<TObjectPtr<UStaticMesh>> Hats;
+
+    UPROPERTY()
+    TObjectPtr<UStaticMeshComponent> Hat;
+    
+    UFUNCTION(BlueprintCallable)
+    void SetSkinByIndex(const int32& Mat_Idx);
+
+    UFUNCTION(BlueprintCallable)
+    void SetHatByIndex(const int32& Hat_Idx);   
+
+    UPROPERTY()
+    FG_ChosenSkinsIdx ChosenSkinsIdx;
+    
+    void CreateSaveFile();
+    void SaveSkinsInfo();
+    void LoadSkinsInfo();
 
 protected:
     virtual void BeginPlay() override;

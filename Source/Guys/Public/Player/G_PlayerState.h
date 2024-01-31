@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
 #include "AbilitySystemInterface.h"
+#include "Character/G_Character.h"
 #include "G_PlayerState.generated.h"
 
 class UAttributeSet;
@@ -22,7 +23,6 @@ public:
     virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
     UAttributeSet* GetAttributeSet() const;
 
-
 protected:
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -36,4 +36,7 @@ protected:
 protected:
     UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "G|Stats")
     FString PlayerName = "";
+
+    UPROPERTY()
+    TObjectPtr<AG_Character> Character{nullptr};
 };

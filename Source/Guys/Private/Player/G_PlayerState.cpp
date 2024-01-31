@@ -28,5 +28,5 @@ UAbilitySystemComponent* AG_PlayerState::GetAbilitySystemComponent() const
 
 UAttributeSet* AG_PlayerState::GetAttributeSet() const
 {
-    return AttributeSet;
+    return AttributeSet;    
 }
