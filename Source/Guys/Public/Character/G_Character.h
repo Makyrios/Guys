@@ -85,6 +85,8 @@ public:
 protected:
     virtual void BeginPlay() override;
 
+    virtual void Tick(float DeltaTime);
+
     virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
     void Move(const FInputActionValue& Value);
@@ -93,9 +95,9 @@ protected:
 
     void Jump() override;
     
-    void Use(const FInputActionValue& Value);
+    void Use();
 
-    void Select(const FInputActionValue& Value);
+    void Select();
 
     void Interact(const FInputActionValue& Value);
 
@@ -103,7 +105,6 @@ protected:
 
     void ToggleStats();
 
-    virtual void Tick(float DeltaTime);
 
     virtual void InitAbilityActorInfo();
 

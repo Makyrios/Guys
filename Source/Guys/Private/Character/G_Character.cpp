@@ -54,6 +54,7 @@ AG_Character::AG_Character()
 
     PhysicalAnimComponent = CreateDefaultSubobject<UG_PhysicalAnimComponent>(TEXT("PhysicalAnimComponent"));
     InventoryComponent = CreateDefaultSubobject<UG_InventoryComponent>(TEXT("Inventory"));
+    InventoryComponent->SetIsReplicated(true);
     
     Hat = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Hat"));
     Hat->AttachToComponent(GetMesh(),FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("Hat_Socket_0"));
@@ -82,8 +83,8 @@ void AG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputC
         EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Started, this, &AG_Character::TogglePause);
         EnhancedInputComponent->BindAction(StatsAction, ETriggerEvent::Started, this, &AG_Character::ToggleStats);
         EnhancedInputComponent->BindAction(StatsAction, ETriggerEvent::Completed, this, &AG_Character::ToggleStats);
-        EnhancedInputComponent->BindAction(UseAction, ETriggerEvent::Triggered, this, &AG_Character::Use);
-        EnhancedInputComponent->BindAction(SelectAction, ETriggerEvent::Triggered, this, &AG_Character::Select);
+        EnhancedInputComponent->BindAction(UseAction, ETriggerEvent::Started, this, &AG_Character::Use);
+        EnhancedInputComponent->BindAction(SelectAction, ETriggerEvent::Started, this, &AG_Character::Select);
     }
 }
 
@@ -116,7 +117,7 @@ void AG_Character::Look(const FInputActionValue& Value)
     }
 }
 
-void AG_Character::Use(const FInputActionValue& Value)
+void AG_Character::Use()
 {
     if (!InventoryComponent)
     {
@@ -131,19 +132,18 @@ void AG_Character::Use(const FInputActionValue& Value)
     if (PState && AbilityToUse)
     {
         bool bSuccess = PState->GetAbilitySystemComponent()->TryActivateAbilityByClass(AbilityToUse, true);
-        Inventory->RemoveAbility(Inventory->CurrentAbilitySlot);
+        Inventory->RemoveAbility(0);
+        // Inventory->RemoveAbility(Inventory->CurrentAbilitySlot);
     }
 }
 
-void AG_Character::Select(const FInputActionValue& Value)
+void AG_Character::Select()
 {
     if (!InventoryComponent)
     {
         return;
     }
-    UG_InventoryComponent* Inventory = InventoryComponent.Get();
-    float Slot = Value.Get<float>() - 1.0f;
-    Inventory->SelectAbility(Slot);
+    InventoryComponent->SelectAbility();
 }
     
 void AG_Character::Jump()

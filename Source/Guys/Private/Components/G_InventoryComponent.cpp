@@ -7,90 +7,120 @@
 
 UG_InventoryComponent::UG_InventoryComponent()
 {
-	PrimaryComponentTick.bCanEverTick = true;
-	SetIsReplicated(true);
+    PrimaryComponentTick.bCanEverTick = true;
 }
 
 void UG_InventoryComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(UG_InventoryComponent, OwnedAbilities);
+    DOREPLIFETIME(UG_InventoryComponent, OwnedAbilities);
+    DOREPLIFETIME(UG_InventoryComponent, MaxAbilities);
 }
 
 void UG_InventoryComponent::AddAbility(TSubclassOf<UGameplayAbility> NewAbility)
 {
-	if (OwnedAbilities.Num() < MaxAbilities)
-	{
-		AActor* Owner = GetOwner();
-		if (Owner->HasAuthority())
-		{
-			AG_PlayerController* OwnerController = Cast<AG_PlayerController>(Owner->GetOwner());
-			AG_PlayerState* OwnerState = OwnerController->GetPlayerState<AG_PlayerState>();
-			FGameplayAbilitySpec AbilitySpec(NewAbility);
-			OwnerState->GetAbilitySystemComponent()->GiveAbility(AbilitySpec);
-			OwnedAbilities.Add(NewAbility);
-		}
-	}
-	OwnedAbilities.Add(NewAbility);
+    if (OwnedAbilities.Num() < MaxAbilities)
+    {
+        AActor* Owner = GetOwner();
+        if (Owner->HasAuthority())
+        {
+            AG_PlayerController* OwnerController = Cast<AG_PlayerController>(Owner->GetOwner());
+            AG_PlayerState* OwnerState = OwnerController->GetPlayerState<AG_PlayerState>();
+            FGameplayAbilitySpec AbilitySpec(NewAbility);
+            OwnerState->GetAbilitySystemComponent()->GiveAbility(AbilitySpec);
+            OwnedAbilities.Add(NewAbility);
+            UpdateAbilityUI();
+        }
+    }
+}
 
-	AG_PlayerController* PlayerController = GetOwner()->GetInstigatorController<AG_PlayerController>();
+void UG_InventoryComponent::UpdateAbilityUI()
+{
+    AG_PlayerController* PlayerController = GetOwner()->GetInstigatorController<AG_PlayerController>();
     if (PlayerController)
     {
-        //PlayerController->UpdateAbilityUI(OwnedAbilities);
-	}
+        FGameplayTagContainer AbilityTags;
+        for (auto& Ability : OwnedAbilities)
+        {
+            if (Ability.GetDefaultObject())
+            {
+                AbilityTags.AddTagFast(Ability.GetDefaultObject()->AbilityTags.First());
+            }
+        }
+        PlayerController->UpdateAbilityUI(AbilityTags);
+    }
+}
 
-	//TWeakObjectPtr<UGameplayAbility> Ability = OwnedAbilities[OwnedAbilities.Find(NewAbility)];
-
-	//if (Ability.IsValid())
-	//{
-	//	// Delegates subscribe here
-	//}
+void UG_InventoryComponent::Server_RemoveAbility_Implementation()
+{
+    OwnedAbilities.RemoveAt(0);
+    UpdateAbilityUI();
 }
 
 void UG_InventoryComponent::RemoveAbility(const int32& AbilitySlot)
 {
-	OwnedAbilities.RemoveAt(AbilitySlot);
-	if (OwnedAbilities.Num() > 0)
-	{
-		CurrentAbilitySlot = FMath::Clamp(CurrentAbilitySlot, 0, OwnedAbilities.Num() - 1);
-	}
-	else
-	{
-		CurrentAbilitySlot = 0;
-	}
+    if (!GetOwner()) return;
 
+    if (!GetOwner()->HasAuthority())
+    {
+        Server_RemoveAbility();
+    }
+    else
+    {
+		OwnedAbilities.RemoveAt(0);
+		UpdateAbilityUI();
+	}
 }
 
 void UG_InventoryComponent::RemoveAllAbilities()
 {
-	OwnedAbilities.Empty();
+    OwnedAbilities.Empty();
+
+    UpdateAbilityUI();
 }
 
 bool UG_InventoryComponent::HasAbility()
 {
-	return OwnedAbilities.Num() > 0;
+    return OwnedAbilities.Num() > 0;
 }
 
 bool UG_InventoryComponent::CanCollectAbilities()
 {
-	if (OwnedAbilities.Num() >= MaxAbilities)
-	{
-		return false;
-	}
+    if (OwnedAbilities.Num() >= MaxAbilities)
+    {
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
-bool UG_InventoryComponent::SelectAbility(const int32& CandidateAbilitySlot)
+bool UG_InventoryComponent::SelectAbility()
 {
-	if ((MaxAbilities > CandidateAbilitySlot) && (OwnedAbilities.Num() > CandidateAbilitySlot))
-	{
+    if (!GetOwner()) return false;
 
-		CurrentAbilitySlot = CandidateAbilitySlot;
-
-		return true;
+    if (!GetOwner()->HasAuthority())
+    {
+		Server_SelectAbility();
 	}
+    else
+    {
+        if (OwnedAbilities.Num() == 2)
+        {
+		    OwnedAbilities.Swap(0, 1);
+		    UpdateAbilityUI();
+        }
+	
+    }
+    return true;
+}
 
-	return false;
+
+void UG_InventoryComponent::Server_SelectAbility_Implementation()
+{
+    if (OwnedAbilities.Num() == 2)
+    {
+        OwnedAbilities.Swap(0, 1);
+        UpdateAbilityUI();
+    }
 }

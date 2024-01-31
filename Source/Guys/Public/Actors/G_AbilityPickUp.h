@@ -14,49 +14,53 @@ class UGameplayAbility;
 UCLASS()
 class GUYS_API AG_AbilityPickUp : public AActor
 {
-	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
-	AG_AbilityPickUp();
+    GENERATED_BODY()
 
 public:
-	void SetPickUpStatus(bool bStatus);
+    AG_AbilityPickUp();
+
+    void SetPickUpStatus(bool bStatus);
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	UFUNCTION()
-	virtual void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+protected:
+    virtual void BeginPlay() override;
 
-	FTimerHandle RecoveryTimer;
+    UFUNCTION()
+    virtual void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+        int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-private:
-	TSubclassOf<UGameplayAbility> RandomChooseAbilityFromPool();
-
-	void Recovery();
-
-	void WasCollected();
+    FTimerHandle RecoveryTimer;
 
 private:
-	UPROPERTY(EditAnywhere, Category = "G|Components")
-	USphereComponent* PickUpArea;
+    TSubclassOf<UGameplayAbility> RandomChooseAbilityFromPool();
 
-	UPROPERTY(EditAnywhere, Category = "G|Components")
-	UStaticMeshComponent* PickUpMesh;
+    void Recovery();
 
-	UPROPERTY(EditAnywhere, Category = "G|Components")
-	UNiagaraComponent* VisualEffect;
+    void WasCollected();
 
-	UPROPERTY(EditAnywhere, Category = "G|Properties")
-	uint32 RecoveryTime = 10.0f;
+    /*UFUNCTION(NetMulticast, Reliable)
+    void Multicast_ToggleVisibility(bool bStatus);*/
 
-	UPROPERTY(EditAnywhere, Category = "G|Properties")
-	TArray<TSubclassOf<UGameplayAbility>> AbilityPool;
+private:
+    UPROPERTY(EditAnywhere, Category = "G|Components")
+    USphereComponent* PickUpArea;
 
-	bool bInRecovery = false;
+    UPROPERTY(EditAnywhere, Category = "G|Components")
+    UStaticMeshComponent* PickUpMesh;
 
-	bool bIsActive = true;
+    UPROPERTY(EditAnywhere, Category = "G|Components")
+    UNiagaraComponent* VisualEffect;
+
+    UPROPERTY(EditAnywhere, Category = "G|Properties")
+    uint32 RecoveryTime = 10.0f;
+
+    UPROPERTY(EditAnywhere, Category = "G|Properties")
+    TArray<TSubclassOf<UGameplayAbility>> AbilityPool;
+
+    UPROPERTY(Replicated)
+    bool bInRecovery = false;
+    UPROPERTY(Replicated)
+    bool bIsActive = true;
 };

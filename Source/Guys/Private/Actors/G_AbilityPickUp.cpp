@@ -6,103 +6,112 @@
 #include "Components/G_InventoryComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
+#include <Net/UnrealNetwork.h>
 
-// Sets default values
 AG_AbilityPickUp::AG_AbilityPickUp()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+    PrimaryActorTick.bCanEverTick = true;
 
-	PickUpArea = CreateDefaultSubobject<USphereComponent>(TEXT("PickUp Area"));
-	PickUpArea->SetupAttachment(RootComponent);
+    PickUpArea = CreateDefaultSubobject<USphereComponent>(TEXT("PickUp Area"));
+    PickUpArea->SetupAttachment(RootComponent);
 
-	PickUpMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PickUp Mesh"));
-	PickUpMesh->SetupAttachment(PickUpArea);
+    PickUpMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PickUp Mesh"));
+    PickUpMesh->SetupAttachment(PickUpArea);
 
-	VisualEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("VFX"));
-	VisualEffect->SetupAttachment(PickUpArea);
+    VisualEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("VFX"));
+    VisualEffect->SetupAttachment(PickUpArea);
 }
 
-void AG_AbilityPickUp::SetPickUpStatus(bool bStatus)
+void AG_AbilityPickUp::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	bIsActive = bStatus;
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	if (PickUpArea)
-	{
-		if (!bIsActive)
-		{
-			PickUpArea->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		}
-		else
-		{
-			PickUpArea->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-			PickUpArea->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-		}
-	}
+    DOREPLIFETIME(AG_AbilityPickUp, bInRecovery);
+    DOREPLIFETIME(AG_AbilityPickUp, bIsActive);
 }
 
-// Called when the game starts or when spawned
 void AG_AbilityPickUp::BeginPlay()
 {
-	Super::BeginPlay();
+    Super::BeginPlay();
 
-	if (PickUpArea)
-	{
-		PickUpArea->OnComponentBeginOverlap.AddDynamic(this, &AG_AbilityPickUp::OnBeginOverlap);
-	}
-
+    if (HasAuthority())
+    {
+        if (PickUpArea)
+        {
+            PickUpArea->OnComponentBeginOverlap.AddDynamic(this, &AG_AbilityPickUp::OnBeginOverlap);
+        }
+    }
 }
 
-void AG_AbilityPickUp::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AG_AbilityPickUp::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+    int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (!bIsActive)
-	{
-		return;
-	}
+    if (!bIsActive)
+    {
+        return;
+    }
 
-	AG_Character* OverlapCharacter = Cast<AG_Character>(OtherActor);
+    AG_Character* OverlapCharacter = Cast<AG_Character>(OtherActor);
 
-	if (OverlapCharacter)
-	{
-		bool bCanPickUp = OverlapCharacter->InventoryComponent.Get()->CanCollectAbilities();
-		if (bCanPickUp)
-		{
-			OverlapCharacter->InventoryComponent.Get()->AddAbility(RandomChooseAbilityFromPool());
-			WasCollected();
-		}
-	}
+    if (OverlapCharacter)
+    {
+        bool bCanPickUp = OverlapCharacter->InventoryComponent.Get()->CanCollectAbilities();
+        if (bCanPickUp)
+        {
+            OverlapCharacter->InventoryComponent.Get()->AddAbility(RandomChooseAbilityFromPool());
+            WasCollected();
+        }
+    }
 }
 
 TSubclassOf<UGameplayAbility> AG_AbilityPickUp::RandomChooseAbilityFromPool()
 {
-	if (AbilityPool.Num() > 0)
-	{
-		int32 RandIndex = FMath::RandRange(0, AbilityPool.Num() - 1);
-		return AbilityPool[RandIndex];
-	}
-	return TSubclassOf<UGameplayAbility>();
-}
-
-void AG_AbilityPickUp::Recovery()
-{
-	bInRecovery = false;
-
-	SetActorHiddenInGame(false);
-
-	SetPickUpStatus(true);
+    if (AbilityPool.Num() > 0)
+    {
+        int32 RandIndex = FMath::RandRange(0, AbilityPool.Num() - 1);
+        return AbilityPool[RandIndex];
+    }
+    return TSubclassOf<UGameplayAbility>();
 }
 
 void AG_AbilityPickUp::WasCollected()
 {
-	if (!bInRecovery)
-	{
-		GetWorldTimerManager().SetTimer(RecoveryTimer, this, &AG_AbilityPickUp::Recovery, RecoveryTime, false, RecoveryTime);
+    if (!bInRecovery)
+    {
+        GetWorldTimerManager().SetTimer(RecoveryTimer, this, &AG_AbilityPickUp::Recovery, RecoveryTime, false, RecoveryTime);
 
-		bInRecovery = true;
+        bInRecovery = true;
 
-		SetActorHiddenInGame(true);
+        SetActorHiddenInGame(true);
+        PickUpMesh->SetVisibility(false);
 
-		SetPickUpStatus(false);
-	}
+        SetPickUpStatus(false);
+    }
+}
+
+void AG_AbilityPickUp::Recovery()
+{
+    bInRecovery = false;
+
+    SetActorHiddenInGame(false);
+    PickUpMesh->SetVisibility(true);
+    SetPickUpStatus(true);
+}
+
+void AG_AbilityPickUp::SetPickUpStatus(bool bStatus)
+{
+    bIsActive = bStatus;
+
+    if (PickUpArea)
+    {
+        if (!bIsActive)
+        {
+            PickUpArea->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+        }
+        else
+        {
+            PickUpArea->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+            PickUpArea->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+        }
+    }
 }

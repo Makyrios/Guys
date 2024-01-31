@@ -4,11 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include <GameplayTagContainer.h>
 #include "G_InventoryWidget.generated.h"
 
 class UCanvasPanel;
 class UImage;
 class UBorder;
+class UDataTable;
 
 UCLASS()
 class GUYS_API UG_InventoryWidget : public UUserWidget

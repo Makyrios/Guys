@@ -6,58 +6,55 @@
 
 class UGameplayAbility;
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class GUYS_API UG_InventoryComponent : public UActorComponent
 {
-	GENERATED_BODY()
-
-public:	
-	// Sets default values for this component's properties
-	UG_InventoryComponent();
-
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-	UFUNCTION(BlueprintCallable, Category = "G|Inventory")
-	void AddAbility(TSubclassOf<UGameplayAbility> NewAbility);
-
-	UFUNCTION(BlueprintCallable, Category = "G|Inventory")
-	void RemoveAbility(const int32& AbilitySlot);
-
-	UFUNCTION(BlueprintCallable, Category = "G|Inventory")
-	void RemoveAllAbilities();
-
-	UFUNCTION(BlueprintCallable, Category = "G|Inventory")
-	bool HasAbility();
-
-	bool CanCollectAbilities();
-
-	UFUNCTION(BlueprintCallable, Category = "G|Inventory")
-	bool SelectAbility(const int32& CandidateAbilitySlot);
-
-	/**
-	*  Getter section
-	*/
-	//UFUNCTION(BlueprintCallable, Category = "G|Inventory")
-	//FORCEINLINE UGameplayAbility* GetAbilityBySlot(const int32& AbilitySlot) const
-	//{
-	//	return OwnedAbilities[AbilitySlot].IsValid() ? OwnedAbilities[AbilitySlot].Get() : nullptr;
-	//}
-
-	UFUNCTION(BlueprintCallable, Category = "G|Inventory")
-	FORCEINLINE TSubclassOf<UGameplayAbility> GetCurrentAbility() const
-	{
-		return OwnedAbilities.Num() > 0 ? OwnedAbilities[CurrentAbilitySlot] : nullptr;
-	}
-
-	TArray<TSubclassOf<UGameplayAbility>> GetOwnedAbilities() { return OwnedAbilities; }
+    GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, Category = "G|Properties")
-	int32 MaxAbilities;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Properties")
-	int32 CurrentAbilitySlot;
+    // Sets default values for this component's properties
+    UG_InventoryComponent();
 
-	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly, Category = "G|Properties")
-	TArray<TSubclassOf<UGameplayAbility>> OwnedAbilities;	
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+    UFUNCTION(BlueprintCallable, Category = "G|Inventory")
+    void AddAbility(TSubclassOf<UGameplayAbility> NewAbility);
+
+    UFUNCTION(BlueprintCallable, Category = "G|Inventory")
+    void RemoveAbility(const int32& AbilitySlot);
+
+    UFUNCTION(BlueprintCallable, Category = "G|Inventory")
+    void RemoveAllAbilities();
+
+    UFUNCTION(BlueprintCallable, Category = "G|Inventory")
+    bool HasAbility();
+
+    bool CanCollectAbilities();
+
+    UFUNCTION(BlueprintCallable, Category = "G|Inventory")
+    bool SelectAbility();
+
+    UFUNCTION(BlueprintCallable, Category = "G|Inventory")
+    FORCEINLINE TSubclassOf<UGameplayAbility> GetCurrentAbility() const
+    {
+        return OwnedAbilities.Num() > 0 ? OwnedAbilities[0] : nullptr;
+    }
+
+    TArray<TSubclassOf<UGameplayAbility>> GetOwnedAbilities() { return OwnedAbilities; }
+
+private:
+    void UpdateAbilityUI();
+
+    UFUNCTION(Server, Reliable)
+    void Server_RemoveAbility();
+
+    UFUNCTION(Server, Reliable)
+    void Server_SelectAbility();
+
+public:
+    UPROPERTY(Replicated, EditAnywhere, Category = "G|Properties")
+    int32 MaxAbilities = 2;
+
+    UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly, Category = "G|Properties")
+    TArray<TSubclassOf<UGameplayAbility>> OwnedAbilities;
 };

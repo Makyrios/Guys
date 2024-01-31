@@ -4,21 +4,24 @@
 #include <Engine/DataTable.h>
 #include "Engine/Texture2D.h"
 #include "Misc/G_AbilityImage.h"
-#include <GameplayTagContainer.h>
 #include "Components/Image.h"
 
 void UG_InventoryWidget::UpdateAbilityUI(FGameplayTagContainer AbilityTags)
 {
-    if (AbilityTags.Num() == 0) return;
-
-    if (AbilityTags.Num() == 1)
-    {
-        SetFirstAbilityImage(AbilityTags.GetByIndex(0));
-    }
-    else if (AbilityTags.Num() == 2)
+    if (AbilityTags.Num() == 2)
     {
         SetFirstAbilityImage(AbilityTags.GetByIndex(0));
         SetSecondAbilityImage(AbilityTags.GetByIndex(1));
+    }
+    else if (AbilityTags.Num() == 1)
+    {
+        SetFirstAbilityImage(AbilityTags.GetByIndex(0));
+        SecondAbilityImage->SetVisibility(ESlateVisibility::Hidden);
+    }
+    else if (AbilityTags.Num() == 0)
+    {
+        FirstAbilityImage->SetVisibility(ESlateVisibility::Hidden);
+		SecondAbilityImage->SetVisibility(ESlateVisibility::Hidden);
     }
 }
 
@@ -28,6 +31,7 @@ void UG_InventoryWidget::SetFirstAbilityImage(FGameplayTag AbilityTag)
     if (AbilityImage)
     {
         FirstAbilityImage->SetBrushFromTexture(AbilityImage);
+        FirstAbilityImage->SetVisibility(ESlateVisibility::Visible);
     }
 }
 
@@ -37,6 +41,7 @@ void UG_InventoryWidget::SetSecondAbilityImage(FGameplayTag AbilityTag)
     if (AbilityImage)
     {
         SecondAbilityImage->SetBrushFromTexture(AbilityImage);
+        SecondAbilityImage->SetVisibility(ESlateVisibility::Visible);
     }
 }
 
@@ -47,13 +52,4 @@ UTexture2D* UG_InventoryWidget::GetAbilityImage(FGameplayTag AbilityTag)
     const FString ContextString = TEXT("Image");
     FG_AbilityImage* AbilityImageStruct = AbilityImagesDataTable->FindRow<FG_AbilityImage>(AbilityTag.GetTagName(), ContextString, true);
     return AbilityImageStruct->AbilityImage;
-
-    /*if (AbilityTag == FGameplayTag::RequestGameplayTag(FName("Ability.Untargeted.SpeedUp")))
-    {
-        const FString ContextString = TEXT("Speed Up Image");
-        FG_AbilityImage* AbilityImageStruct = AbilityImagesDataTable->FindRow<FG_AbilityImage>(FName("SpeedUp"), ContextString, true);
-        return AbilityImageStruct->AbilityImage;
-    }*/
-
-    return nullptr;
 }
