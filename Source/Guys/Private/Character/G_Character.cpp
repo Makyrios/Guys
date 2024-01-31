@@ -121,20 +121,30 @@ void AG_Character::Interact(const FInputActionValue& Value)
 
 void AG_Character::Server_Interact_Implementation()
 {
-    TArray<AActor*> OverlappingActors;
-    this->GetOverlappingActors(OverlappingActors);
-    if (!OverlappingActors.IsEmpty())
+    if (bCanInteract)
     {
-        for (auto& OverlappingActor : OverlappingActors)
+        TArray<AActor*> OverlappingActors;
+        this->GetOverlappingActors(OverlappingActors);
+        if (!OverlappingActors.IsEmpty())
         {
-            if (OverlappingActor->Implements<UG_Interactable>())
+            for (auto& OverlappingActor : OverlappingActors)
             {
-                FVector PushDirection = (OverlappingActor->GetActorLocation() - this->GetActorLocation()).GetSafeNormal();
-                Multicast_Interact(OverlappingActor, PushDirection);
-                break;
+                if (OverlappingActor->Implements<UG_Interactable>())
+                {
+                    FVector PushDirection = (OverlappingActor->GetActorLocation() - this->GetActorLocation()).GetSafeNormal();
+                    Multicast_Interact(OverlappingActor, PushDirection);
+                    bCanInteract = false;
+                    GetWorldTimerManager().SetTimer(
+                        InteractTimer, 
+                        [this]() { bCanInteract = true; }, 
+                        InteractCooldown, 
+                        false);
+                    break;
+                }
             }
         }
     }
+    
 }
 
 void AG_Character::TogglePause()
