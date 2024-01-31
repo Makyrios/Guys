@@ -50,6 +50,7 @@ private:
     void RestartGame();
     bool IsMatchStarted();
     bool IsMatchPreparing();
+    void UpdatePlayerSkins() const;
 
 public:
     FOnChangeMatchState OnChangeMatchState;

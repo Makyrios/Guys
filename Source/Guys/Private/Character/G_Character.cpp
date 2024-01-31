@@ -22,6 +22,8 @@
 #include "Components/G_InventoryComponent.h"
 #include <Interfaces/G_Interactable.h>
 
+#include "Kismet/KismetInputLibrary.h"
+
 AG_Character::AG_Character()
 {
     GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -59,7 +61,7 @@ AG_Character::AG_Character()
 void AG_Character::BeginPlay()
 {
     Super::BeginPlay();
-    LoadSkinsInfo();    
+    UpdateSkins();
 }
 
 void AG_Character::Tick(float DeltaTime)
@@ -249,49 +251,75 @@ void AG_Character::InitAbilityActorInfo()
     }
 }
 
+
+
 void AG_Character::CreateSaveFile()
 {
     UG_SaveGame* dataToSave = Cast<UG_SaveGame>(UGameplayStatics::CreateSaveGameObject(UG_SaveGame::StaticClass()));
-    dataToSave->ChosenSkins = ChosenSkinsIdx;
-    UGameplayStatics::SaveGameToSlot(dataToSave, "Slot1", this->GetController()->GetLinkerIndex());
+    dataToSave->ChosenSkins.SkinIdx = ChosenSkinIdx;
+    dataToSave->ChosenSkins.HatIdx = ChosenHatIdx;
+    UGameplayStatics::SaveGameToSlot(dataToSave, "Slot1", 0);
 }
 
 void AG_Character::SaveSkinsInfo()
 {
-    if (!UGameplayStatics::DoesSaveGameExist("Slot1",this->GetController()->GetLinkerIndex()))
+    if (!UGameplayStatics::DoesSaveGameExist("Slot1",0))
     {
         CreateSaveFile();
     }
-    UG_SaveGame* dataToSave = Cast<UG_SaveGame>(UGameplayStatics::LoadGameFromSlot("Slot1", this->GetController()->GetLinkerIndex()));
-    dataToSave->ChosenSkins = ChosenSkinsIdx;
-    UGameplayStatics::SaveGameToSlot(dataToSave, "Slot1", this->GetController()->GetLinkerIndex());
+    UG_SaveGame* dataToSave = Cast<UG_SaveGame>(UGameplayStatics::LoadGameFromSlot("Slot1", 0));
+    dataToSave->ChosenSkins.SkinIdx = ChosenSkinIdx;
+    dataToSave->ChosenSkins.HatIdx = ChosenHatIdx;
+    UGameplayStatics::SaveGameToSlot(dataToSave, "Slot1", 0);
 }
 
 void AG_Character::LoadSkinsInfo()
 {
-    if (!UGameplayStatics::DoesSaveGameExist("Slot1",this->GetController()->GetLinkerIndex()))
+    if (!UGameplayStatics::DoesSaveGameExist("Slot1",0))
     {
         CreateSaveFile();
+        
     }
-    UG_SaveGame* savedData = Cast<UG_SaveGame>(UGameplayStatics::LoadGameFromSlot("Slot1", this->GetController()->GetLinkerIndex()));
-    ChosenSkinsIdx = savedData->ChosenSkins;
-    SetSkinByIndex(ChosenSkinsIdx.SkinIdx);
-    SetHatByIndex(ChosenSkinsIdx.HatIdx);
+    const UG_SaveGame* savedData = Cast<UG_SaveGame>(UGameplayStatics::LoadGameFromSlot("Slot1", 0));
+    ChosenSkinIdx = savedData->ChosenSkins.SkinIdx;
+    ChosenHatIdx = savedData->ChosenSkins.HatIdx;
+
+    SetSkinByIndex(ChosenSkinIdx);
+    SetHatByIndex(ChosenHatIdx);
 }
 
-void AG_Character::SetSkinByIndex(const int32& Mat_Idx)
+void AG_Character::UpdateSkins()
 {
-    this->GetMesh()->SetMaterial(0,Skins[Mat_Idx]);
-    ChosenSkinsIdx.SkinIdx = Mat_Idx;
+    LoadSkinsInfo();
+    SetSkinByIndex(ChosenSkinIdx);
+    SetHatByIndex(ChosenHatIdx);
+}
+
+void AG_Character::ChaneSkinByIndex(const int32& Mat_Idx)
+{
+    SetSkinByIndex(Mat_Idx);
     SaveSkinsInfo();
 }
 
-void AG_Character::SetHatByIndex(const int32& Hat_Idx)
-{    
+void AG_Character::ChaneHatByIndex(const int32& Hat_Idx)
+{
+    SetHatByIndex(Hat_Idx);
+    SaveSkinsInfo();
+}
+
+void AG_Character::SetSkinByIndex_Implementation(const int32& Mat_Idx)
+{
+    this->GetMesh()->SetMaterial(0,Skins[Mat_Idx]);
+    ChosenSkinIdx = Mat_Idx;    
+}
+
+void AG_Character::SetHatByIndex_Implementation(const int32& Hat_Idx)
+{
     FString SocketName = TEXT("Hat_Socket_");
     SocketName.Append(FString::FromInt(Hat_Idx));
     Hat->SetStaticMesh(Hats[Hat_Idx]);
     Hat->AttachToComponent(GetMesh(),FAttachmentTransformRules::SnapToTargetIncludingScale, FName(SocketName));
-    ChosenSkinsIdx.HatIdx = Hat_Idx;
-    SaveSkinsInfo();
+    ChosenHatIdx = Hat_Idx;    
 }
+
+

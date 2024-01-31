@@ -8,252 +8,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="27d253a3-bb1c-4019-8599-1a7f6654a7f7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Build/Windows/FileOpenOrder/CookerOpenOrder.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Build/Windows/FileOpenOrder/EditorOpenOrder.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini.bak" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/Images/Brush/T_BrushSprite.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/Images/WIP.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/Dark_Blue.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/Dark_Grey.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Circle.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cube.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cube_001.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cube_002.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cube_003.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cube_004.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cube_005.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cube_006.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cube_007.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cube_008.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cube_009.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cube_010.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cube_011.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cube_012.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cube_013.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cube_014.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cube_015.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cube_016.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cube_017.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cube_17.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cylinder_001.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cylinder_002.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cylinder_003.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cylinder_004.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cylinder_005.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Cylinder_006.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Plane.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/GuysMapAssets_Plane_001.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/Light_Blue.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/Light_Yellow.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/Pink.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/Purple.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/_Yellow.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/MapsAssets/background.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/Models/MysteryBox/M_Base.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/Models/MysteryBox/Mystery_box.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/Models/MysteryBox/Textures/Cube_spec.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/Sounds/Classes/SC_Interface.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/Sounds/Classes/SC_Master.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/Sounds/Classes/SC_Music.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/Sounds/Cues/SC_MenuClick.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/Sounds/Cues/SC_MenuMusic.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/Sounds/Mixes/SCM_Interface.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/Sounds/Mixes/SCM_Master.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/Sounds/Mixes/SCM_Music.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/Sounds/Waves/SW_MenuClick.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/Sounds/Waves/SW_MenuMusic.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Blueprints/AbilitySystem/Abilities/GA_SpeedUp.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Blueprints/Actors/PickUps/BP_RandomAbilityPickUp.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Blueprints/Actors/PickUps/M_Particle.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Blueprints/Actors/PickUps/NS_Particles.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Blueprints/Framework/GameModes/BP_LobbyGameMode.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Blueprints/GameplayEffects/GE_SpeedUpDuration.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Blueprints/Misc/BP_SetupAudioSettings.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Blueprints/SaveFiles/SV_AudioSettings.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Blueprints/UI/Widgets/Menu/SessionList/WBP_SessinListElement.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Blueprints/UI/Widgets/Menu/SessionList/WBP_SessionList.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Blueprints/UI/Widgets/Menu/WBP_BaseMenu.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Blueprints/UI/Widgets/Menu/WBP_BaseSetingsMenu.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Blueprints/UI/Widgets/Menu/WBP_SessionMenu.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Blueprints/UI/Widgets/Menu/WBP_SoundSettingsMenu.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Blueprints/UI/Widgets/Menu/WBP_VisualSettingsMenu.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Maps/DeathrunMap.umap" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Maps/LobbyMap.umap" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Maps/MainMenuMap.umap" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Maps/ThirdPersonMap.umap" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Maps/ThirdPersonMap_2.umap" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/ThirdPerson/Maps/_GENERATED/Admin/Box_080DAAAA.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/ThirdPerson/Maps/_GENERATED/Admin/Box_2B0207DE.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/ThirdPerson/Maps/_GENERATED/Admin/Box_3E2FD85F.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/ThirdPerson/Maps/_GENERATED/Admin/Box_4D6724ED.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/ThirdPerson/Maps/_GENERATED/Admin/Box_5979A2C2.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/ThirdPerson/Maps/_GENERATED/Admin/Box_5EA97D01.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/ThirdPerson/Maps/_GENERATED/Admin/Box_606ADF85.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/ThirdPerson/Maps/_GENERATED/Admin/Box_64663CD4.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/ThirdPerson/Maps/_GENERATED/Admin/Box_6DC49823.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/ThirdPerson/Maps/_GENERATED/Admin/Box_B1B67160.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/ThirdPerson/Maps/_GENERATED/Admin/Box_D14FEC52.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/ThirdPerson/Maps/_GENERATED/Admin/Box_DF520C22.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/ThirdPerson/Maps/_GENERATED/Admin/Box_F3A541AE.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/ThirdPerson/Maps/_GENERATED/Admin/Box_F6CC8028.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/ThirdPerson/Maps/_GENERATED/Admin/Rectangle_448A1509.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/ThirdPerson/Maps/_GENERATED/Admin/Rectangle_C274D1F4.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/ThirdPerson/Maps/_GENERATED/Admin/Stairs_2C9AF869.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/ThirdPerson/Maps/_GENERATED/Admin/Stairs_D3395AC9.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/0/6E/M98BPWDM5UXZ9GHI2Y28JT.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/1/IC/TD3QNTPYTMZO2AF1WW7LPN.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/2/3Z/PHBIPKXI0HII1BI8JT0XMF.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/2/91/7JMDZPUCYVYUE7EA5X0JMQ.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/2/MJ/85DM43NEOAF9S4FZ68NETM.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/2/QL/AQIXRYNGEPBF508GX3772R.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/2/QX/3JYEAZY9VZG2CQCYYZOYKG.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/2/Y3/SEG7LS6I5PMNIUHYKBTRXR.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/3/HJ/MT2YSSLC40BSKZTSAGBI3P.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/3/QE/DD1R1U97HV99A535L6TW75.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/4/3I/ERHZT8JM8KONHG6WDR6U30.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/4/DN/J7ARMYJG4WAO252V0Z7QH1.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/4/LJ/ZJMEVP3VTMBPFGH6E0IF9H.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/4/XI/KJ9PO1M18WIGVFEJ82A87I.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/5/7Z/OHAODE7D85M5QX62WW8TNJ.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/5/8X/LH4J8D2J1QJDXZOM529I82.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/5/99/LC0LDGDAEXUO8I0SWIF6YI.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/5/PR/96FUDOFF1804LRJR1XDEZB.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/5/SY/KNT87RXT5QY5KZ21ZS2PCP.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/6/4K/8UHVG15QSS2KT626L4GACJ.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/6/HQ/7C0OVZ3GZ2ZCI3RT0BR5OC.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/7/9Q/LJ1VP7PKDVG3NW4GT9TU7X.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/7/EF/DGMXH6R48P14CL9DA7ZNFC.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/8/4R/VWU75UGLNZ3HDKQMDDPN22.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/9/4B/76VVNB6HL5A4J0953WT07U.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/9/TR/YR5ZNDYZ6QLMF8SWKCLLNU.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/A/6M/R2XACUP81D5YAP4FL3LAGI.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/A/74/ZQSWRFHBVEWH2W6C8DNUXI.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/A/DX/ZUGN91K87DP2VUKFS6L649.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/A/GN/NB9PO6TBTJY1C77BHVTV9C.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/A/NU/Q8ALDS42R8FQO67JCKSYKE.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/A/RQ/5ZRN2KUDTHIDQG8OCOQEDH.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/A/X9/MCLYGU9IKXUQ9QNDZWNS7L.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/B/3S/K55PQPR3WTL1QIH8B79CU6.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/B/OQ/HPLSZ2FZYPMH8X6R4UUB0S.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/B/OU/I1P4KBC6WUFELMCNZVGP8K.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/B/SE/97H7PR1DXXHL4POZ14J3MD.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/C/E0/UYBRHI54N4MID1G5EOM1CK.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/C/KJ/OYWQ8HG7MFV40DJW26E7LB.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/C/NH/9BWXTKN5WYV59F22SCBDKS.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/E/7S/AFPTYO2D82B6388LCHEW04.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/LobbyMap/E/YX/VNPQ6FZ8LTVJW3RKFURZWM.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/0/1V/GQWM65LA8E1XPRQAR8KFP9.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/0/2Q/RFZN3FLL1Z2M7LM5SCTAMM.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/0/6L/J41VDV09PDRUOAZ7LAU7UI.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/0/F4/U222XD23VHLGLTTE141TMD.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/0/I0/7R2SLCP7RE79Q14ZI9399D.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/0/MF/DMRG72MEMJ1XM8IAQURCES.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/0/MX/KM8HGRNTUF2LB1CYMIICXB.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/1/0S/89EX1XBYBWIXUJ2W4KHZKR.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/1/9S/V7CUDTMU0BWT3VKRMKGHX6.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/1/NH/YRGYL04GL3CB72RO9ZXBAU.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/3/1B/XASWLK7IUNZGYZ8JCJ6O5Y.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/3/3J/IWSSFGQQZ4WAXKO4RKFB5A.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/3/5L/E3UCWFZX3R2YUOHFCZLK5S.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/3/8X/ULSJ56DSUTCFV6SATAZA5J.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/3/DR/UBUMIKTF6OC9Q5F9C5VBSO.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/3/Q8/NBZE1SIS0L5RG8I5QOET1C.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/3/UD/BB4MDNTU359RPOEOB0K97W.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/4/97/SC2AAQCCUQO5SPAGFZJPYQ.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/4/CG/OPJGUFKWJG8LMV9FMQQ4DL.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/4/QR/YS53T6QBXHLS5W3Z3CLSQY.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/4/VI/PDXA9Q02LMQ2U8KWXCKWUI.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/6/3M/KQTC6D0WYOPP0CH0C95H43.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/7/14/D2OVAP242JWMCJ0PSLU9XU.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/7/3V/X80VS6OUZ7F81EDIXJIP8T.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/7/4X/UDP2IN938JI08H3GCLV5MW.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/7/9C/KA1OWREDW9KWZAYKF5PPKI.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/7/A5/DRUW0Z9VGD2RB36I1UR9H1.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/7/SN/54G2E6KSHCBT0L3UCPROEX.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/7/TM/RHEKN2PI6VS7X8SU66QWJP.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/8/4V/4088U9FJ9VMZ0WFSKSRA7W.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/8/O1/O1IX5R1W7OWY6LZ0RCYVRD.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/9/RB/8Q172RGHN06IXWEU1ILOI3.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/9/XT/YPHASR9N2MG4MGTALPF5WX.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/A/J5/6QNAD6R4TEJP8E5X8APZW6.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/B/0U/BTI89BYFRN7CT55DFI2M1W.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/B/AQ/OJTR8YOVX54WHU7BX19EA2.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/B/L0/PK2GGQSC29VZ1CPD1O5XNB.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/B/PZ/18PJR4A4AXLPM4AQ34HQZU.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/B/T7/RSM8TN0HE5ONTXJ6A8NQWC.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/C/3N/37DDSB2TYD5OVM5M907XAC.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/C/HY/QDT9F7V3CSE47XAER57IXV.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/D/87/6HUJP9A096QM74ZVDZJP0S.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/D/VY/RSXANJEVJDNKW83NLSURPT.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/E/JJ/FJ93PGBA64REAOI7YZUGHA.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/E/VI/7A1Z91AH6R4ER1EBVWYP3L.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/E/VX/G6E2M04N1DLA6AH136CV36.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ThirdPersonMap/F/31/VYOK9AOBKLMZMHGNYOCVFJ.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/6/YO/SWK4I00OO5YFG3CSLVXYA8.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalObjects__/Maps/ThirdPersonMap/5/83/483CAR2XKC4RMEHRM2JFGB.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalObjects__/Maps/ThirdPersonMap/A/49/8HIMCSIT8A2UWS4ST8SXJX.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalObjects__/Maps/ThirdPersonMap/B/HW/XXRYTWVX3IYYDOBPESFRBM.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalObjects__/Maps/ThirdPersonMap/C/2X/4IPO10K3WT63VMOV533GV3.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalObjects__/Maps/ThirdPersonMap/E/BS/XBDSA7XTFOWO748HHJ84Z0.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalObjects__/Maps/ThirdPersonMap/E/SW/70C2AQXJHLUWAC7DC45UR8.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Plugins/MultiplayerMenu/MultiplayerMenu.uplugin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Plugins/MultiplayerMenu/Resources/Icon128.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Plugins/MultiplayerMenu/Source/MultiplayerMenu/MultiplayerMenu.Build.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Plugins/MultiplayerMenu/Source/MultiplayerMenu/Private/Menu.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Plugins/MultiplayerMenu/Source/MultiplayerMenu/Private/MultiplayerMenu.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Plugins/MultiplayerMenu/Source/MultiplayerMenu/Private/MultiplayerSubsystem.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Plugins/MultiplayerMenu/Source/MultiplayerMenu/Public/Menu.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Plugins/MultiplayerMenu/Source/MultiplayerMenu/Public/MultiplayerMenu.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Plugins/MultiplayerMenu/Source/MultiplayerMenu/Public/MultiplayerSubsystem.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/Guys/Private/Actors/G_AbilityPickUp.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/Guys/Private/Components/G_PhysicalAnimComponent.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/Guys/Private/GameModes/G_LobbyGameMode.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/Guys/Public/Actors/G_AbilityPickUp.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/Guys/Public/Components/G_PhysicalAnimComponent.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/Guys/Public/GameModes/G_LobbyGameMode.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Guys.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Guys.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/AbilitySystem/GameplayTags/DT_BuffStates.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/AbilitySystem/GameplayTags/DT_BuffStates.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Actors/Areas/SlowedArea/BP_SlowedArea.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Actors/Areas/SlowedArea/BP_SlowedArea.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Actors/Areas/SlowedArea/GE_SlowedAreaDuration.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Actors/Areas/SlowedArea/GE_SlowedAreaDuration.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Actors/BP_Checkpoint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Actors/BP_Checkpoint.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Actors/BP_Checkpoint_FinishLine.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Actors/BP_Checkpoint_FinishLine.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/BP_Character.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/BP_Character.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Framework/GameModes/BP_BaseGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Framework/GameModes/BP_BaseGameMode.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Framework/GameModes/BP_LobbyGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Framework/GameModes/BP_LobbyGameMode.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/Framework/GameModes/BP_RaceGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Framework/GameModes/BP_RaceGameMode.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/GameInstance/BP_GameInstance.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/GameInstance/BP_GameInstance.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/UI/Widgets/WBP_StartGameWidget.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/UI/Widgets/WBP_StartGameWidget.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ThirdPerson/Maps/ThirdPersonMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ThirdPerson/Maps/ThirdPersonMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ThirdPerson/Maps/ThirdPersonMap_BuiltData.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/ThirdPersonMap_BuiltData.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Guys.Build.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Guys.Build.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Guys.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Guys.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Private/AbilitySystem/G_AttributeSet.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Private/AbilitySystem/G_AttributeSet.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Private/Actors/G_Checkpoint.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Private/Actors/G_Checkpoint.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Private/Actors/G_RaceTrajectorySpline.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Private/Actors/G_RaceTrajectorySpline.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/UI/Widgets/Menu/WBP_BaseMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/UI/Widgets/Menu/WBP_BaseMenu.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/MainMenuMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/MainMenuMap.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Guys/Private/Character/G_Character.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Private/Character/G_Character.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Private/Components/G_InventoryComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Private/Components/G_InventoryComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Private/GameInstance/G_GameInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Private/GameInstance/G_GameInstance.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Guys/Private/GameModes/G_BaseGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Private/GameModes/G_BaseGameMode.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Private/GameModes/G_RaceGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Private/GameModes/G_RaceGameMode.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Private/Interfaces/G_IInteractable.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Private/Interfaces/G_Interactable.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Private/Player/G_PlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Private/Player/G_PlayerController.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Guys/Private/Player/G_PlayerState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Private/Player/G_PlayerState.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Private/Player/G_RacePlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Private/Player/G_RacePlayerController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Private/UI/HUD/G_HUD.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Private/UI/HUD/G_HUD.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Private/UI/Widgets/G_StartGameWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Private/UI/Widgets/G_StartGameWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Public/AbilitySystem/G_AttributeSet.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Public/AbilitySystem/G_AttributeSet.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Public/Actors/G_EffectActor.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Public/Actors/G_EffectActor.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Guys/Public/Character/G_Character.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Public/Character/G_Character.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Public/Components/G_InventoryComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Public/Components/G_InventoryComponent.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Public/GameInstance/G_GameInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Public/GameInstance/G_GameInstance.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Guys/Public/GameModes/G_BaseGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Public/GameModes/G_BaseGameMode.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Public/GameModes/G_RaceGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Public/GameModes/G_RaceGameMode.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Public/Interfaces/G_IInteractable.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Public/Interfaces/G_Interactable.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Public/Player/G_PlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Public/Player/G_PlayerController.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Public/Player/G_PlayerState.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Public/Player/G_PlayerState.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Public/Player/G_RacePlayerState.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Public/Player/G_RacePlayerState.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Public/UI/HUD/G_HUD.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Public/UI/HUD/G_HUD.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Public/UI/Widgets/G_StartGameWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Public/UI/Widgets/G_StartGameWidget.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -263,9 +28,14 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -279,7 +49,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Uproject.Guys.executor": "Run",
-    "git-widget-placeholder": "Merging CharacterCustomisation",
+    "git-widget-placeholder": "CharacterCustomisation",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -372,13 +142,14 @@
       <workItem from="1706529351780" duration="466000" />
       <workItem from="1706625800492" duration="8056000" />
       <workItem from="1706641594190" duration="2576000" />
-      <workItem from="1706689764800" duration="10209000" />
+      <workItem from="1706689764800" duration="19223000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
