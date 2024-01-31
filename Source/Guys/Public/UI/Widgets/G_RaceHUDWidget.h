@@ -11,6 +11,7 @@ class UG_InventoryWidget;
 class UTextBlock;
 class UImage;
 class AG_RaceTrajectorySpline;
+class UG_TimerWidget;
 
 UCLASS()
 class GUYS_API UG_RaceHUDWidget : public UUserWidget
@@ -19,7 +20,6 @@ class GUYS_API UG_RaceHUDWidget : public UUserWidget
 
 public:
     void SetTimeText(float RemainingSeconds);
-    void ShowTimer();
 
     void SetFirstAbilityImage(FGameplayTag AbilityTag);
     void SetSecondAbilityImage(FGameplayTag AbilityTag);
@@ -42,7 +42,7 @@ public:
     TObjectPtr<UTextBlock> PlaceText;
 
     UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-    TObjectPtr<UTextBlock> TimeText;
+    TObjectPtr<UG_TimerWidget> Timer;
 
 private:
     UPROPERTY()

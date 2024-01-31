@@ -16,9 +16,6 @@ class GUYS_API UG_RaceSpectatorHUDWidget : public UUserWidget
 public:
     void SetTimeText(float RemainingSeconds);
 
-protected:
-    void NativePreConstruct() override;
-
 public:
     UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
     TObjectPtr<UG_TimerWidget> Timer;

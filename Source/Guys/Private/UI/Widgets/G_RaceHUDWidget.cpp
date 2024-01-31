@@ -8,29 +8,13 @@
 #include <GameModes/G_RaceGameMode.h>
 #include <Kismet/GameplayStatics.h>
 #include <Actors/G_RaceTrajectorySpline.h>
+#include "UI/Widgets/G_TimerWidget.h"
 
 void UG_RaceHUDWidget::SetTimeText(float RemainingSeconds)
 {
-    if (!TimeText) return;
-
-    if (TimeText->GetVisibility() != ESlateVisibility::Visible)
+    if (Timer)
     {
-        ShowTimer();
-    }
-
-    if (RemainingSeconds >= 0)
-    {
-        FString TimerString = UKismetStringLibrary::TimeSecondsToString(RemainingSeconds);
-        TimerString.RemoveAt(5, 3);
-        TimeText->SetText(FText::FromString(TimerString));
-    }
-}
-
-void UG_RaceHUDWidget::ShowTimer()
-{
-    if (TimeText)
-    {
-        TimeText->SetVisibility(ESlateVisibility::Visible);
+        Timer->SetTimerText(RemainingSeconds);
     }
 }
 
