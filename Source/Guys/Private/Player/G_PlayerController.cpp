@@ -15,6 +15,13 @@
 AG_PlayerController::AG_PlayerController()
 {
     bReplicates = true;
+
+    /* Clamp camera look */
+    if (PlayerCameraManager)
+    {
+        PlayerCameraManager->ViewPitchMin = -45.0f;
+        PlayerCameraManager->ViewPitchMax = 10.0f;
+    }
 }
 
 void AG_PlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
