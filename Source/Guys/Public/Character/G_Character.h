@@ -120,6 +120,16 @@ private:
     UPROPERTY()
     FTimerHandle JumpTimer;
 
+    UPROPERTY()
+    FTimerHandle InteractTimer;
+
     UPROPERTY(EditDefaultsOnly, Category = "G|Settings")
     float JumpCooldown = 0.5f;
+
+    UPROPERTY(EditDefaultsOnly, Category = "G|Settings")
+    float InteractCooldown = 2.0f;
+
+    UPROPERTY()
+    bool bCanInteract = true;
+    
 };

@@ -44,13 +44,14 @@ void UG_PhysicalAnimComponent::TogglePhysicalAnimation()
 		Data.MaxLinearForce = 100.f;
 		Data.MaxAngularForce = 100.f;
 
+		PhysicalAnimComponent->SetStrengthMultiplyer(1.0f);
 		PhysicalAnimComponent->ApplyPhysicalAnimationSettingsBelow(SimulationBone, Data);
 		SkeletalMeshComponent->SetAllBodiesBelowSimulatePhysics(SimulationBone, true, false);
 
 		/* Revert to normal condition after delay */
 		GetOwner()->GetWorldTimerManager().SetTimer(
 			TogglePhysicsTimer, 
-			[this]() { SkeletalMeshComponent->SetAllBodiesBelowSimulatePhysics(SimulationBone, false, false); },
+			[this]() { PhysicalAnimComponent->SetStrengthMultiplyer(10.0f); },
 			2.0f, 
 			false);
 	}
