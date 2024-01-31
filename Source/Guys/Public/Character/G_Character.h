@@ -58,6 +58,10 @@ protected:
     void Look(const FInputActionValue& Value);
 
     void Jump() override;
+    
+    void Use(const FInputActionValue& Value);
+
+    void Select(const FInputActionValue& Value);
 
     void Interact(const FInputActionValue& Value);
 
@@ -117,6 +121,12 @@ private:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Input", meta = (AllowPrivateAccess = "true"))
     TObjectPtr<UInputAction> StatsAction;
 
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Input", meta = (AllowPrivateAccess = "true"))
+    TObjectPtr<UInputAction> UseAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Input", meta = (AllowPrivateAccess = "true"))
+    TObjectPtr<UInputAction> SelectAction;
+
     UPROPERTY()
     FTimerHandle JumpTimer;
 
@@ -131,5 +141,5 @@ private:
 
     UPROPERTY()
     bool bCanInteract = true;
-    
+
 };

@@ -15,6 +15,8 @@ public:
 	// Sets default values for this component's properties
 	UG_InventoryComponent();
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	UFUNCTION(BlueprintCallable, Category = "G|Inventory")
 	void AddAbility(TSubclassOf<UGameplayAbility> NewAbility);
 
@@ -56,6 +58,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Properties")
 	int32 CurrentAbilitySlot;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Properties")
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly, Category = "G|Properties")
 	TArray<TSubclassOf<UGameplayAbility>> OwnedAbilities;	
 };
