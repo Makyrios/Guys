@@ -59,9 +59,6 @@ void AG_Character::BeginPlay()
 void AG_Character::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-
-    ApplyAttributes();
-    ApplyGameplayTags();
 }
 
 void AG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -244,31 +241,4 @@ void AG_Character::InitAbilityActorInfo()
     {
         CustomAbilitySystemComponent->AbilityActorInfoSet();
     }
-}
-
-void AG_Character::ApplyGameplayTags()
-{
-    if (!AbilitySystemComponent) return;
-
-    FGameplayTagContainer AssetTags;
-    AbilitySystemComponent->GetOwnedGameplayTags(AssetTags);
-
-    for (const FGameplayTag& Tag : AssetTags)
-    {
-        FGameplayTag StateTag = FGameplayTag::RequestGameplayTag(FName("State"));
-        if (Tag.MatchesTag(StateTag))
-        {
-            // Confirm States
-            if (Tag.GetTagName() == "State.Debuff.Stunned")
-            {
-            }
-        }
-    }
-}
-
-void AG_Character::ApplyAttributes()
-{
-    UG_AttributeSet* G_AttributeSet = Cast<UG_AttributeSet>(AttributeSet);
-    if (!G_AttributeSet) return;
-    GetCharacterMovement()->MaxWalkSpeed = G_AttributeSet->GetMaxMovementSpeed();
 }

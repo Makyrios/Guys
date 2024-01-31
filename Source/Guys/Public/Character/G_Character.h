@@ -69,11 +69,6 @@ protected:
 
     virtual void InitAbilityActorInfo();
 
-private:
-    void ApplyGameplayTags();
-
-    void ApplyAttributes();
-
 public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Components", meta = (AllowPrivateAccess = "true"))
     TObjectPtr<UG_InventoryComponent> InventoryComponent;
