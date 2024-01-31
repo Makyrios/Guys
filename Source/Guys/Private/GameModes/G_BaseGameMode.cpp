@@ -107,6 +107,7 @@ bool AG_BaseGameMode::IsMatchPreparing()
     return GetMatchState() == MatchState::WaitingToStart || GetMatchState() == MatchState::EnteringMap;
 }
 
+
 bool AG_BaseGameMode::IsMatchStarted()
 {
     return GetMatchState() == MatchState::InProgress;
@@ -121,7 +122,8 @@ void AG_BaseGameMode::SpawnNewPawn(APlayerController* NewPlayer)
     if (!NewPlayer) return;
     APawn* NewPawn = GetWorld()->SpawnActor<APawn>(DefaultPawnClass);
     NewPlayer->Possess(NewPawn);
-    MovePawnToRandomPlayerStart(NewPawn);
+    MovePawnToRandomPlayerStart(NewPawn);    
+    UpdatePlayerSkins();
 }
 
 void AG_BaseGameMode::MovePawnToRandomPlayerStart(APawn* PawnToMove)
@@ -264,4 +266,14 @@ void AG_BaseGameMode::RestartGame()
 
     const FString MapName = UGameplayStatics::GetCurrentLevelName(World);
     World->ServerTravel(MapName);
+}
+
+void AG_BaseGameMode::UpdatePlayerSkins() const
+{
+    const int32 NumberOfPlayers = UGameplayStatics::GetNumPlayerControllers(GetWorld());
+    for (int32 i = 0; i < NumberOfPlayers; i++)
+    {
+        AG_Character* Character = Cast<AG_Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(),i));
+        Character->UpdateSkins();
+    }
 }

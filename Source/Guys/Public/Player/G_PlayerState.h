@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
 #include "AbilitySystemInterface.h"
+#include "Character/G_Character.h"
 #include "GameplayEffectTypes.h"
 #include "G_PlayerState.generated.h"
 
@@ -38,4 +39,7 @@ protected:
 
     UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "G|Stats")
     FString PlayerName = "";
+
+    UPROPERTY()
+    TObjectPtr<AG_Character> Character{nullptr};
 };

@@ -38,12 +38,12 @@ UAbilitySystemComponent* AG_PlayerState::GetAbilitySystemComponent() const
 
 UAttributeSet* AG_PlayerState::GetAttributeSet() const
 {
-    return AttributeSet;
+    return AttributeSet;    
 }
 
 void AG_PlayerState::OnMaxMovementSpeedAttributeChanged(const FOnAttributeChangeData& Data)
 {
-    ACharacter* Character = Cast<ACharacter>(GetPawn());
+    Character = Cast<AG_Character>(GetPawn());
 
     if (Character == nullptr) return;
 

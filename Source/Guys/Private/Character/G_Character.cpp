@@ -14,11 +14,16 @@
 #include "Player/G_PlayerState.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include <GameModes/G_BaseGameMode.h>
+
+#include "Kismet/GameplayStatics.h"
+#include "Save/G_SaveGame.h"
 #include "Player/G_PlayerController.h"
 #include "Components/G_PhysicalAnimComponent.h"
 #include "Components/G_InventoryComponent.h"
 #include <Interfaces/G_Interactable.h>
 #include <Kismet/GameplayStatics.h>
+
+#include "Kismet/KismetInputLibrary.h"
 
 AG_Character::AG_Character()
 {
@@ -48,13 +53,16 @@ AG_Character::AG_Character()
     FollowCamera->bUsePawnControlRotation = false;
 
     PhysicalAnimComponent = CreateDefaultSubobject<UG_PhysicalAnimComponent>(TEXT("PhysicalAnimComponent"));
-
     InventoryComponent = CreateDefaultSubobject<UG_InventoryComponent>(TEXT("Inventory"));
+    
+    Hat = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Hat"));
+    Hat->AttachToComponent(GetMesh(),FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("Hat_Socket_0"));
 }
 
 void AG_Character::BeginPlay()
 {
     Super::BeginPlay();
+    UpdateSkins();
 }
 
 void AG_Character::Tick(float DeltaTime)
@@ -285,3 +293,76 @@ void AG_Character::InitAbilityActorInfo()
         CustomAbilitySystemComponent->AbilityActorInfoSet();
     }
 }
+
+
+
+void AG_Character::CreateSaveFile()
+{
+    UG_SaveGame* dataToSave = Cast<UG_SaveGame>(UGameplayStatics::CreateSaveGameObject(UG_SaveGame::StaticClass()));
+    dataToSave->ChosenSkins.SkinIdx = ChosenSkinIdx;
+    dataToSave->ChosenSkins.HatIdx = ChosenHatIdx;
+    UGameplayStatics::SaveGameToSlot(dataToSave, "Slot1", 0);
+}
+
+void AG_Character::SaveSkinsInfo()
+{
+    if (!UGameplayStatics::DoesSaveGameExist("Slot1",0))
+    {
+        CreateSaveFile();
+    }
+    UG_SaveGame* dataToSave = Cast<UG_SaveGame>(UGameplayStatics::LoadGameFromSlot("Slot1", 0));
+    dataToSave->ChosenSkins.SkinIdx = ChosenSkinIdx;
+    dataToSave->ChosenSkins.HatIdx = ChosenHatIdx;
+    UGameplayStatics::SaveGameToSlot(dataToSave, "Slot1", 0);
+}
+
+void AG_Character::LoadSkinsInfo()
+{
+    if (!UGameplayStatics::DoesSaveGameExist("Slot1",0))
+    {
+        CreateSaveFile();
+        
+    }
+    const UG_SaveGame* savedData = Cast<UG_SaveGame>(UGameplayStatics::LoadGameFromSlot("Slot1", 0));
+    ChosenSkinIdx = savedData->ChosenSkins.SkinIdx;
+    ChosenHatIdx = savedData->ChosenSkins.HatIdx;
+
+    SetSkinByIndex(ChosenSkinIdx);
+    SetHatByIndex(ChosenHatIdx);
+}
+
+void AG_Character::UpdateSkins()
+{
+    LoadSkinsInfo();
+    SetSkinByIndex(ChosenSkinIdx);
+    SetHatByIndex(ChosenHatIdx);
+}
+
+void AG_Character::ChaneSkinByIndex(const int32& Mat_Idx)
+{
+    SetSkinByIndex(Mat_Idx);
+    SaveSkinsInfo();
+}
+
+void AG_Character::ChaneHatByIndex(const int32& Hat_Idx)
+{
+    SetHatByIndex(Hat_Idx);
+    SaveSkinsInfo();
+}
+
+void AG_Character::SetSkinByIndex_Implementation(const int32& Mat_Idx)
+{
+    this->GetMesh()->SetMaterial(0,Skins[Mat_Idx]);
+    ChosenSkinIdx = Mat_Idx;    
+}
+
+void AG_Character::SetHatByIndex_Implementation(const int32& Hat_Idx)
+{
+    FString SocketName = TEXT("Hat_Socket_");
+    SocketName.Append(FString::FromInt(Hat_Idx));
+    Hat->SetStaticMesh(Hats[Hat_Idx]);
+    Hat->AttachToComponent(GetMesh(),FAttachmentTransformRules::SnapToTargetIncludingScale, FName(SocketName));
+    ChosenHatIdx = Hat_Idx;    
+}
+
+
