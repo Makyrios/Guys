@@ -13,7 +13,6 @@
     GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName)                                                                                           \
     GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
-
 UCLASS()
 class GUYS_API UG_AttributeSet : public UAttributeSet
 {
@@ -35,4 +34,12 @@ public:
     UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxMovementSpeed, Category = "G|Attributes")
     FGameplayAttributeData MaxMovementSpeed;
     ATTRIBUTE_ACCESSORS(UG_AttributeSet, MaxMovementSpeed);
+
+    UPROPERTY(BlueprintReadOnly, Category = "G|Attributes")
+    FGameplayAttributeData JumpCooldown;
+    ATTRIBUTE_ACCESSORS(UG_AttributeSet, JumpCooldown);
+
+    UPROPERTY(BlueprintReadOnly, Category = "G|Attributes")
+    FGameplayAttributeData InteractCooldown;
+    ATTRIBUTE_ACCESSORS(UG_AttributeSet, InteractCooldown);
 };

@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Actors/G_RaceTrajectorySpline.h"
 #include <Components/SplineComponent.h>
 #include <Kismet/GameplayStatics.h>
@@ -8,13 +7,13 @@
 #include "GameFramework/GameStateBase.h"
 #include "Player/G_RacePlayerController.h"
 #include <Player/G_RacePlayerState.h>
-
+#include <GameStates/G_RaceGameState.h>
 
 AG_RaceTrajectorySpline::AG_RaceTrajectorySpline()
 {
-	PrimaryActorTick.bCanEverTick = true;
+    PrimaryActorTick.bCanEverTick = true;
 
-	SplineComponent = CreateDefaultSubobject<USplineComponent>(TEXT("Spline Component"));
+    SplineComponent = CreateDefaultSubobject<USplineComponent>(TEXT("Spline Component"));
     IntervalSpline = CreateDefaultSubobject<USplineComponent>(TEXT("Interval Spline Component"));
 }
 
@@ -22,6 +21,13 @@ void AG_RaceTrajectorySpline::BeginPlay()
 {
     Super::BeginPlay();
 
+    RaceGameState = GetWorld()->GetGameState<AG_RaceGameState>();
+
+    BuildIntervalSplinePoints();
+}
+
+void AG_RaceTrajectorySpline::BuildIntervalSplinePoints()
+{
     check(SplineComponent);
     check(IntervalSpline);
 
@@ -44,26 +50,24 @@ float AG_RaceTrajectorySpline::GetPlayerProgress(AActor* Player)
     return PlayerDistance / IntervalSpline->GetNumberOfSplinePoints();
 }
 
-void AG_RaceTrajectorySpline::OnConstruction(const FTransform& Transform) 
-{
-    Super::OnConstruction(Transform);
-    
-}
-
 void AG_RaceTrajectorySpline::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
     UpdateActorsInWorld();
 
-    TMap<AActor*, float> CurrentPlayerProgressesMap = GetUpdatedPlayerProgressess();
+    CurrentPlayerProgressesMap = GetUpdatedPlayerProgressess();
     CurrentPlayerProgressesMap.ValueSort([](const float& A, const float& B) { return A > B; });
-    
-    if (PlayersChangedPositions(CurrentPlayerProgressesMap))
+    if (RaceGameState != nullptr)
+    {
+        RaceGameState->SetPlayerProgressesMap(CurrentPlayerProgressesMap);
+    }
+
+    if (PlayersChangedPositions())
     {
         PlayerProgressesMap = CurrentPlayerProgressesMap;
         UpdatePlayerPositions();
-	}
+    }
 }
 
 void AG_RaceTrajectorySpline::UpdateActorsInWorld()
@@ -102,7 +106,7 @@ TMap<AActor*, float> AG_RaceTrajectorySpline::GetUpdatedPlayerProgressess()
     return Players;
 }
 
-bool AG_RaceTrajectorySpline::PlayersChangedPositions(TMap<AActor*, float>& CurrentPlayerProgressesMap)
+bool AG_RaceTrajectorySpline::PlayersChangedPositions()
 {
     TArray<AActor*> Keys1, Keys2;
     CurrentPlayerProgressesMap.GetKeys(Keys1);
@@ -129,4 +133,3 @@ void AG_RaceTrajectorySpline::UpdatePlayerPositions()
         }
     }
 }
-

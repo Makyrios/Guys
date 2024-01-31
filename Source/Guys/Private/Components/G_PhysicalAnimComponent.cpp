@@ -31,7 +31,7 @@ void UG_PhysicalAnimComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-void UG_PhysicalAnimComponent::TogglePhysicalAnimation()
+void UG_PhysicalAnimComponent::TogglePhysicalAnimation(float RevertAnimDelay)
 {
 	if (SkeletalMeshComponent && PhysicalAnimComponent)
 	{
@@ -44,14 +44,15 @@ void UG_PhysicalAnimComponent::TogglePhysicalAnimation()
 		Data.MaxLinearForce = 100.f;
 		Data.MaxAngularForce = 100.f;
 
+		PhysicalAnimComponent->SetStrengthMultiplyer(1.0f);
 		PhysicalAnimComponent->ApplyPhysicalAnimationSettingsBelow(SimulationBone, Data);
 		SkeletalMeshComponent->SetAllBodiesBelowSimulatePhysics(SimulationBone, true, false);
 
 		/* Revert to normal condition after delay */
 		GetOwner()->GetWorldTimerManager().SetTimer(
 			TogglePhysicsTimer, 
-			[this]() { SkeletalMeshComponent->SetAllBodiesBelowSimulatePhysics(SimulationBone, false, false); },
-			2.0f, 
+			[this]() { PhysicalAnimComponent->SetStrengthMultiplyer(10.0f); },
+			RevertAnimDelay,
 			false);
 	}
 }

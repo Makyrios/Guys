@@ -7,6 +7,7 @@
 #include "G_RaceTrajectorySpline.generated.h"
 
 class USplineComponent;
+class AG_RaceGameState;
 
 UCLASS()
 class GUYS_API AG_RaceTrajectorySpline : public AActor
@@ -21,14 +22,14 @@ public:
 protected:
     virtual void BeginPlay() override;
 
-    virtual void Tick(float DeltaTime) override;
+    void BuildIntervalSplinePoints();
 
-    virtual void OnConstruction(const FTransform& Transform) override;
+    virtual void Tick(float DeltaTime) override;
 
 private:
     void UpdateActorsInWorld();
     TMap<AActor*, float> GetUpdatedPlayerProgressess();
-    bool PlayersChangedPositions(TMap<AActor*, float>& CurrentPlayerProgressesMap); 
+    bool PlayersChangedPositions(); 
     void UpdatePlayerPositions();
 
 private:
@@ -39,7 +40,15 @@ private:
     TObjectPtr<USplineComponent> IntervalSpline;
 
     UPROPERTY()
+    TWeakObjectPtr<AG_RaceGameState> RaceGameState;
+
+    UPROPERTY()
     TArray<AActor*> ActorsInWorld;
 
+    UPROPERTY()
+    TMap<AActor*, float> CurrentPlayerProgressesMap;
+    UPROPERTY()
     TMap<AActor*, float> PlayerProgressesMap;
+
+
 };

@@ -15,6 +15,13 @@
 AG_PlayerController::AG_PlayerController()
 {
     bReplicates = true;
+
+    /* Clamp camera look */
+    if (PlayerCameraManager)
+    {
+        PlayerCameraManager->ViewPitchMin = -45.0f;
+        PlayerCameraManager->ViewPitchMax = 10.0f;
+    }
 }
 
 void AG_PlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -29,7 +36,6 @@ void AG_PlayerController::BeginPlay()
     Super::BeginPlay();
 
     BindChangeMatchState();
-
     ClampCamera();
 }
 
@@ -86,17 +92,16 @@ void AG_PlayerController::AcknowledgePossession(APawn* InPawn)
 
 void AG_PlayerController::SetKeyboardInput(bool bEnable)
 {
-    if (HasAuthority() && IsLocalController())
-    {
-        G_Character = G_Character.IsValid() ? G_Character : Cast<AG_Character>(GetPawn());
-        if (!G_Character.IsValid()) return;
-
-        G_Character->SetKeyboardInput(bEnable);
-    }
-    else
+    if (!IsLocalController())
     {
         Client_SetKeyboardInput(bEnable);
+        return;
     }
+
+    G_Character = G_Character.IsValid() ? G_Character : Cast<AG_Character>(GetPawn());
+    if (!G_Character.IsValid()) return;
+
+    G_Character->SetKeyboardInput(bEnable);
 }
 
 void AG_PlayerController::Client_SetKeyboardInput_Implementation(bool bEnable)
@@ -131,6 +136,24 @@ void AG_PlayerController::TogglePause()
     }
 }
 
+void AG_PlayerController::SetHUDWidgetVisibility(ESlateVisibility InVisibility)
+{
+    if (!ShouldChangeHUDVisibility())
+    {
+        return;
+    }
+
+    if (!GetPawn()) return;
+    if (GetPawn()->IsA<ASpectatorPawn>())
+    {
+        SetSpectatorHUDWidgetVisibility(InVisibility);
+    }
+    else
+    {
+        SetPlayerHUDWidgetVisibility(InVisibility);
+    }
+}
+
 void AG_PlayerController::ToggleStats()
 {
     G_HUD = (!G_HUD) ? GetHUD<AG_HUD>() : G_HUD;
@@ -156,6 +179,25 @@ void AG_PlayerController::ExitToMenu()
     if (!GameInstance) return;
 
     UGameplayStatics::OpenLevel(this, GameInstance->GetMenuMapName());
+}
+
+void AG_PlayerController::UpdateAbilityUI(FGameplayTagContainer AbilityTags)
+{
+    if (!IsLocalController())
+    {
+        Client_UpdateAbilityUI(AbilityTags);
+        return;
+    }
+
+    G_HUD = (!G_HUD) ? GetHUD<AG_HUD>() : G_HUD;
+    if (!G_HUD) return;
+
+    G_HUD->UpdateAbilityUI(AbilityTags);
+}
+
+void AG_PlayerController::Client_UpdateAbilityUI_Implementation(FGameplayTagContainer AbilityTags)
+{
+    UpdateAbilityUI(AbilityTags);
 }
 
 void AG_PlayerController::SetSpectatorHUD(bool bEnableSpectator)
@@ -199,11 +241,6 @@ void AG_PlayerController::CreateStartGameWidget(float DelayBeforeStart)
     }
 }
 
-void AG_PlayerController::Client_ShowStartGameWidget_Implementation(float DelayBeforeStart)
-{
-    ShowStartGameWidget(DelayBeforeStart);
-}
-
 void AG_PlayerController::ShowStartGameWidget(float DelayBeforeStart)
 {
     G_HUD = (!G_HUD) ? GetHUD<AG_HUD>() : G_HUD;
@@ -212,22 +249,9 @@ void AG_PlayerController::ShowStartGameWidget(float DelayBeforeStart)
     G_HUD->ShowStartGameWidget(DelayBeforeStart);
 }
 
-void AG_PlayerController::SetHUDWidgetVisibility(ESlateVisibility InVisibility)
+void AG_PlayerController::Client_ShowStartGameWidget_Implementation(float DelayBeforeStart)
 {
-    if (!ShouldChangeHUDVisibility())
-    {
-        return;
-    }
-
-    if (!GetPawn()) return;
-    if (GetPawn()->IsA<ASpectatorPawn>())
-    {
-        SetSpectatorHUDWidgetVisibility(InVisibility);
-    }
-    else
-    {
-        SetPlayerHUDWidgetVisibility(InVisibility);
-    }
+    ShowStartGameWidget(DelayBeforeStart);
 }
 
 bool AG_PlayerController::ShouldChangeHUDVisibility()

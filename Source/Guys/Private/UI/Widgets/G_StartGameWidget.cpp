@@ -21,7 +21,7 @@ void UG_StartGameWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTi
         Timer -= InDeltaTime;
         if (StartGameDelay - Timer < 1)
         {
-            DisplayText->SetText(FText::FromString("Get Ready!"));
+            DisplayText->SetText(FText::AsNumber(FMath::FloorToInt(Timer)));
             if (!IsAnimationPlaying(TextShrinkAnimation))
             {
                 PlayAnimation(TextShrinkAnimation);

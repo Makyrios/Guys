@@ -26,6 +26,9 @@ public:
     FORCEINLINE float GetTimer() const { return Timer; }
     FORCEINLINE int GetFinishedPlayersCount() const { return FinishedPlayersCount; }
 
+    FORCEINLINE void SetPlayerProgressesMap(TMap<AActor*, float>& NewPlayerProgressesMap) { PlayerProgressesMap = NewPlayerProgressesMap; }
+    FORCEINLINE const TMap<AActor*, float> GetPlayerProgressesMap() const { return PlayerProgressesMap; }
+
 protected:
     void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -46,4 +49,7 @@ private:
     bool bAnyPlayerFinished = false;
     UPROPERTY(Replicated)
     float Timer = 0.f;
+
+    UPROPERTY()
+    TMap<AActor*, float> PlayerProgressesMap;
 };

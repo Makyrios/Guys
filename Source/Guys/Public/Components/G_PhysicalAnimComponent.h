@@ -18,7 +18,8 @@ public:
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void TogglePhysicalAnimation();
+	UFUNCTION(BlueprintCallable)
+	void TogglePhysicalAnimation(float RevertAnimDelay);
 		
 protected:
 	virtual void BeginPlay() override;

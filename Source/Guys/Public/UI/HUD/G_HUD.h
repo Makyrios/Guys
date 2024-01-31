@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
+#include <GameplayTagContainer.h>
 #include "G_HUD.generated.h"
 
 class UG_RaceHUDWidget;
@@ -26,15 +27,10 @@ public:
 
     void ShowStartGameWidget(float StartDelayTime);
 
-    void ShowWonWidget();
-    void ShowLoseWidget();
-
-    void UpdateInventoryInfo();
+    void UpdateAbilityUI(FGameplayTagContainer AbilityTags);
 
 protected:
     virtual void PostInitializeComponents() override;
-
-    void UpdateTableWidget();
 
 public:
     UPROPERTY()

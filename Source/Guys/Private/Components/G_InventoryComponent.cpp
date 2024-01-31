@@ -1,15 +1,44 @@
 #include "Components/G_InventoryComponent.h"
 #include "Abilities/GameplayAbility.h"
+#include <Player/G_PlayerController.h>
+#include "AbilitySystem/G_AbilitySystemComponent.h"
+#include <Player/G_PlayerState.h>
+#include "Net/UnrealNetwork.h"
 
 UG_InventoryComponent::UG_InventoryComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
+	SetIsReplicated(true);
+}
 
+void UG_InventoryComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UG_InventoryComponent, OwnedAbilities);
 }
 
 void UG_InventoryComponent::AddAbility(TSubclassOf<UGameplayAbility> NewAbility)
 {
+	if (OwnedAbilities.Num() < MaxAbilities)
+	{
+		AActor* Owner = GetOwner();
+		if (Owner->HasAuthority())
+		{
+			AG_PlayerController* OwnerController = Cast<AG_PlayerController>(Owner->GetOwner());
+			AG_PlayerState* OwnerState = OwnerController->GetPlayerState<AG_PlayerState>();
+			FGameplayAbilitySpec AbilitySpec(NewAbility);
+			OwnerState->GetAbilitySystemComponent()->GiveAbility(AbilitySpec);
+			OwnedAbilities.Add(NewAbility);
+		}
+	}
 	OwnedAbilities.Add(NewAbility);
+
+	AG_PlayerController* PlayerController = GetOwner()->GetInstigatorController<AG_PlayerController>();
+    if (PlayerController)
+    {
+        //PlayerController->UpdateAbilityUI(OwnedAbilities);
+	}
 
 	//TWeakObjectPtr<UGameplayAbility> Ability = OwnedAbilities[OwnedAbilities.Find(NewAbility)];
 
@@ -21,26 +50,20 @@ void UG_InventoryComponent::AddAbility(TSubclassOf<UGameplayAbility> NewAbility)
 
 void UG_InventoryComponent::RemoveAbility(const int32& AbilitySlot)
 {
-	TSubclassOf<UGameplayAbility> Ability = OwnedAbilities[AbilitySlot];
+	OwnedAbilities.RemoveAt(AbilitySlot);
+	if (OwnedAbilities.Num() > 0)
+	{
+		CurrentAbilitySlot = FMath::Clamp(CurrentAbilitySlot, 0, OwnedAbilities.Num() - 1);
+	}
+	else
+	{
+		CurrentAbilitySlot = 0;
+	}
 
-	//if (Ability.IsValid())
-	//{
-	//	// Delegates unsubscribe
-	//}
-
-	OwnedAbilities.RemoveSingle(Ability);
 }
 
 void UG_InventoryComponent::RemoveAllAbilities()
 {
-	//for (TWeakObjectPtr<UGameplayAbility>& Ability : OwnedAbilities)
-	//{
-	//	if (Ability.IsValid())
-	//	{
-	//		// Delegates unsubscribe
-	//	}
-	//}
-
 	OwnedAbilities.Empty();
 }
 
@@ -61,12 +84,8 @@ bool UG_InventoryComponent::CanCollectAbilities()
 
 bool UG_InventoryComponent::SelectAbility(const int32& CandidateAbilitySlot)
 {
-	if ((OwnedAbilities.Num() > CandidateAbilitySlot) && CurrentAbilitySlot != CandidateAbilitySlot)
+	if ((MaxAbilities > CandidateAbilitySlot) && (OwnedAbilities.Num() > CandidateAbilitySlot))
 	{
-		//if (UGameplayAbility* CurrentAbility = GetCurrentAbility())
-		//{
-		//	// Delegates unsubscribe
-		//}
 
 		CurrentAbilitySlot = CandidateAbilitySlot;
 

@@ -14,10 +14,16 @@
 #include "Player/G_PlayerState.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include <GameModes/G_BaseGameMode.h>
+
+#include "Kismet/GameplayStatics.h"
+#include "Save/G_SaveGame.h"
 #include "Player/G_PlayerController.h"
 #include "Components/G_PhysicalAnimComponent.h"
 #include "Components/G_InventoryComponent.h"
 #include <Interfaces/G_Interactable.h>
+#include <Kismet/GameplayStatics.h>
+
+#include "Kismet/KismetInputLibrary.h"
 
 AG_Character::AG_Character()
 {
@@ -47,13 +53,16 @@ AG_Character::AG_Character()
     FollowCamera->bUsePawnControlRotation = false;
 
     PhysicalAnimComponent = CreateDefaultSubobject<UG_PhysicalAnimComponent>(TEXT("PhysicalAnimComponent"));
-
     InventoryComponent = CreateDefaultSubobject<UG_InventoryComponent>(TEXT("Inventory"));
+
+    Hat = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Hat"));
+    Hat->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("Hat_Socket_0"));
 }
 
 void AG_Character::BeginPlay()
 {
     Super::BeginPlay();
+    UpdateSkins();
 }
 
 void AG_Character::Tick(float DeltaTime)
@@ -73,6 +82,8 @@ void AG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputC
         EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Started, this, &AG_Character::TogglePause);
         EnhancedInputComponent->BindAction(StatsAction, ETriggerEvent::Started, this, &AG_Character::ToggleStats);
         EnhancedInputComponent->BindAction(StatsAction, ETriggerEvent::Completed, this, &AG_Character::ToggleStats);
+        EnhancedInputComponent->BindAction(UseAction, ETriggerEvent::Triggered, this, &AG_Character::Use);
+        EnhancedInputComponent->BindAction(SelectAction, ETriggerEvent::Triggered, this, &AG_Character::Select);
     }
 }
 
@@ -105,11 +116,45 @@ void AG_Character::Look(const FInputActionValue& Value)
     }
 }
 
+void AG_Character::Use(const FInputActionValue& Value)
+{
+    if (!InventoryComponent)
+    {
+        return;
+    }
+
+    UG_InventoryComponent* Inventory = InventoryComponent.Get();
+    TSubclassOf<UGameplayAbility> AbilityToUse = Inventory->GetCurrentAbility();
+
+    AG_PlayerState* PState = Cast<AG_PlayerState>(GetPlayerState());
+
+    if (PState && AbilityToUse)
+    {
+        bool bSuccess = PState->GetAbilitySystemComponent()->TryActivateAbilityByClass(AbilityToUse, true);
+        Inventory->RemoveAbility(Inventory->CurrentAbilitySlot);
+    }
+}
+
+void AG_Character::Select(const FInputActionValue& Value)
+{
+    if (!InventoryComponent)
+    {
+        return;
+    }
+    UG_InventoryComponent* Inventory = InventoryComponent.Get();
+    float Slot = Value.Get<float>() - 1.0f;
+    Inventory->SelectAbility(Slot);
+}
+
 void AG_Character::Jump()
 {
     if (GetWorldTimerManager().IsTimerActive(JumpTimer)) return;
 
-    GetWorld()->GetTimerManager().SetTimer(JumpTimer, JumpCooldown, false);
+    if (AttributeSet == nullptr) return;
+
+    UG_AttributeSet* GAttributeSet = Cast<UG_AttributeSet>(AttributeSet);
+
+    GetWorld()->GetTimerManager().SetTimer(JumpTimer, GAttributeSet->GetJumpCooldown(), false);
 
     Super::Jump();
 }
@@ -121,17 +166,28 @@ void AG_Character::Interact(const FInputActionValue& Value)
 
 void AG_Character::Server_Interact_Implementation()
 {
-    TArray<AActor*> OverlappingActors;
-    this->GetOverlappingActors(OverlappingActors);
-    if (!OverlappingActors.IsEmpty())
+    if (bCanInteract)
     {
-        for (auto& OverlappingActor : OverlappingActors)
+        TArray<AActor*> OverlappingActors;
+        this->GetOverlappingActors(OverlappingActors);
+        if (!OverlappingActors.IsEmpty())
         {
-            if (OverlappingActor->Implements<UG_Interactable>())
+            for (auto& OverlappingActor : OverlappingActors)
             {
-                FVector PushDirection = (OverlappingActor->GetActorLocation() - this->GetActorLocation()).GetSafeNormal();
-                Multicast_Interact(OverlappingActor, PushDirection);
-                break;
+                if (OverlappingActor->Implements<UG_Interactable>())
+                {
+                    FVector PushDirection = (OverlappingActor->GetActorLocation() - this->GetActorLocation()).GetSafeNormal();
+                    Multicast_Interact(OverlappingActor, PushDirection);
+                    bCanInteract = false;
+
+                    if (AttributeSet == nullptr) return;
+
+                    UG_AttributeSet* GAttributeSet = Cast<UG_AttributeSet>(AttributeSet);
+
+                    GetWorldTimerManager().SetTimer(
+                        InteractTimer, [this]() { bCanInteract = true; }, GAttributeSet->GetInteractCooldown(), false);
+                    break;
+                }
             }
         }
     }
@@ -201,7 +257,7 @@ void AG_Character::ReactOnPush(FVector PushDirection)
 {
     if (PhysicalAnimComponent)
     {
-        PhysicalAnimComponent->TogglePhysicalAnimation();
+        PhysicalAnimComponent->TogglePhysicalAnimation(2.0f);
         this->LaunchCharacter(PushDirection * 1000, false, false);
     }
 }
@@ -241,4 +297,72 @@ void AG_Character::InitAbilityActorInfo()
     {
         CustomAbilitySystemComponent->AbilityActorInfoSet();
     }
+}
+
+void AG_Character::CreateSaveFile()
+{
+    UG_SaveGame* dataToSave = Cast<UG_SaveGame>(UGameplayStatics::CreateSaveGameObject(UG_SaveGame::StaticClass()));
+    dataToSave->ChosenSkins.SkinIdx = ChosenSkinIdx;
+    dataToSave->ChosenSkins.HatIdx = ChosenHatIdx;
+    UGameplayStatics::SaveGameToSlot(dataToSave, "Slot1", 0);
+}
+
+void AG_Character::SaveSkinsInfo()
+{
+    if (!UGameplayStatics::DoesSaveGameExist("Slot1", 0))
+    {
+        CreateSaveFile();
+    }
+    UG_SaveGame* dataToSave = Cast<UG_SaveGame>(UGameplayStatics::LoadGameFromSlot("Slot1", 0));
+    dataToSave->ChosenSkins.SkinIdx = ChosenSkinIdx;
+    dataToSave->ChosenSkins.HatIdx = ChosenHatIdx;
+    UGameplayStatics::SaveGameToSlot(dataToSave, "Slot1", 0);
+}
+
+void AG_Character::LoadSkinsInfo()
+{
+    if (!UGameplayStatics::DoesSaveGameExist("Slot1", 0))
+    {
+        CreateSaveFile();
+    }
+    const UG_SaveGame* savedData = Cast<UG_SaveGame>(UGameplayStatics::LoadGameFromSlot("Slot1", 0));
+    ChosenSkinIdx = savedData->ChosenSkins.SkinIdx;
+    ChosenHatIdx = savedData->ChosenSkins.HatIdx;
+
+    SetSkinByIndex(ChosenSkinIdx);
+    SetHatByIndex(ChosenHatIdx);
+}
+
+void AG_Character::UpdateSkins()
+{
+    LoadSkinsInfo();
+    SetSkinByIndex(ChosenSkinIdx);
+    SetHatByIndex(ChosenHatIdx);
+}
+
+void AG_Character::ChaneSkinByIndex(const int32& Mat_Idx)
+{
+    SetSkinByIndex(Mat_Idx);
+    SaveSkinsInfo();
+}
+
+void AG_Character::ChaneHatByIndex(const int32& Hat_Idx)
+{
+    SetHatByIndex(Hat_Idx);
+    SaveSkinsInfo();
+}
+
+void AG_Character::SetSkinByIndex_Implementation(const int32& Mat_Idx)
+{
+    this->GetMesh()->SetMaterial(0, Skins[Mat_Idx]);
+    ChosenSkinIdx = Mat_Idx;
+}
+
+void AG_Character::SetHatByIndex_Implementation(const int32& Hat_Idx)
+{
+    FString SocketName = TEXT("Hat_Socket_");
+    SocketName.Append(FString::FromInt(Hat_Idx));
+    Hat->SetStaticMesh(Hats[Hat_Idx]);
+    Hat->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName(SocketName));
+    ChosenHatIdx = Hat_Idx;
 }

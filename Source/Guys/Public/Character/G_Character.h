@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
+#include "Structs/G_ChosenSkinsIdx.h"
 #include "Interfaces/G_Interactable.h"
 #include "G_Character.generated.h"
 
@@ -48,6 +49,39 @@ public:
     UFUNCTION(NetMulticast, Reliable)
     void Multicast_Interact(AActor* Actor, FVector Direction);
 
+    FG_ChosenSkinsIdx ChosenSkins;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere)
+    TArray<TObjectPtr<UMaterialInterface>> Skins;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere)
+    TArray<TObjectPtr<UStaticMesh>> Hats;
+
+    UPROPERTY()
+    TObjectPtr<UStaticMeshComponent> Hat;
+
+    UFUNCTION()
+    void UpdateSkins();
+
+    UFUNCTION(BlueprintCallable)
+    void ChaneSkinByIndex(const int32& Mat_Idx);
+    UFUNCTION(NetMulticast, Reliable)
+    void SetSkinByIndex(const int32& Mat_Idx);
+
+    UFUNCTION(BlueprintCallable)
+    void ChaneHatByIndex(const int32& Hat_Idx);
+    UFUNCTION(NetMulticast, Reliable)
+    void SetHatByIndex(const int32& Hat_Idx);
+
+    UPROPERTY(BlueprintReadOnly)
+    int32 ChosenHatIdx{0};
+    UPROPERTY(BlueprintReadOnly)
+    int32 ChosenSkinIdx{0};
+
+    void CreateSaveFile();
+    void SaveSkinsInfo();
+    void LoadSkinsInfo();
+
 protected:
     virtual void BeginPlay() override;
 
@@ -58,6 +92,10 @@ protected:
     void Look(const FInputActionValue& Value);
 
     void Jump() override;
+
+    void Use(const FInputActionValue& Value);
+
+    void Select(const FInputActionValue& Value);
 
     void Interact(const FInputActionValue& Value);
 
@@ -117,9 +155,18 @@ private:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Input", meta = (AllowPrivateAccess = "true"))
     TObjectPtr<UInputAction> StatsAction;
 
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Input", meta = (AllowPrivateAccess = "true"))
+    TObjectPtr<UInputAction> UseAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Input", meta = (AllowPrivateAccess = "true"))
+    TObjectPtr<UInputAction> SelectAction;
+
     UPROPERTY()
     FTimerHandle JumpTimer;
 
-    UPROPERTY(EditDefaultsOnly, Category = "G|Settings")
-    float JumpCooldown = 0.5f;
+    UPROPERTY()
+    FTimerHandle InteractTimer;
+
+    UPROPERTY()
+    bool bCanInteract = true;
 };
