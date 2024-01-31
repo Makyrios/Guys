@@ -29,7 +29,6 @@ void AG_PlayerController::BeginPlay()
     Super::BeginPlay();
 
     BindChangeMatchState();
-
     ClampCamera();
 }
 
@@ -86,17 +85,16 @@ void AG_PlayerController::AcknowledgePossession(APawn* InPawn)
 
 void AG_PlayerController::SetKeyboardInput(bool bEnable)
 {
-    if (HasAuthority() && IsLocalController())
-    {
-        G_Character = G_Character.IsValid() ? G_Character : Cast<AG_Character>(GetPawn());
-        if (!G_Character.IsValid()) return;
-
-        G_Character->SetKeyboardInput(bEnable);
-    }
-    else
+    if (!IsLocalController())
     {
         Client_SetKeyboardInput(bEnable);
+        return;
     }
+
+    G_Character = G_Character.IsValid() ? G_Character : Cast<AG_Character>(GetPawn());
+    if (!G_Character.IsValid()) return;
+
+    G_Character->SetKeyboardInput(bEnable);
 }
 
 void AG_PlayerController::Client_SetKeyboardInput_Implementation(bool bEnable)
@@ -128,6 +126,24 @@ void AG_PlayerController::TogglePause()
         FInputModeUIOnly InputMode;
         SetInputMode(InputMode);
         bShowMouseCursor = true;
+    }
+}
+
+void AG_PlayerController::SetHUDWidgetVisibility(ESlateVisibility InVisibility)
+{
+    if (!ShouldChangeHUDVisibility())
+    {
+        return;
+    }
+
+    if (!GetPawn()) return;
+    if (GetPawn()->IsA<ASpectatorPawn>())
+    {
+        SetSpectatorHUDWidgetVisibility(InVisibility);
+    }
+    else
+    {
+        SetPlayerHUDWidgetVisibility(InVisibility);
     }
 }
 
@@ -199,11 +215,6 @@ void AG_PlayerController::CreateStartGameWidget(float DelayBeforeStart)
     }
 }
 
-void AG_PlayerController::Client_ShowStartGameWidget_Implementation(float DelayBeforeStart)
-{
-    ShowStartGameWidget(DelayBeforeStart);
-}
-
 void AG_PlayerController::ShowStartGameWidget(float DelayBeforeStart)
 {
     G_HUD = (!G_HUD) ? GetHUD<AG_HUD>() : G_HUD;
@@ -212,22 +223,9 @@ void AG_PlayerController::ShowStartGameWidget(float DelayBeforeStart)
     G_HUD->ShowStartGameWidget(DelayBeforeStart);
 }
 
-void AG_PlayerController::SetHUDWidgetVisibility(ESlateVisibility InVisibility)
+void AG_PlayerController::Client_ShowStartGameWidget_Implementation(float DelayBeforeStart)
 {
-    if (!ShouldChangeHUDVisibility())
-    {
-        return;
-    }
-
-    if (!GetPawn()) return;
-    if (GetPawn()->IsA<ASpectatorPawn>())
-    {
-        SetSpectatorHUDWidgetVisibility(InVisibility);
-    }
-    else
-    {
-        SetPlayerHUDWidgetVisibility(InVisibility);
-    }
+    ShowStartGameWidget(DelayBeforeStart);
 }
 
 bool AG_PlayerController::ShouldChangeHUDVisibility()

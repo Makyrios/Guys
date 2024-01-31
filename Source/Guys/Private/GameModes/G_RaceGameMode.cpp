@@ -23,6 +23,7 @@ void AG_RaceGameMode::HandleSeamlessTravelPlayer(AController*& C)
     Super::HandleSeamlessTravelPlayer(C);
 }
 
+
 bool AG_RaceGameMode::ReadyToEndMatch_Implementation()
 {
     if (const AG_RaceGameState* CurrentGameState = Cast<AG_RaceGameState>(GameState))
@@ -48,6 +49,17 @@ void AG_RaceGameMode::HandleMatchHasEnded()
     }
 }
 
+void AG_RaceGameMode::HandleLoginBeforeGameStart(APlayerController* NewPlayer)
+{
+    SpawnNewPawn(NewPlayer);
+}
+
+void AG_RaceGameMode::HandleLoginAfterGameStart(APlayerController* NewPlayer)
+{
+    SpawnSpectatorPawn(NewPlayer);
+    EnableSpectatorHUD(NewPlayer);
+}
+
 void AG_RaceGameMode::RespawnPawn(AController* Controller)
 {
     if (!Controller) return;
@@ -65,17 +77,6 @@ void AG_RaceGameMode::RespawnPawn(AController* Controller)
 APawn* AG_RaceGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot)
 {
     return nullptr;
-}
-
-void AG_RaceGameMode::HandleLoginBeforeGameStart(APlayerController* NewPlayer)
-{
-    SpawnNewPawn(NewPlayer);
-}
-
-void AG_RaceGameMode::HandleLoginAfterGameStart(APlayerController* NewPlayer)
-{
-    SpawnSpectatorPawn(NewPlayer);
-    EnableSpectatorHUD(NewPlayer);
 }
 
 void AG_RaceGameMode::OnAllPlayersLoaded()

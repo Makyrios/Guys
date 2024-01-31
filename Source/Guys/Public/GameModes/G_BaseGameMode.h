@@ -23,8 +23,7 @@ protected:
     virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
     virtual bool IsGameStarted();
     virtual void PostLogin(APlayerController* NewPlayer) override;
-    virtual void HandleMatchIsWaitingToStart() override;
-    virtual void HandleMatchHasStarted() override;
+    void HandlePlayerLoad(APlayerController* NewPlayer);
     virtual void HandleMatchHasEnded() override;
     virtual void HandleSeamlessTravelPlayer(AController*& C) override;
     virtual void HandleActorDeath(AController* DeadActor);
@@ -56,10 +55,10 @@ public:
     FOnChangeMatchState OnChangeMatchState;
 
 protected:
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "G|GameStart", meta = (EditCondition = "bDelayedStart"))
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "G|Game", meta = (EditCondition = "bDelayedStart"))
     float DelayBeforeStart;
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "G|GameEnd")
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "G|Game")
     float DelayBeforeRestart;
 
     UPROPERTY()
