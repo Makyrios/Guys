@@ -252,7 +252,7 @@ void AG_Character::ReactOnPush(FVector PushDirection)
 {
     if (PhysicalAnimComponent)
     {
-        PhysicalAnimComponent->TogglePhysicalAnimation();
+        PhysicalAnimComponent->TogglePhysicalAnimation(2.0f);
         this->LaunchCharacter(PushDirection * 1000, false, false);
     }
 }

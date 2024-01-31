@@ -31,7 +31,7 @@ void UG_PhysicalAnimComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-void UG_PhysicalAnimComponent::TogglePhysicalAnimation()
+void UG_PhysicalAnimComponent::TogglePhysicalAnimation(float RevertAnimDelay)
 {
 	if (SkeletalMeshComponent && PhysicalAnimComponent)
 	{
@@ -52,7 +52,7 @@ void UG_PhysicalAnimComponent::TogglePhysicalAnimation()
 		GetOwner()->GetWorldTimerManager().SetTimer(
 			TogglePhysicsTimer, 
 			[this]() { PhysicalAnimComponent->SetStrengthMultiplyer(10.0f); },
-			2.0f, 
+			RevertAnimDelay,
 			false);
 	}
 }
