@@ -37,7 +37,7 @@ void UG_InventoryComponent::AddAbility(TSubclassOf<UGameplayAbility> NewAbility)
 	AG_PlayerController* PlayerController = GetOwner()->GetInstigatorController<AG_PlayerController>();
     if (PlayerController)
     {
-        PlayerController->UpdateAbilityUI(OwnedAbilities);
+        //PlayerController->UpdateAbilityUI(OwnedAbilities);
 	}
 
 	//TWeakObjectPtr<UGameplayAbility> Ability = OwnedAbilities[OwnedAbilities.Find(NewAbility)];

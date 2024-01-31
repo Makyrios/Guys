@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "G_PlayerController.generated.h"
 #include <GameplayTagContainer.h>
+#include "G_PlayerController.generated.h"
 
 class AG_Character;
 class AG_HUD;
