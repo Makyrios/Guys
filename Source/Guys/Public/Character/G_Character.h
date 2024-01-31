@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
-#include "Interfaces/G_IInteractable.h"
 #include "Structs/G_ChosenSkinsIdx.h"
+#include "Interfaces/G_Interactable.h"
 #include "G_Character.generated.h"
 
 class UInputAction;
@@ -15,10 +15,12 @@ class UAttributeSet;
 class USpringArmComponent;
 class UCameraComponent;
 class AG_PlayerController;
+class UG_InventoryComponent;
+class UG_PhysicalAnimComponent;
 struct FInputActionValue;
 
 UCLASS(config = Game)
-class AG_Character : public ACharacter, public IAbilitySystemInterface, public IG_IInteractable
+class AG_Character : public ACharacter, public IAbilitySystemInterface, public IG_Interactable
 {
     GENERATED_BODY()
 
@@ -37,16 +39,15 @@ public:
 
     void OnCharacterDie();
 
-    virtual void ReactOnPush() override;
+    virtual void ReactOnPush(FVector PushDirection) override;
 
-    // RENAME
     void SetKeyboardInput(bool bEnable);
 
     UFUNCTION(Server, Reliable)
     void Server_Interact();
 
     UFUNCTION(NetMulticast, Reliable)
-    void Multicast_Interact();
+    void Multicast_Interact(AActor* Actor, FVector Direction);
 
     FG_ChosenSkinsIdx ChosenSkins;
     
@@ -81,6 +82,8 @@ protected:
 
     void Look(const FInputActionValue& Value);
 
+    void Jump() override;
+
     void Interact(const FInputActionValue& Value);
 
     void TogglePause();
@@ -91,10 +94,9 @@ protected:
 
     virtual void InitAbilityActorInfo();
 
-private:
-    void ApplyGameplayTags();
-
-    void ApplyAttributes();
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Components", meta = (AllowPrivateAccess = "true"))
+    TObjectPtr<UG_InventoryComponent> InventoryComponent;
 
 protected:
     UPROPERTY()
@@ -102,7 +104,6 @@ protected:
 
     UPROPERTY()
     TObjectPtr<UAttributeSet> AttributeSet;
-
 
 private:
     UPROPERTY()
@@ -113,6 +114,9 @@ private:
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
     TObjectPtr<UCameraComponent> FollowCamera;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "G|Components", meta = (AllowPrivateAccess = "true"))
+    TObjectPtr<UG_PhysicalAnimComponent> PhysicalAnimComponent;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Input", meta = (AllowPrivateAccess = "true"))
     TObjectPtr<UInputMappingContext> DefaultMappingContext;
@@ -137,4 +141,10 @@ private:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Input", meta = (AllowPrivateAccess = "true"))
     TObjectPtr<UInputAction> StatsAction;
+
+    UPROPERTY()
+    FTimerHandle JumpTimer;
+
+    UPROPERTY(EditDefaultsOnly, Category = "G|Settings")
+    float JumpCooldown = 0.5f;
 };

@@ -13,13 +13,12 @@
     GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName)                                                                                           \
     GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
-/**
- *
- */
+
 UCLASS()
 class GUYS_API UG_AttributeSet : public UAttributeSet
 {
     GENERATED_BODY()
+
 public:
     UG_AttributeSet();
 

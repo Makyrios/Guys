@@ -8,7 +8,7 @@
 
 UG_AttributeSet::UG_AttributeSet()
 {
-    InitMaxMovementSpeed(500.0f);
+    InitMaxMovementSpeed(300.0f);
 }
 
 void UG_AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

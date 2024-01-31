@@ -30,6 +30,10 @@ public:
 
     FORCEINLINE FName GetMenuMapName() const { return MenuMapName; }
 
+    int32 GetNumExpectedPlayers() const;
+    // Set players from lobby
+    FORCEINLINE void SetNumExpectedPlayers(int32 Players) { NumExpectedPlayers = Players; } 
+
 private:
     UPROPERTY(EditDefaultsOnly, Category = "G|LoadingScreen")
     TSubclassOf<UUserWidget> LoadingScreenClass;
@@ -41,4 +45,6 @@ private:
     TObjectPtr<USoundClass> MasterSoundClass;
 
     FText PlayerName = FText::FromString(TEXT("Player"));
+
+    int32 NumExpectedPlayers = 0;
 };

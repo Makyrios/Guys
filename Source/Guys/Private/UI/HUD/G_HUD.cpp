@@ -88,8 +88,9 @@ void AG_HUD::ExitToMenu()
 void AG_HUD::ShowStartGameWidget(float StartDelayTime)
 {
     if (!StartGameWidgetClass) return;
+    if (StartGameWidget && StartGameWidget->IsInViewport()) return;
 
-    UG_StartGameWidget* StartGameWidget = CreateWidget<UG_StartGameWidget>(GetOwningPlayerController(), StartGameWidgetClass);
+    StartGameWidget = CreateWidget<UG_StartGameWidget>(GetOwningPlayerController(), StartGameWidgetClass);
 
     if (HUDWidget)
     {

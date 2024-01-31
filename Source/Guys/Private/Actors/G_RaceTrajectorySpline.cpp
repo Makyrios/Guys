@@ -21,6 +21,19 @@ AG_RaceTrajectorySpline::AG_RaceTrajectorySpline()
 void AG_RaceTrajectorySpline::BeginPlay()
 {
     Super::BeginPlay();
+
+    check(SplineComponent);
+    check(IntervalSpline);
+
+    IntervalSpline->ClearSplinePoints();
+
+    float SplineLength = SplineComponent->GetSplineLength();
+    int NumberOfPoints = FMath::TruncToInt(SplineLength / 100);
+    for (int i = 0; i < NumberOfPoints; i++)
+    {
+        FVector PointLocation = SplineComponent->GetLocationAtDistanceAlongSpline(i * 100, ESplineCoordinateSpace::World);
+        IntervalSpline->AddSplinePointAtIndex(PointLocation, i, ESplineCoordinateSpace::World);
+    }
 }
 
 float AG_RaceTrajectorySpline::GetPlayerProgress(AActor* Player)
@@ -34,18 +47,7 @@ float AG_RaceTrajectorySpline::GetPlayerProgress(AActor* Player)
 void AG_RaceTrajectorySpline::OnConstruction(const FTransform& Transform) 
 {
     Super::OnConstruction(Transform);
-    check(SplineComponent);
-    check(IntervalSpline);
-
-	IntervalSpline->ClearSplinePoints();
-
-	float SplineLength = SplineComponent->GetSplineLength();
-    int NumberOfPoints = FMath::TruncToInt(SplineLength / 100);
-    for (int i = 0; i < NumberOfPoints; i++)
-    {
-        FVector PointLocation = SplineComponent->GetLocationAtDistanceAlongSpline(i * 100, ESplineCoordinateSpace::World);
-        IntervalSpline->AddSplinePointAtIndex(PointLocation, i, ESplineCoordinateSpace::World);
-    }
+    
 }
 
 void AG_RaceTrajectorySpline::Tick(float DeltaTime)
