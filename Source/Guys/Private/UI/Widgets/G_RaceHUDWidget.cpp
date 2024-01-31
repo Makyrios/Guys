@@ -4,7 +4,6 @@
 #include "UI/Widgets/G_InventoryWidget.h"
 #include <Components/TextBlock.h>
 #include <Kismet/KismetStringLibrary.h>
-#include "Components/Image.h"
 #include <GameModes/G_RaceGameMode.h>
 #include <Kismet/GameplayStatics.h>
 #include <Actors/G_RaceTrajectorySpline.h>
@@ -16,24 +15,6 @@ void UG_RaceHUDWidget::SetTimeText(float RemainingSeconds)
     {
         Timer->SetTimerText(RemainingSeconds);
     }
-}
-
-void UG_RaceHUDWidget::SetFirstAbilityImage(FGameplayTag AbilityTag)
-{
-    /*UImage* AbilityImage = GetAbilityImage(AbilityTag);
-    if (AbilityImage)
-    {
-        InventoryWidget->FirstAbilityImage->SetBrushFromTexture(AbilityImage->Brush.GetResourceObject());
-    }*/
-}
-
-void UG_RaceHUDWidget::SetSecondAbilityImage(FGameplayTag AbilityTag)
-{
-    /*UImage* AbilityImage = GetAbilityImage(AbilityTag);
-    if (AbilityImage)
-    {
-        InventoryWidget->SecondAbilityImage->SetBrushFromTexture(AbilityImage->Brush.GetResourceObject());
-    }*/
 }
 
 void UG_RaceHUDWidget::NativePreConstruct()
@@ -50,15 +31,6 @@ void UG_RaceHUDWidget::NativeConstruct()
     TrajectorySpline = Cast<AG_RaceTrajectorySpline>(UGameplayStatics::GetActorOfClass(GetWorld(), AG_RaceTrajectorySpline::StaticClass()));
 }
 
-UImage* UG_RaceHUDWidget::GetAbilityImage(FGameplayTag AbilityTag)
-{
-    /* TODO - Get ability image from ability tag
-    switch (AbilityTag)
-    {
-    */
-    return nullptr;
-}
-
 void UG_RaceHUDWidget::SetPlayerPosition(int32 Position)
 {
     check(PlaceText);
@@ -68,4 +40,11 @@ void UG_RaceHUDWidget::SetPlayerPosition(int32 Position)
     PlayerPosition = Position;
     FText PosText = FText::AsNumber(Position);
     PlaceText->SetText(PosText);
+}
+
+void UG_RaceHUDWidget::UpdateAbilityUI(FGameplayTagContainer AbilityTag)
+{
+    if (!InventoryWidget) return;
+
+    InventoryWidget->UpdateAbilityUI(AbilityTag);
 }

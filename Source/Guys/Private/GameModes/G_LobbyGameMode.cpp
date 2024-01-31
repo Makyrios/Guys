@@ -10,6 +10,8 @@
 void AG_LobbyGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
     Super::InitGame(MapName, Options, ErrorMessage);
+
+    LobbyGameState = LobbyGameState.IsValid() ? LobbyGameState : GetGameState<AG_LobbyGameState>();
 }
 
 void AG_LobbyGameMode::PostLogin(APlayerController* NewPlayer)
@@ -24,6 +26,8 @@ void AG_LobbyGameMode::PostLogin(APlayerController* NewPlayer)
         UMultiplayerSubsystem* Subsystem = GameInstance->GetSubsystem<UMultiplayerSubsystem>();
         check(Subsystem);
 
+        UpdatePlayers(NumberOfPlayers, Subsystem->DesiredNumPublicConnections);
+
         if (NumberOfPlayers == Subsystem->DesiredNumPublicConnections)
         {
             StartChangeMapTimer(Subsystem);
@@ -32,25 +36,46 @@ void AG_LobbyGameMode::PostLogin(APlayerController* NewPlayer)
     }
 }
 
-void AG_LobbyGameMode::StartChangeMapTimer(UMultiplayerSubsystem* Subsystem)
-{
-    FTimerHandle ChangeMapHandle;
-
-    GetWorld()->GetTimerManager().SetTimer(
-        ChangeMapHandle, [&]() { ChangeMap(Subsystem); }, ChangeMapDelay, false);
-}
-
 void AG_LobbyGameMode::OnMinPlayersReached()
 {
-    if (AG_LobbyGameState* LobbyGameState = GetGameState<AG_LobbyGameState>())
+    LobbyGameState = LobbyGameState.IsValid() ? LobbyGameState : GetGameState<AG_LobbyGameState>();
+    if (LobbyGameState.IsValid())
     {
         LobbyGameState->SetMinPlayersReached(true);
     }
 }
 
+void AG_LobbyGameMode::UpdatePlayers(int ConnectedPlayers, int DesiredPlayersNum)
+{
+    LobbyGameState = LobbyGameState.IsValid() ? LobbyGameState : GetGameState<AG_LobbyGameState>();
+    if (LobbyGameState.IsValid())
+    {
+        LobbyGameState->OnPlayersUpdate.Broadcast(ConnectedPlayers, DesiredPlayersNum);
+    }
+}
+
+void AG_LobbyGameMode::StartChangeMapTimer(UMultiplayerSubsystem* Subsystem)
+{
+    if (!Subsystem)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Subsystem is null"));
+        return;
+    }
+
+    FTimerHandle ChangeMapHandle;
+    FTimerDelegate ChangeMapDelegate = FTimerDelegate::CreateUObject(this, &AG_LobbyGameMode::ChangeMap, Subsystem);
+
+    GetWorld()->GetTimerManager().SetTimer(
+        ChangeMapHandle, ChangeMapDelegate, ChangeMapDelay, false);
+}
+
 void AG_LobbyGameMode::ChangeMap(UMultiplayerSubsystem* Subsystem)
 {
-    if (!Subsystem) return;
+    if (!Subsystem)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Subsystem is null in changemap"));
+        return;
+    }
     UWorld* World = GetWorld();
     if (World)
     {

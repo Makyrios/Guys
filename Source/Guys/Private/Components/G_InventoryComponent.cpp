@@ -1,5 +1,6 @@
 #include "Components/G_InventoryComponent.h"
 #include "Abilities/GameplayAbility.h"
+#include <Player/G_PlayerController.h>
 
 UG_InventoryComponent::UG_InventoryComponent()
 {
@@ -10,6 +11,12 @@ UG_InventoryComponent::UG_InventoryComponent()
 void UG_InventoryComponent::AddAbility(TSubclassOf<UGameplayAbility> NewAbility)
 {
 	OwnedAbilities.Add(NewAbility);
+
+	AG_PlayerController* PlayerController = GetOwner()->GetInstigatorController<AG_PlayerController>();
+    if (PlayerController)
+    {
+        PlayerController->UpdateAbilityUI(OwnedAbilities);
+	}
 
 	//TWeakObjectPtr<UGameplayAbility> Ability = OwnedAbilities[OwnedAbilities.Find(NewAbility)];
 

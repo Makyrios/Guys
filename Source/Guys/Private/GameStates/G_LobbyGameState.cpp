@@ -35,3 +35,8 @@ void AG_LobbyGameState::UpdateTimer(float DeltaTime)
     float TimeLimit = LobbyGameMode->GetChangeMapDelay();
     OnTimerUpdate.Broadcast(TimeLimit - Timer);
 }
+
+void AG_LobbyGameState::UpdatePlayers(int ConnectedPlayers, int DesiredPlayersNum)
+{
+    OnPlayersUpdate.Broadcast(ConnectedPlayers, DesiredPlayersNum);
+}

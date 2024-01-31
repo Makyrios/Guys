@@ -174,6 +174,25 @@ void AG_PlayerController::ExitToMenu()
     UGameplayStatics::OpenLevel(this, GameInstance->GetMenuMapName());
 }
 
+void AG_PlayerController::UpdateAbilityUI(FGameplayTagContainer AbilityTags)
+{
+    if (!IsLocalController())
+    {
+        Client_UpdateAbilityUI(AbilityTags);
+        return;
+    }
+
+    G_HUD = (!G_HUD) ? GetHUD<AG_HUD>() : G_HUD;
+    if (!G_HUD) return;
+
+    G_HUD->UpdateAbilityUI(AbilityTags);
+}
+
+void AG_PlayerController::Client_UpdateAbilityUI_Implementation(FGameplayTagContainer AbilityTags)
+{
+    UpdateAbilityUI(AbilityTags);
+}
+
 void AG_PlayerController::SetSpectatorHUD(bool bEnableSpectator)
 {
     if (bEnableSpectator)

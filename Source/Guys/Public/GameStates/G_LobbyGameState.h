@@ -7,6 +7,8 @@
 #include "G_LobbyGameState.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnTimerUpdate, float);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnPlayersUpdate, int, int);
+
 
 class AG_LobbyGameMode;
 
@@ -27,8 +29,11 @@ protected:
 private:
     void UpdateTimer(float DeltaTime);
 
+    void UpdatePlayers(int ConnectedPlayers, int DesiredPlayersNum);
+
 public:
     FOnTimerUpdate OnTimerUpdate;
+    FOnPlayersUpdate OnPlayersUpdate;
 
 private:
     UPROPERTY()

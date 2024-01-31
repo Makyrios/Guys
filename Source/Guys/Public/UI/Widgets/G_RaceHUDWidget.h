@@ -12,6 +12,7 @@ class UTextBlock;
 class UImage;
 class AG_RaceTrajectorySpline;
 class UG_TimerWidget;
+class UDataTable;
 
 UCLASS()
 class GUYS_API UG_RaceHUDWidget : public UUserWidget
@@ -21,18 +22,14 @@ class GUYS_API UG_RaceHUDWidget : public UUserWidget
 public:
     void SetTimeText(float RemainingSeconds);
 
-    void SetFirstAbilityImage(FGameplayTag AbilityTag);
-    void SetSecondAbilityImage(FGameplayTag AbilityTag);
-
     FORCEINLINE int32 GetPlayerPosition() const { return PlayerPosition; }
     void SetPlayerPosition(int32 Position);
+
+    void UpdateAbilityUI(FGameplayTagContainer AbilityTags);
 
 protected:
     virtual void NativePreConstruct() override;
     virtual void NativeConstruct() override;
-
-private:
-    UImage* GetAbilityImage(FGameplayTag AbilityTag);
 
 public:
     UPROPERTY(BlueprintReadWrite, meta = (BindWidget))

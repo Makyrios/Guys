@@ -8,6 +8,7 @@
 
 class UG_TimerWidget;
 class UVerticalBox;
+class UTextBlock;
 
 UCLASS()
 class GUYS_API UG_LobbyHUDWidget : public UUserWidget
@@ -17,10 +18,15 @@ class GUYS_API UG_LobbyHUDWidget : public UUserWidget
 public:
     void SetTimeRemaining(float RemainingSeconds);
 
+    void SetPlayersText(int ConnectedPlayers, int DesiredPlayersNum);
+
 private:
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UVerticalBox> VerticalBox; 
 
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UG_TimerWidget> Timer;
+
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UTextBlock> PlayersText;
 };

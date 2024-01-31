@@ -16,6 +16,8 @@ class GUYS_API AG_LobbyHUD : public AG_HUD
 public:
     void SetTimeRemaining(float RemainingSeconds);
 
+    void SetPlayersText(int ConnectedPlayers, int DesiredPlayersNum);
+
 protected:
     virtual void PostInitializeComponents() override;
 

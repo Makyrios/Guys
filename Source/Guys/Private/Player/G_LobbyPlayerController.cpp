@@ -12,6 +12,7 @@ void AG_LobbyPlayerController::BeginPlay()
     if (LobbyGameState)
     {
         LobbyGameState->OnTimerUpdate.AddUObject(this, &AG_LobbyPlayerController::OnTimerUpdate);
+        LobbyGameState->OnPlayersUpdate.AddUObject(this, &AG_LobbyPlayerController::OnPlayersUpdate);
     }
 }
 
@@ -32,4 +33,23 @@ void AG_LobbyPlayerController::OnTimerUpdate(float RemainingSeconds)
 void AG_LobbyPlayerController::Client_SetTimeRemaining_Implementation(float RemainingSeconds)
 {
     OnTimerUpdate(RemainingSeconds);
+}
+
+void AG_LobbyPlayerController::OnPlayersUpdate(int ConnectedPlayers, int DesiredPlayersNum)
+{
+    if (!IsLocalController())
+    {
+        Client_SetPlayersText(ConnectedPlayers, DesiredPlayersNum);
+        return;
+    }
+
+    LobbyHUD = (!LobbyHUD) ? GetHUD<AG_LobbyHUD>() : LobbyHUD;
+    if (!LobbyHUD) return;
+
+    LobbyHUD->SetPlayersText(ConnectedPlayers, DesiredPlayersNum);
+}
+
+void AG_LobbyPlayerController::Client_SetPlayersText_Implementation(int ConnectedPlayers, int DesiredPlayersNum)
+{
+    OnPlayersUpdate(ConnectedPlayers, DesiredPlayersNum);
 }

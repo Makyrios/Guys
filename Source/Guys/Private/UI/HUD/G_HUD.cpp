@@ -6,6 +6,7 @@
 #include <UI/Widgets/G_StartGameWidget.h>
 #include <Player/G_PlayerController.h>
 #include <Kismet/GameplayStatics.h>
+#include "UI/Widgets/G_RaceHUDWidget.h"
 
 void AG_HUD::PostInitializeComponents()
 {
@@ -92,43 +93,22 @@ void AG_HUD::ShowStartGameWidget(float StartDelayTime)
 
     StartGameWidget = CreateWidget<UG_StartGameWidget>(GetOwningPlayerController(), StartGameWidgetClass);
 
-    if (HUDWidget)
-    {
-        HUDWidget->SetVisibility(ESlateVisibility::Hidden);
-    }
-
     if (StartGameWidget)
     {
         StartGameWidget->InitializeWidget(StartDelayTime);
         StartGameWidget->AddToViewport();
     }
+
+    if (HUDWidget)
+    {
+        HUDWidget->SetVisibility(ESlateVisibility::Hidden);
+    }
 }
 
-void AG_HUD::ShowWonWidget()
+void AG_HUD::UpdateAbilityUI(FGameplayTagContainer AbilityTags)
 {
-    /*
-    UUserWidget* WonWidget = AddWidget<UUserWidget>(WonWidgetClass);
-    */
-}
-
-void AG_HUD::ShowLoseWidget()
-{
-    /*
-    UUserWidget* WonWidget = AddWidget<UUserWidget>(LoseWidgetClass);
-    */
-}
-
-void AG_HUD::UpdateInventoryInfo()
-{
-    /*if (!HUDWidget) return;
-
-    HUDWidget->UpdateInventoryInfo();*/
-}
-
-void AG_HUD::UpdateTableWidget()
-{
-    /*if (!TableStatsWidget) return;
-
-    const int32 NumberOfPlayers = UGameplayStatics::GetNumPlayerStates(this);
-    TableStatsWidget->SetPlayerNumber(NumberOfPlayers);*/
+    if (UG_RaceHUDWidget* RaceHUDWidget = Cast<UG_RaceHUDWidget>(HUDWidget))
+    {
+        RaceHUDWidget->UpdateAbilityUI(AbilityTags);
+    }
 }

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "G_PlayerController.generated.h"
+#include <GameplayTagContainer.h>
 
 class AG_Character;
 class AG_HUD;
@@ -25,6 +26,8 @@ public:
     void TogglePause();
     void ToggleStats();
     void ExitToMenu();
+
+    void UpdateAbilityUI(FGameplayTagContainer AbilityTags);
 
     FORCEINLINE FName GetCurrentMatchState() const { return CurrentMatchState; }
     void SetCurrentMatchState(FName InMatchState);
@@ -54,6 +57,9 @@ private:
 
     UFUNCTION(Client, Reliable)
     void Client_SetKeyboardInput(bool bEnable);
+
+    UFUNCTION(Client, Reliable)
+    void Client_UpdateAbilityUI(FGameplayTagContainer AbilityTags);
 
     UFUNCTION()
     void OnRep_CurrentMatchState();

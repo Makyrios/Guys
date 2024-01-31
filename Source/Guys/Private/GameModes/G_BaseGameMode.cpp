@@ -156,7 +156,8 @@ void AG_BaseGameMode::CreateStartGameWidget(APlayerController* NewPlayer)
     {
         if (!IsGameStarted())
         {
-            const float CurrentDelayBeforeStart = DelayBeforeStart - GameState->GetServerWorldTimeSeconds();
+            if (!GameState) return;
+            float CurrentDelayBeforeStart = DelayBeforeStart;
             CustomPlayerController->CreateStartGameWidget(CurrentDelayBeforeStart);
         }
     }

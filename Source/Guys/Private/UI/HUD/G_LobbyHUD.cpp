@@ -25,3 +25,11 @@ void AG_LobbyHUD::SetTimeRemaining(float RemainingSeconds)
         LobbyHUDWidget->SetTimeRemaining(RemainingSeconds);
     }
 }
+
+void AG_LobbyHUD::SetPlayersText(int ConnectedPlayers, int DesiredPlayersNum)
+{
+    if (LobbyHUDWidget)
+    {
+        LobbyHUDWidget->SetPlayersText(ConnectedPlayers, DesiredPlayersNum);
+    }
+}

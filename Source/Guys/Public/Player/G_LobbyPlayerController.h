@@ -21,8 +21,13 @@ protected:
 private:
     void OnTimerUpdate(float RemainingSeconds);
 
+    void OnPlayersUpdate(int ConnectedPlayers, int DesiredPlayersNum);
+
     UFUNCTION(Client, Unreliable)
     void Client_SetTimeRemaining(float RemainingSeconds);
+
+    UFUNCTION(Client, Unreliable)
+    void Client_SetPlayersText(int ConnectedPlayers, int DesiredPlayersNum);
 
     UPROPERTY()
     TObjectPtr<AG_LobbyHUD> LobbyHUD;
