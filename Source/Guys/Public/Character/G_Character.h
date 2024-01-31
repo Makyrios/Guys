@@ -58,6 +58,10 @@ protected:
 
     void Look(const FInputActionValue& Value);
 
+    void Use(const FInputActionValue& Value);
+
+    void Select(const FInputActionValue& Value);
+
     void Interact(const FInputActionValue& Value);
 
     void TogglePause();
@@ -121,4 +125,10 @@ private:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Input", meta = (AllowPrivateAccess = "true"))
     TObjectPtr<UInputAction> StatsAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Input", meta = (AllowPrivateAccess = "true"))
+    TObjectPtr<UInputAction> UseAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "G|Input", meta = (AllowPrivateAccess = "true"))
+    TObjectPtr<UInputAction> SelectAction;
 };

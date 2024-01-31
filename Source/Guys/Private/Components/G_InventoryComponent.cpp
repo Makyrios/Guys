@@ -1,23 +1,51 @@
 #include "Components/G_InventoryComponent.h"
 #include "Abilities/GameplayAbility.h"
+#include <Player/G_PlayerController.h>
+#include "AbilitySystem/G_AbilitySystemComponent.h"
+#include <Player/G_PlayerState.h>
+#include "Net/UnrealNetwork.h"
 
 UG_InventoryComponent::UG_InventoryComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
+	SetIsReplicated(true);
+}
 
+void UG_InventoryComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UG_InventoryComponent, OwnedAbilities);
 }
 
 void UG_InventoryComponent::AddAbility(TSubclassOf<UGameplayAbility> NewAbility)
 {
 	if (OwnedAbilities.Num() < MaxAbilities)
 	{
-		OwnedAbilities.Add(NewAbility);
+		AActor* Owner = GetOwner();
+		if (Owner->HasAuthority())
+		{
+			AG_PlayerController* OwnerController = Cast<AG_PlayerController>(Owner->GetOwner());
+			AG_PlayerState* OwnerState = OwnerController->GetPlayerState<AG_PlayerState>();
+			FGameplayAbilitySpec AbilitySpec(NewAbility);
+			OwnerState->GetAbilitySystemComponent()->GiveAbility(AbilitySpec);
+			OwnedAbilities.Add(NewAbility);
+		}
 	}
 }
 
 void UG_InventoryComponent::RemoveAbility(const int32& AbilitySlot)
 {
 	OwnedAbilities.RemoveAt(AbilitySlot);
+	if (OwnedAbilities.Num() > 0)
+	{
+		CurrentAbilitySlot = FMath::Clamp(CurrentAbilitySlot, 0, OwnedAbilities.Num() - 1);
+	}
+	else
+	{
+		CurrentAbilitySlot = 0;
+	}
+
 }
 
 void UG_InventoryComponent::RemoveAllAbilities()
@@ -42,7 +70,7 @@ bool UG_InventoryComponent::CanCollectAbilities()
 
 bool UG_InventoryComponent::SelectAbility(const int32& CandidateAbilitySlot)
 {
-	if ((OwnedAbilities.Num() > CandidateAbilitySlot) && CurrentAbilitySlot != CandidateAbilitySlot)
+	if ((MaxAbilities > CandidateAbilitySlot) && (OwnedAbilities.Num() > CandidateAbilitySlot))
 	{
 
 		CurrentAbilitySlot = CandidateAbilitySlot;

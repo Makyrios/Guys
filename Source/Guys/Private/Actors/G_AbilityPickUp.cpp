@@ -36,8 +36,7 @@ void AG_AbilityPickUp::SetPickUpStatus(bool bStatus)
 		else
 		{
 			PickUpArea->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-			PickUpArea->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
-			PickUpArea->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
+			PickUpArea->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 		}
 	}
 }
@@ -66,8 +65,12 @@ void AG_AbilityPickUp::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 
 	if (OverlapCharacter)
 	{
-		OverlapCharacter->InventoryComponent.Get()->AddAbility(RandomChooseAbilityFromPool());
-		WasCollected();
+		bool bCanPickUp = OverlapCharacter->InventoryComponent.Get()->CanCollectAbilities();
+		if (bCanPickUp)
+		{
+			OverlapCharacter->InventoryComponent.Get()->AddAbility(RandomChooseAbilityFromPool());
+			WasCollected();
+		}
 	}
 }
 

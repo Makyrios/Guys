@@ -18,6 +18,7 @@
 #include "Components/G_PhysicalAnimComponent.h"
 #include "Components/G_InventoryComponent.h"
 #include <Interfaces/G_Interactable.h>
+#include <Kismet/GameplayStatics.h>
 
 AG_Character::AG_Character()
 {
@@ -78,6 +79,8 @@ void AG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputC
         EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Started, this, &AG_Character::TogglePause);
         EnhancedInputComponent->BindAction(StatsAction, ETriggerEvent::Started, this, &AG_Character::ToggleStats);
         EnhancedInputComponent->BindAction(StatsAction, ETriggerEvent::Completed, this, &AG_Character::ToggleStats);
+        EnhancedInputComponent->BindAction(UseAction, ETriggerEvent::Triggered, this, &AG_Character::Use);
+        EnhancedInputComponent->BindAction(SelectAction, ETriggerEvent::Triggered, this, &AG_Character::Select);
     }
 }
 
@@ -108,6 +111,36 @@ void AG_Character::Look(const FInputActionValue& Value)
         AddControllerYawInput(LookAxisVector.X);
         AddControllerPitchInput(LookAxisVector.Y);
     }
+}
+
+void AG_Character::Use(const FInputActionValue& Value)
+{
+    if (!InventoryComponent)
+    {
+        return;
+    }
+
+    UG_InventoryComponent* Inventory = InventoryComponent.Get();
+    TSubclassOf<UGameplayAbility> AbilityToUse = Inventory->GetCurrentAbility();
+
+    AG_PlayerState* PState = Cast<AG_PlayerState>(GetPlayerState());
+
+    if (PState && AbilityToUse)
+    {
+        bool bSuccess = PState->GetAbilitySystemComponent()->TryActivateAbilityByClass(AbilityToUse, true);
+        Inventory->RemoveAbility(Inventory->CurrentAbilitySlot);
+    }
+}
+
+void AG_Character::Select(const FInputActionValue& Value)
+{
+    if (!InventoryComponent)
+    {
+        return;
+    }
+    UG_InventoryComponent* Inventory = InventoryComponent.Get();
+    float Slot = Value.Get<float>() - 1.0f;
+    Inventory->SelectAbility(Slot);
 }
 
 void AG_Character::Interact(const FInputActionValue& Value)
