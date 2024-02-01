@@ -7,19 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="27d253a3-bb1c-4019-8599-1a7f6654a7f7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Guys.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Guys.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/BP_Character.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/BP_Character.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Framework/GameModes/BP_LobbyGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Framework/GameModes/BP_LobbyGameMode.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Framework/GameModes/BP_RaceGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Framework/GameModes/BP_RaceGameMode.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/UI/Widgets/Menu/WBP_BaseMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/UI/Widgets/Menu/WBP_BaseMenu.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/MainMenuMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/MainMenuMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Private/Character/G_Character.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Private/Character/G_Character.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Private/GameModes/G_BaseGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Private/GameModes/G_BaseGameMode.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Private/Player/G_PlayerState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Private/Player/G_PlayerState.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Public/Character/G_Character.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Public/Character/G_Character.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Guys/Public/GameModes/G_BaseGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Public/GameModes/G_BaseGameMode.h" afterDir="false" />
-    </list>
+    <list default="true" id="27d253a3-bb1c-4019-8599-1a7f6654a7f7" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -28,14 +16,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -49,14 +32,13 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Uproject.Guys.executor": "Run",
-    "git-widget-placeholder": "CharacterCustomisation",
+    "git-widget-placeholder": "Character",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "SpellingScopeSettingsId",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -140,16 +122,12 @@
       <updated>1706527981475</updated>
       <workItem from="1706527983718" duration="995000" />
       <workItem from="1706529351780" duration="466000" />
-      <workItem from="1706625800492" duration="8056000" />
-      <workItem from="1706641594190" duration="2576000" />
-      <workItem from="1706689764800" duration="19223000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>

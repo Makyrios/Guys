@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
+#include <GameplayTagContainer.h>
 #include "G_HUD.generated.h"
 
 class UG_RaceHUDWidget;

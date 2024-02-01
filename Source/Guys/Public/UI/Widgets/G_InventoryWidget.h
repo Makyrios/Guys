@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include <GameplayTagContainer.h>
+#include "Engine/DataTable.h"
 #include "G_InventoryWidget.generated.h"
 
 class UCanvasPanel;
