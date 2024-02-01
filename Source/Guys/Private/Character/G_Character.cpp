@@ -60,6 +60,25 @@ AG_Character::AG_Character()
     Hat->SetupAttachment(GetMesh(), TEXT("Hat_Socket_0"));
 }
 
+
+void AG_Character::PlayPunchSound(const FVector& SoundPosition)
+{   
+    const int32 randChosenSoundIdx = FMath::RandRange(0, SoundsOnPush.Num()-1);
+    if(USoundBase* SoundToPlay = SoundsOnPush[randChosenSoundIdx])
+    {
+        UGameplayStatics::PlaySoundAtLocation(GetWorld(),SoundToPlay,SoundPosition);
+    }
+}
+
+void AG_Character::PlayFallingSound(const FVector& SoundPosition)
+{
+    const int32 randChosenSoundIdx = FMath::RandRange(0, SoundsOnFalling.Num()-1);
+    if(USoundBase* SoundToPlay = SoundsOnFalling[randChosenSoundIdx])
+    {
+        UGameplayStatics::PlaySoundAtLocation(GetWorld(),SoundToPlay,SoundPosition);
+    }
+}
+
 void AG_Character::BeginPlay()
 {
     Super::BeginPlay();
@@ -208,6 +227,17 @@ void AG_Character::ToggleStats()
     G_PlayerController->ToggleStats();
 }
 
+void AG_Character::UnPossessed()
+{
+    Super::UnPossessed();
+    /*
+    if (const AG_BaseGameMode* GameMode = Cast<AG_BaseGameMode>(GetWorld()->GetAuthGameMode()))
+    {
+        GameMode->OnPlayerFall(this->GetActorLocation());
+    }
+    */
+}
+
 void AG_Character::Multicast_Interact_Implementation(AActor* Actor, FVector Direction)
 {
     if (IG_Interactable* OtherActor = Cast<IG_Interactable>(Actor))
@@ -253,7 +283,7 @@ void AG_Character::OnCharacterDie()
         {
             AController* RefController = GetController();
             GameMode->RespawnPawn(Controller);
-        }
+        }        
     }
 }
 
@@ -263,6 +293,12 @@ void AG_Character::ReactOnPush(FVector PushDirection)
     {
         PhysicalAnimComponent->TogglePhysicalAnimation(0.5f);
         this->LaunchCharacter(PushDirection * 1000, false, false);
+        /*
+        if (const AG_BaseGameMode* GameMode = Cast<AG_BaseGameMode>(GetWorld()->GetAuthGameMode()))
+        {
+            GameMode->OnPlayerPunch(GetActorLocation());
+        }
+        */
     }
 }
 
