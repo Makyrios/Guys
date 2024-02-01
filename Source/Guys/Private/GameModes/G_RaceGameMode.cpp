@@ -115,9 +115,11 @@ APawn* AG_RaceGameMode::GetSpawnedPawn(APawn* OldPawn)
     if (LastCheckpoint)
     {
         APawn* SpawnedPawn = SpawnPawnAtLocation(LastCheckpoint->GetRandomSpawnPoint(), LastCheckpoint->GetActorRotation(), OldPawn);
-        while (!SpawnedPawn)
+        int Tries = 0;
+        while (!SpawnedPawn && Tries <= 5)
         {
             SpawnedPawn = SpawnPawnAtLocation(LastCheckpoint->GetRandomSpawnPoint(), LastCheckpoint->GetActorRotation(), OldPawn);
+            Tries += 1;
         }
         return SpawnedPawn;
     }
@@ -128,11 +130,13 @@ APawn* AG_RaceGameMode::GetSpawnedPawn(APawn* OldPawn)
         if (PlayerStart)
         {
             APawn* SpawnedPawn = SpawnPawnAtLocation(PlayerStart->GetActorLocation(), PlayerStart->GetActorRotation(), OldPawn);
-            while (SpawnedPawn)
+            int Tries = 0;
+            while (!SpawnedPawn && Tries <= 5)
             {
                 PlayerStart = ChoosePlayerStart(OldPawn->GetController());
                 if (!PlayerStart) continue;
                 SpawnedPawn = SpawnPawnAtLocation(PlayerStart->GetActorLocation(), PlayerStart->GetActorRotation(), OldPawn);
+                Tries += 1;
             }
             return SpawnedPawn;
         }
