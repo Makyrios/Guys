@@ -39,6 +39,9 @@ public:
     FOnPlayerFinishRace OnPlayerFinishRace;
     FOnTimerUpdate OnTimerUpdate;
 
+    UPROPERTY(BlueprintReadOnly)
+    TMap<AActor*, float> PlayerProgressesMap;
+
 private:
     UPROPERTY()
     const AG_RaceGameMode* RaceGameMode;
@@ -50,6 +53,4 @@ private:
     UPROPERTY(Replicated)
     float Timer = 0.f;
 
-    UPROPERTY()
-    TMap<AActor*, float> PlayerProgressesMap;
 };
