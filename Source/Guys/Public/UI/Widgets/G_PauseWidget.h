@@ -29,18 +29,12 @@ private:
     UFUNCTION()
     void OnExitButtonClicked();
 
-    UFUNCTION()
-    void OnVolumeSliderValueChanged(float Value);
-
 public:
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UButton> PlayButton;
 
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UButton> ExitButton;
-
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<USlider> VolumeSlider;
 
 private:
     UPROPERTY()

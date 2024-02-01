@@ -244,6 +244,11 @@ void AG_Character::OnCharacterDie()
 {
     if (UWorld* World = GetWorld())
     {
+        G_PlayerController = G_PlayerController.IsValid() ? G_PlayerController : Cast<AG_PlayerController>(Controller);
+        if (G_PlayerController.IsValid())
+        {
+            G_PlayerController->UpdateAbilityUI(FGameplayTagContainer());
+        }
         if (AG_BaseGameMode* GameMode = Cast<AG_BaseGameMode>(World->GetAuthGameMode()))
         {
             AController* RefController = GetController();

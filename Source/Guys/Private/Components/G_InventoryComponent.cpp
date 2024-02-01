@@ -68,9 +68,9 @@ void UG_InventoryComponent::RemoveAbility(const int32& AbilitySlot)
     }
     else
     {
-		OwnedAbilities.RemoveAt(0);
-		UpdateAbilityUI();
-	}
+        OwnedAbilities.RemoveAt(0);
+        UpdateAbilityUI();
+    }
 }
 
 void UG_InventoryComponent::RemoveAllAbilities()
@@ -101,20 +101,18 @@ bool UG_InventoryComponent::SelectAbility()
 
     if (!GetOwner()->HasAuthority())
     {
-		Server_SelectAbility();
-	}
+        Server_SelectAbility();
+    }
     else
     {
         if (OwnedAbilities.Num() == 2)
         {
-		    OwnedAbilities.Swap(0, 1);
-		    UpdateAbilityUI();
+            OwnedAbilities.Swap(0, 1);
+            UpdateAbilityUI();
         }
-	
     }
     return true;
 }
-
 
 void UG_InventoryComponent::Server_SelectAbility_Implementation()
 {

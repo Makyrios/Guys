@@ -12,7 +12,6 @@ class GUYS_API UG_InventoryComponent : public UActorComponent
     GENERATED_BODY()
 
 public:
-    // Sets default values for this component's properties
     UG_InventoryComponent();
 
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -42,9 +41,9 @@ public:
 
     TArray<TSubclassOf<UGameplayAbility>> GetOwnedAbilities() { return OwnedAbilities; }
 
-private:
     void UpdateAbilityUI();
 
+private:
     UFUNCTION(Server, Reliable)
     void Server_RemoveAbility();
 
