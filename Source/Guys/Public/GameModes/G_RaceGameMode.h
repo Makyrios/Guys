@@ -29,7 +29,7 @@ protected:
     virtual void HandleLoginBeforeGameStart(APlayerController* NewPlayer) override;
     virtual void HandleLoginAfterGameStart(APlayerController* NewPlayer) override;
     virtual void OnAllPlayersLoaded() override;
-
+    
 private:
     UFUNCTION()
     void OnPlayerFinishRace(AG_RacePlayerController* RaceController, int32 Place);

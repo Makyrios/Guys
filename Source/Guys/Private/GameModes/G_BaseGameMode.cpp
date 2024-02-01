@@ -122,8 +122,13 @@ void AG_BaseGameMode::SpawnNewPawn(APlayerController* NewPlayer)
     if (!NewPlayer) return;
     APawn* NewPawn = GetWorld()->SpawnActor<APawn>(DefaultPawnClass);
     NewPlayer->Possess(NewPawn);
+<<<<<<< Updated upstream
     MovePawnToRandomPlayerStart(NewPawn);    
     UpdatePlayerSkins();
+=======
+    MovePawnToRandomPlayerStart(NewPawn);
+    UpdatePlayerSkins(NewPlayer);
+>>>>>>> Stashed changes
 }
 
 void AG_BaseGameMode::MovePawnToRandomPlayerStart(APawn* PawnToMove)
@@ -268,12 +273,44 @@ void AG_BaseGameMode::RestartGame()
     World->ServerTravel(MapName);
 }
 
-void AG_BaseGameMode::UpdatePlayerSkins() const
+void AG_BaseGameMode::UpdatePlayerSkins(APlayerController* NewPlayer) const
 {
     const int32 NumberOfPlayers = UGameplayStatics::GetNumPlayerControllers(GetWorld());
+    AG_Character* Character = Cast<AG_Character>(NewPlayer->GetPawn());
+    if(!Character)
+    {
+        return;
+    }
+    int32 ChosenHatIdx = Character->GetChosenHatIdx();
+    int32 ChosenSkinIdx = Character->GetChosenSkinIdx();
+    Character->SetHatByIndex(ChosenHatIdx);
+    Character->SetSkinByIndex(ChosenSkinIdx);
+
+    /*
     for (int32 i = 0; i < NumberOfPlayers; i++)
     {
         AG_Character* Character = Cast<AG_Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(),i));
         Character->UpdateSkins();
+    }
+    */
+}
+
+void AG_BaseGameMode::OnPlayerPunch(const FVector& PunchLocation) const
+{
+    const int32 NumberOfPlayers = UGameplayStatics::GetNumPlayerControllers(GetWorld());
+    for (int32 i = 0; i < NumberOfPlayers; i++)
+    {
+        AG_Character* Character = Cast<AG_Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), i));
+        Character->PlayPunchSound(PunchLocation);
+    }
+}
+
+void AG_BaseGameMode::OnPlayerFall(const FVector& FallLocation) const
+{
+    const int32 NumberOfPlayers = UGameplayStatics::GetNumPlayerControllers(GetWorld());
+    for (int32 i = 0; i < NumberOfPlayers; i++)
+    {
+        AG_Character* Character = Cast<AG_Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), i));
+        Character->PlayFallingSound(FallLocation);
     }
 }

@@ -9,6 +9,7 @@
   <component name="ChangeListManager">
     <list default="true" id="27d253a3-bb1c-4019-8599-1a7f6654a7f7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Guys.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Guys.dir/.idea/workspace.xml" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/BP_Character.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/BP_Character.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/Framework/GameModes/BP_LobbyGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Framework/GameModes/BP_LobbyGameMode.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/Framework/GameModes/BP_RaceGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Framework/GameModes/BP_RaceGameMode.uasset" afterDir="false" />
@@ -19,6 +20,19 @@
       <change beforePath="$PROJECT_DIR$/Source/Guys/Private/Player/G_PlayerState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Private/Player/G_PlayerState.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Guys/Public/Character/G_Character.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Public/Character/G_Character.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Guys/Public/GameModes/G_BaseGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Public/GameModes/G_BaseGameMode.h" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Sounds/Classes/SC_Interface.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Sounds/Classes/SC_Interface.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Sounds/Classes/SC_Master.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Sounds/Classes/SC_Master.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Sounds/Classes/SC_Music.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Sounds/Classes/SC_Music.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Sounds/SoundClassess/SC_Main.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Sounds/SoundClassess/SC_Main.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/BP_Character.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/BP_Character.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Obstacles/BP_Obstacle_Spinner.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Obstacles/BP_Obstacle_Spinner.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Guys/Private/Character/G_Character.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Private/Character/G_Character.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Guys/Private/GameModes/G_BaseGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Private/GameModes/G_BaseGameMode.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Guys/Public/Character/G_Character.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Public/Character/G_Character.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Guys/Public/GameModes/G_BaseGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Public/GameModes/G_BaseGameMode.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Guys/Public/GameModes/G_RaceGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Guys/Public/GameModes/G_RaceGameMode.h" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +63,11 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Uproject.Guys.executor": "Run",
+<<<<<<< Updated upstream
     "git-widget-placeholder": "CharacterCustomisation",
+=======
+    "git-widget-placeholder": "develop",
+>>>>>>> Stashed changes
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -140,9 +158,13 @@
       <updated>1706527981475</updated>
       <workItem from="1706527983718" duration="995000" />
       <workItem from="1706529351780" duration="466000" />
+<<<<<<< Updated upstream
       <workItem from="1706625800492" duration="8056000" />
       <workItem from="1706641594190" duration="2576000" />
       <workItem from="1706689764800" duration="19223000" />
+=======
+      <workItem from="1706786434655" duration="8747000" />
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>

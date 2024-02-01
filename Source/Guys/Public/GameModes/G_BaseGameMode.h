@@ -18,7 +18,11 @@ public:
 
     UFUNCTION()
     virtual void RespawnPawn(AController* Controller);
-
+    
+    UFUNCTION()
+    void OnPlayerPunch(const FVector& PunchLocation) const;
+    UFUNCTION()
+    void OnPlayerFall(const FVector& FallLocation) const;
 protected:
     virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
     virtual bool IsGameStarted();
@@ -50,7 +54,7 @@ private:
     void RestartGame();
     bool IsMatchStarted();
     bool IsMatchPreparing();
-    void UpdatePlayerSkins() const;
+    void UpdatePlayerSkins(APlayerController* NewPlayer) const;
 
 public:
     FOnChangeMatchState OnChangeMatchState;
