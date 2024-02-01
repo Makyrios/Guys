@@ -57,10 +57,6 @@ bool UMenu::Initialize()
 	{
 		HostButton->OnClicked.AddDynamic(this, &ThisClass::HostButtonClicked);
 	}
-	if (JoinButton)
-	{
-		JoinButton->OnClicked.AddDynamic(this, &ThisClass::JoinButtonClicked);
-	}
 
 	if (MultiplayerSubsystem)
 	{
@@ -118,10 +114,6 @@ void UMenu::OnFindSessions(const TArray<FOnlineSessionSearchResult>& SessionResu
 			return;
 		}
 	}
-	if (!bWasSuccessful || SessionResults.Num() == 0)
-	{
-		JoinButton->SetIsEnabled(true);
-	}
 }
 
 void UMenu::OnJoinSession(EOnJoinSessionCompleteResult::Type Result)
@@ -158,15 +150,6 @@ void UMenu::HostButtonClicked()
 	if (MultiplayerSubsystem)
 	{
 		MultiplayerSubsystem->CreateSession(PublicConnectionsNum, MatchType);
-	}
-}
-
-void UMenu::JoinButtonClicked()
-{
-	JoinButton->SetIsEnabled(false);
-	if (MultiplayerSubsystem)
-	{
-		MultiplayerSubsystem->FindSessions(10000);
 	}
 }
 

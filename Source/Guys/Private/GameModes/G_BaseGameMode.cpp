@@ -132,10 +132,6 @@ void AG_BaseGameMode::SpawnNewPawn(APlayerController* NewPlayer)
 {
     if (!NewPlayer) return;
     APawn* NewPawn = GetWorld()->SpawnActor<APawn>(DefaultPawnClass);
-    /*if (AG_Character* CharacterPawn = Cast<AG_Character>(NewPawn))
-    {
-		CharacterPawn->UpdateSkins();
-	}*/
     NewPlayer->Possess(NewPawn);
     MovePawnToRandomPlayerStart(NewPawn);
     UpdatePlayerSkins();

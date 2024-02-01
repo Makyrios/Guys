@@ -37,8 +37,6 @@ private:
 	UFUNCTION()
 	void HostButtonClicked();
 
-	UFUNCTION()
-	void JoinButtonClicked();
 	void MenuTearDown();
 
 public:
@@ -53,9 +51,6 @@ public:
 private:
 	UPROPERTY(meta = (BindWidget))
 	UButton* HostButton;
-
-	UPROPERTY(meta = (BindWidget))
-	UButton* JoinButton;
 
 	UMultiplayerSubsystem* MultiplayerSubsystem;
 };

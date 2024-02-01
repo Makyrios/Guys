@@ -58,13 +58,12 @@ AG_Character::AG_Character()
     
     Hat = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Hat"));
     Hat->SetupAttachment(GetMesh(), TEXT("Hat_Socket_0"));
-    //Hat->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("Hat_Socket_0"));
 }
 
 void AG_Character::BeginPlay()
 {
     Super::BeginPlay();
-    UpdateSkins();
+    //UpdateSkins();
 }
 
 void AG_Character::Tick(float DeltaTime)
@@ -262,7 +261,7 @@ void AG_Character::ReactOnPush(FVector PushDirection)
 {
     if (PhysicalAnimComponent)
     {
-        PhysicalAnimComponent->TogglePhysicalAnimation(2.0f);
+        PhysicalAnimComponent->TogglePhysicalAnimation(0.5f);
         this->LaunchCharacter(PushDirection * 1000, false, false);
     }
 }
