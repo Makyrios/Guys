@@ -17,9 +17,9 @@ void UG_AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-    DOREPLIFETIME_CONDITION_NOTIFY(UG_AttributeSet, MaxMovementSpeed, COND_None, REPNOTIFY_Always);
+    /*DOREPLIFETIME_CONDITION_NOTIFY(UG_AttributeSet, MaxMovementSpeed, COND_None, REPNOTIFY_Always);
     DOREPLIFETIME_CONDITION_NOTIFY(UG_AttributeSet, JumpCooldown, COND_None, REPNOTIFY_Always);
-    DOREPLIFETIME_CONDITION_NOTIFY(UG_AttributeSet, InteractCooldown, COND_None, REPNOTIFY_Always);
+    DOREPLIFETIME_CONDITION_NOTIFY(UG_AttributeSet, InteractCooldown, COND_None, REPNOTIFY_Always);*/
 }
 
 void UG_AttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)

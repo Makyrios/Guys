@@ -20,6 +20,16 @@ void AG_BaseGameMode::InitGame(const FString& MapName, const FString& Options, F
     Super::InitGame(MapName, Options, ErrorMessage);
 }
 
+void AG_BaseGameMode::Tick(float DeltaSeconds)
+{
+    Super::Tick(DeltaSeconds);
+
+    if (bUpdateTimerAfterTravel)
+    {
+        TimerAfterTravel += DeltaSeconds;
+    }
+}
+
 void AG_BaseGameMode::PostLogin(APlayerController* NewPlayer)
 {
     Super::PostLogin(NewPlayer);
@@ -30,6 +40,8 @@ void AG_BaseGameMode::PostLogin(APlayerController* NewPlayer)
 void AG_BaseGameMode::HandleSeamlessTravelPlayer(AController*& C)
 {
     Super::HandleSeamlessTravelPlayer(C);
+
+    bUpdateTimerAfterTravel = true;
 
     APlayerController* PC = Cast<APlayerController>(C);
     HandlePlayerLoad(PC);
@@ -107,7 +119,6 @@ bool AG_BaseGameMode::IsMatchPreparing()
     return GetMatchState() == MatchState::WaitingToStart || GetMatchState() == MatchState::EnteringMap;
 }
 
-
 bool AG_BaseGameMode::IsMatchStarted()
 {
     return GetMatchState() == MatchState::InProgress;
@@ -122,7 +133,7 @@ void AG_BaseGameMode::SpawnNewPawn(APlayerController* NewPlayer)
     if (!NewPlayer) return;
     APawn* NewPawn = GetWorld()->SpawnActor<APawn>(DefaultPawnClass);
     NewPlayer->Possess(NewPawn);
-    MovePawnToRandomPlayerStart(NewPawn);    
+    MovePawnToRandomPlayerStart(NewPawn);
     UpdatePlayerSkins();
 }
 
@@ -159,7 +170,7 @@ void AG_BaseGameMode::CreateStartGameWidget(APlayerController* NewPlayer)
         if (!IsGameStarted())
         {
             if (!GameState) return;
-            float CurrentDelayBeforeStart = DelayBeforeStart;
+            float CurrentDelayBeforeStart = DelayBeforeStart - TimerAfterTravel;
             CustomPlayerController->CreateStartGameWidget(CurrentDelayBeforeStart);
         }
     }
@@ -274,7 +285,7 @@ void AG_BaseGameMode::UpdatePlayerSkins() const
     const int32 NumberOfPlayers = UGameplayStatics::GetNumPlayerControllers(GetWorld());
     for (int32 i = 0; i < NumberOfPlayers; i++)
     {
-        AG_Character* Character = Cast<AG_Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(),i));
+        AG_Character* Character = Cast<AG_Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), i));
         Character->UpdateSkins();
     }
 }

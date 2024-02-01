@@ -20,7 +20,7 @@ void AG_LobbyGameMode::PostLogin(APlayerController* NewPlayer)
 
     int32 NumberOfPlayers = GameState.Get()->PlayerArray.Num();
 
-    UGameInstance* GameInstance = GetGameInstance();
+    UG_GameInstance* GameInstance = GetGameInstance<UG_GameInstance>();
     if (GameInstance)
     {
         UMultiplayerSubsystem* Subsystem = GameInstance->GetSubsystem<UMultiplayerSubsystem>();
@@ -30,6 +30,7 @@ void AG_LobbyGameMode::PostLogin(APlayerController* NewPlayer)
 
         if (NumberOfPlayers == Subsystem->DesiredNumPublicConnections)
         {
+            GameInstance->SetNumExpectedPlayers(NumberOfPlayers);
             StartChangeMapTimer(Subsystem);
             OnMinPlayersReached();
         }

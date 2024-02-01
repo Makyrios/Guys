@@ -21,6 +21,7 @@ public:
 
 protected:
     virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
+    virtual void Tick(float DeltaSeconds) override;
     virtual bool IsGameStarted();
     virtual void PostLogin(APlayerController* NewPlayer) override;
     void HandlePlayerLoad(APlayerController* NewPlayer);
@@ -67,4 +68,8 @@ protected:
     FTimerDelegate RespawnDelegate;
 
     int32 LoadedPlayers = 0;
+
+private:
+    bool bUpdateTimerAfterTravel = false;
+    float TimerAfterTravel = 0.f;
 };
