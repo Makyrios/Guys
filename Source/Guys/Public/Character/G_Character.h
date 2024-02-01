@@ -64,14 +64,14 @@ public:
     void UpdateSkins();
 
     UFUNCTION(BlueprintCallable)
-    void ChaneSkinByIndex(const int32& Mat_Idx);
+    void ChaneSkinByIndex(int32 Mat_Idx);
     UFUNCTION(NetMulticast, Reliable)
-    void SetSkinByIndex(const int32& Mat_Idx);
+    void SetSkinByIndex(int32 Mat_Idx);
 
     UFUNCTION(BlueprintCallable)
-    void ChaneHatByIndex(const int32& Hat_Idx);
+    void ChaneHatByIndex(int32 Hat_Idx);
     UFUNCTION(NetMulticast, Reliable)
-    void SetHatByIndex(const int32& Hat_Idx);
+    void SetHatByIndex(int32 Hat_Idx);
 
     UPROPERTY(BlueprintReadOnly)
     int32 ChosenHatIdx{0};

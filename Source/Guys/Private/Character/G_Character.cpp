@@ -57,7 +57,8 @@ AG_Character::AG_Character()
     InventoryComponent->SetIsReplicated(true);
     
     Hat = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Hat"));
-    Hat->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("Hat_Socket_0"));
+    Hat->SetupAttachment(GetMesh(), TEXT("Hat_Socket_0"));
+    //Hat->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("Hat_Socket_0"));
 }
 
 void AG_Character::BeginPlay()
@@ -306,9 +307,12 @@ void AG_Character::InitAbilityActorInfo()
 void AG_Character::CreateSaveFile()
 {
     UG_SaveGame* dataToSave = Cast<UG_SaveGame>(UGameplayStatics::CreateSaveGameObject(UG_SaveGame::StaticClass()));
-    dataToSave->ChosenSkins.SkinIdx = ChosenSkinIdx;
-    dataToSave->ChosenSkins.HatIdx = ChosenHatIdx;
-    UGameplayStatics::SaveGameToSlot(dataToSave, "Slot1", 0);
+    if (dataToSave)
+    {
+        dataToSave->ChosenSkins.SkinIdx = ChosenSkinIdx;
+        dataToSave->ChosenSkins.HatIdx = ChosenHatIdx;
+        UGameplayStatics::SaveGameToSlot(dataToSave, "Slot1", 0);
+    }
 }
 
 void AG_Character::SaveSkinsInfo()
@@ -318,9 +322,12 @@ void AG_Character::SaveSkinsInfo()
         CreateSaveFile();
     }
     UG_SaveGame* dataToSave = Cast<UG_SaveGame>(UGameplayStatics::LoadGameFromSlot("Slot1", 0));
-    dataToSave->ChosenSkins.SkinIdx = ChosenSkinIdx;
-    dataToSave->ChosenSkins.HatIdx = ChosenHatIdx;
-    UGameplayStatics::SaveGameToSlot(dataToSave, "Slot1", 0);
+    if (dataToSave)
+    {
+        dataToSave->ChosenSkins.SkinIdx = ChosenSkinIdx;
+        dataToSave->ChosenSkins.HatIdx = ChosenHatIdx;
+        UGameplayStatics::SaveGameToSlot(dataToSave, "Slot1", 0);
+    }
 }
 
 void AG_Character::LoadSkinsInfo()
@@ -330,43 +337,52 @@ void AG_Character::LoadSkinsInfo()
         CreateSaveFile();
     }
     const UG_SaveGame* savedData = Cast<UG_SaveGame>(UGameplayStatics::LoadGameFromSlot("Slot1", 0));
-    ChosenSkinIdx = savedData->ChosenSkins.SkinIdx;
-    ChosenHatIdx = savedData->ChosenSkins.HatIdx;
-
-    SetSkinByIndex(ChosenSkinIdx);
-    SetHatByIndex(ChosenHatIdx);
+    if (this && savedData)
+    {
+        ChosenSkinIdx = savedData->ChosenSkins.SkinIdx;
+        ChosenHatIdx = savedData->ChosenSkins.HatIdx;
+        /*SetSkinByIndex(ChosenSkinIdx);
+        SetHatByIndex(ChosenHatIdx);*/
+    }
 }
 
 void AG_Character::UpdateSkins()
 {
+    if (!this) return;
     LoadSkinsInfo();
     SetSkinByIndex(ChosenSkinIdx);
     SetHatByIndex(ChosenHatIdx);
 }
 
-void AG_Character::ChaneSkinByIndex(const int32& Mat_Idx)
+void AG_Character::ChaneSkinByIndex(int32 Mat_Idx)
 {
     SetSkinByIndex(Mat_Idx);
     SaveSkinsInfo();
 }
 
-void AG_Character::ChaneHatByIndex(const int32& Hat_Idx)
+void AG_Character::ChaneHatByIndex(int32 Hat_Idx)
 {
     SetHatByIndex(Hat_Idx);
     SaveSkinsInfo();
 }
 
-void AG_Character::SetSkinByIndex_Implementation(const int32& Mat_Idx)
+void AG_Character::SetSkinByIndex_Implementation(int32 Mat_Idx)
 {
-    this->GetMesh()->SetMaterial(0, Skins[Mat_Idx]);
-    ChosenSkinIdx = Mat_Idx;
+    if (GetMesh() && Skins.IsValidIndex(Mat_Idx))
+    {
+        GetMesh()->SetMaterial(0, Skins[Mat_Idx]);
+        ChosenSkinIdx = Mat_Idx;
+    }
 }
 
-void AG_Character::SetHatByIndex_Implementation(const int32& Hat_Idx)
+void AG_Character::SetHatByIndex_Implementation(int32 Hat_Idx)
 {
-    FString SocketName = TEXT("Hat_Socket_");
-    SocketName.Append(FString::FromInt(Hat_Idx));
-    Hat->SetStaticMesh(Hats[Hat_Idx]);
-    Hat->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName(SocketName));
-    ChosenHatIdx = Hat_Idx;
+    if (Hat && Hats.IsValidIndex(Hat_Idx))
+    {
+        FString SocketName = TEXT("Hat_Socket_");
+        SocketName.Append(FString::FromInt(Hat_Idx));
+        Hat->SetStaticMesh(Hats[Hat_Idx]);
+        Hat->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName(SocketName));
+        ChosenHatIdx = Hat_Idx;
+    }
 }
