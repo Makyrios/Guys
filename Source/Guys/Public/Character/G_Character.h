@@ -50,11 +50,9 @@ public:
     void Multicast_Interact(AActor* Actor, FVector Direction);
 
     FG_ChosenSkinsIdx ChosenSkins;
-
-    UPROPERTY(BlueprintReadWrite, EditAnywhere)
     TArray<TObjectPtr<UMaterialInterface>> Skins;
 
-    UPROPERTY(BlueprintReadWrite, EditAnywhere)
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Skins")
     TArray<TObjectPtr<UStaticMesh>> Hats;
 
     UPROPERTY()
@@ -77,11 +75,25 @@ public:
     int32 ChosenHatIdx{0};
     UPROPERTY(BlueprintReadOnly)
     int32 ChosenSkinIdx{0};
-
+    FORCEINLINE int32 GetChosenHatIdx() const {return ChosenHatIdx;}
+    FORCEINLINE int32 GetChosenSkinIdx() const {return ChosenSkinIdx;}
     void CreateSaveFile();
     void SaveSkinsInfo();
     void LoadSkinsInfo();
 
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Sound Effects")
+    TArray<TObjectPtr<USoundBase>> SoundsOnPush{nullptr};
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Sound Effects")
+    TArray<TObjectPtr<USoundBase>> SoundsOnFalling{nullptr};
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Sound Effects")
+    TObjectPtr<USoundBase> SoundsOnJump{nullptr};
+
+    UFUNCTION(BlueprintCallable)
+    void PlayPunchSound(const FVector& SoundPosition);
+
+    UFUNCTION(BlueprintCallable)
+    void PlayFallingSound(const FVector& SoundPosition);
+    
 protected:
     virtual void BeginPlay() override;
 
@@ -104,8 +116,8 @@ protected:
     void TogglePause();
 
     void ToggleStats();
-
-
+    
+    void UnPossessed() override;
     virtual void InitAbilityActorInfo();
 
 public:
