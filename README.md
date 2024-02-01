@@ -20,10 +20,9 @@ Accelerate the player
 
 # Screenshots
 
-![1](https://imgur.com/0it6vzK)
-![2](https://imgur.com/M5WYuG1)
-![3](https://imgur.com/s0FOx1G)
-![4](https://imgur.com/maaUutk)
-![5](https://imgur.com/maaUutk)
+![1](https://i.imgur.com/0it6vzK.jpeg)
+![2](https://i.imgur.com/M5WYuG1.jpeg)
+![3](https://i.imgur.com/s0FOx1G.jpeg)
+![4](https://i.imgur.com/maaUutk.jpeg)
 
 Developed with Unreal Engine 5
