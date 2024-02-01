@@ -49,13 +49,15 @@ void AG_PlayerState::OnMaxMovementSpeedAttributeChanged(const FOnAttributeChange
 {
     Character = Cast<AG_Character>(GetPawn());
 
-    if (Character == nullptr) return;
+    if (Character == nullptr || Character->GetCharacterMovement() == nullptr) return;
 
     Character->GetCharacterMovement()->MaxWalkSpeed = Data.NewValue;
 }
 
 void AG_PlayerState::StunTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
 {
+    if (GetPlayerController() == nullptr) return;
+
     if (NewCount == 0)
     {
         GetPlayerController()->SetIgnoreMoveInput(false);

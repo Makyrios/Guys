@@ -24,6 +24,7 @@
 #include <Kismet/GameplayStatics.h>
 
 #include "Kismet/KismetInputLibrary.h"
+#include <GameModes/G_LobbyGameMode.h>
 
 AG_Character::AG_Character()
 {
@@ -167,6 +168,11 @@ void AG_Character::Server_Interact_Implementation()
 {
     if (bCanInteract)
     {
+        if (UGameplayStatics::GetGameMode(this)->IsA<AG_LobbyGameMode>())
+        {
+            return;
+        }
+
         TArray<AActor*> OverlappingActors;
         this->GetOverlappingActors(OverlappingActors);
         if (!OverlappingActors.IsEmpty())
